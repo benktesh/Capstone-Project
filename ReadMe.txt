@@ -1,0 +1,1 @@
+This repository contains assets created for Android Nanodegrees for Capstone Stage. 
