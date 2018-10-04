@@ -7,7 +7,7 @@ Pdf file detailing design of the smartstockapp
 
 Updates:
 Ready for submissions
-
+Resubmitting
 
 
 
