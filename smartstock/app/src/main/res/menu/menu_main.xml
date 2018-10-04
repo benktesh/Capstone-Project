@@ -7,4 +7,20 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_portfolio"
+        android:title="Portfolio"
+        app:showAsAction="never"
+        android:orderInCategory="90"/>
+    <item
+        android:id="@+id/action_exit"
+        android:orderInCategory="101"
+        app:showAsAction="never"
+        android:title="Exit"/>
+    <item
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always"
+        android:title="Search"/>
 </menu>
