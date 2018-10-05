@@ -44,3 +44,10 @@ Task 5: Create variants and Integrate with Google Play Service
 +Create Screen size variant for layout
 +Implement Google Play Service
 
+
+
+Design:
+Main activity lists the market summary and portfolio summary using list adapter.
+In both the adapters, the onClick listerner will call detailed activity and display the result
+
+
