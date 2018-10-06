@@ -45,6 +45,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         mData = data;
         mOnClickListener = listener;
         mViewHolderCount = 0;
+
     }
 
 
@@ -71,9 +72,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
      */
     @Override
     public SearchViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        Context context = viewGroup.getContext();
+        mContext = viewGroup.getContext();
         int layoutIdForListItem = R.layout.searchrow;
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         boolean shouldAttachToParentImmediately = false;
 
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
@@ -82,7 +83,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         viewHolder.viewHolderIndex.setText("ViewHolder index: " + mViewHolderCount);
 
         //stock is up, one color, stock is down another color. Start with default color
-        int backgroundColorForViewHolder = ColorUtils.getViewBackGroundColorForStock(context,0);
+        int backgroundColorForViewHolder = ColorUtils.getViewBackGroundColorForStock(mContext,0);
         viewHolder.itemView.setBackgroundColor(backgroundColorForViewHolder);
 
         mViewHolderCount++;
@@ -103,6 +104,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     @Override
     public void onBindViewHolder(SearchViewHolder holder, int position) {
         Log.d(TAG, "#" + position);
+        SearchRow stock = mData.get(position);
+        holder.itemView.setBackgroundColor(ColorUtils.getViewBackGroundColorForStock(mContext, stock.getChange()));
         holder.bind(position);
     }
 
