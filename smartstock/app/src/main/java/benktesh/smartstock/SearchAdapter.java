@@ -1,21 +1,16 @@
 package benktesh.smartstock;
 
 import android.content.Context;
-import android.database.DataSetObserver;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Objects;
 
 import benktesh.smartstock.Utils.ColorUtils;
 
@@ -52,7 +47,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     //  An interface called ListItemClickListener receives onClick message. Within that interface,
     // we can define a void method called onListItemClick that takes any arguement as paramter.
     public interface ListItemClickListener {
-        void onListItemClick(int clickedItemIndex);
+        void onListItemClick(SearchRow stock);
     }
 
 
@@ -104,9 +99,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     @Override
     public void onBindViewHolder(SearchViewHolder holder, int position) {
         Log.d(TAG, "#" + position);
-        SearchRow stock = mData.get(position);
-        holder.itemView.setBackgroundColor(ColorUtils.getViewBackGroundColorForStock(mContext, stock.getChange()));
         holder.bind(position);
+    }
+
+    public void resetData(ArrayList<SearchRow> data) {
+        mData = data;
+        notifyDataSetChanged();
     }
 
 
@@ -120,7 +118,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     class SearchViewHolder extends ViewHolder implements View.OnClickListener {
         
         // Will display the position in the list, ie 0 through getItemCount() - 1
-        TextView listItemNumberView;
+        TextView symbolView;
+        TextView changeView;
+        ImageView imageView;
+        TextView summaryView;
         // Will display which ViewHolder is displaying this data
         TextView viewHolderIndex;
 
@@ -129,14 +130,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
          * TextViews and set an onClickListener to listen for clicks. Those will be handled in the
          * onClick method below.
          * @param itemView The View that you inflated in
-         *                 {@link GreenAdapter#onCreateViewHolder(ViewGroup, int)}
+         *                 {@link SearchAdapter#onCreateViewHolder(ViewGroup, int)}
          */
         public SearchViewHolder(View itemView) {
             super(itemView);
 
-            listItemNumberView = (TextView) itemView.findViewById(R.id.search_result_symbol);
+            symbolView = (TextView) itemView.findViewById(R.id.search_result_symbol);
             viewHolderIndex = (TextView) itemView.findViewById(R.id.search_result_change);
+            changeView = itemView.findViewById(R.id.search_result_change);
+            imageView = itemView.findViewById(R.id.search_result_image);
+            summaryView = itemView.findViewById(R.id.search_result_summary);
             // COMPLETED (7) Call setOnClickListener on the View passed into the constructor (use 'this' as the OnClickListener)
+
             itemView.setOnClickListener(this);
         }
 
@@ -147,7 +152,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
          * @param listIndex Position of the item in the list
          */
         void bind(int listIndex) {
-            listItemNumberView.setText(String.valueOf(listIndex));
+
+            SearchRow stock = mData.get(listIndex);
+            symbolView.setText(stock.getSymbol());
+            changeView.setText(stock.getChange().toString());
+            summaryView.setText(stock.getDetail());
+
+            itemView.setBackgroundColor(ColorUtils.getViewBackGroundColorForStock(mContext, stock.getChange()));
+
         }
 
 
@@ -159,7 +171,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
-            mOnClickListener.onListItemClick(clickedPosition);
+            SearchRow stock = mData.get(clickedPosition);
+            mOnClickListener.onListItemClick(stock);
         }
     }
 }

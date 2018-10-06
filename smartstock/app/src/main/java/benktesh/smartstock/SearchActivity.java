@@ -65,7 +65,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         /*
          * The GreenAdapter is responsible for displaying each item in the list.
          */
-        mData = getSearchResult("hhh");
+        //mData = getSearchResult("hhh");
         mAdapter = new SearchAdapter(mData, this) ;
         mSearchList.setAdapter(mAdapter);
 
@@ -76,9 +76,9 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+            //TODO this will move to async task
             mData = getSearchResult(query);
-
-            mSearchList.getAdapter().notifyDataSetChanged();
+            mAdapter.resetData(mData);
         }
     }
 
@@ -155,11 +155,11 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     }
 
     @Override
-    public void onListItemClick(int clickedItemIndex) {
+    public void onListItemClick(SearchRow stock) {
         if(mToast != null){
             mToast.cancel();
         }
-        String toastMessage = "Item #" + clickedItemIndex + " clicked.";
+        String toastMessage = "Item #" + stock.getSymbol() + " clicked.";
         mToast = Toast.makeText(this,toastMessage, Toast.LENGTH_LONG);
         mToast.show();
 
