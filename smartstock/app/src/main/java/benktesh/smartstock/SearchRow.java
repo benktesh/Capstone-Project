@@ -12,7 +12,7 @@ public class SearchRow {
         Change = change;
     }
 
-    private Double Change;
+    private Double Change = 0.0;
     private String Detail;
 
     public SearchRow(int id, String symbol, Double change ,String detail) {

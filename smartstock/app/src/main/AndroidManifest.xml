@@ -24,13 +24,13 @@
                 android:resource="@xml/searchable" />
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".SearchableActivity" />
+                android:value=".SearchActivity" />
 
 
         </activity>
 
 
-        <activity android:name=".SearchableActivity"
+        <activity android:name=".SearchActivity"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
