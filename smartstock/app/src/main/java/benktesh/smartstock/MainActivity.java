@@ -18,6 +18,10 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import benktesh.smartstock.Utils.SmartStockConstant;
+
+import static android.content.Intent.ACTION_SEARCH;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -81,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_portfolio) {
             //TODO
             ShowMessage("Portfolio is shown");
+
+            Intent intent = new Intent(this.getApplicationContext(), SearchActivity.class);
+            intent.setAction(ACTION_SEARCH);
+            intent.putExtra(SearchManager.QUERY, SmartStockConstant.PortfolioQueryString);
+            startActivity(intent);
             return true;
         }
         if(id == R.id.action_search) {
