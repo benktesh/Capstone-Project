@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import benktesh.smartstock.UI.StockDetailActivity;
+import benktesh.smartstock.Utils.SmartStockConstant;
+
 public class SearchActivity extends AppCompatActivity implements SearchAdapter.ListItemClickListener {
 
     private static String TAG = SearchActivity.class.getSimpleName();
@@ -76,6 +79,20 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+
+            if(query.equals(SmartStockConstant.PortfolioQueryString)) {
+                //TODO
+                //Get portfolio
+                //call latest data from server
+                //save portfolio
+                //return data
+            }
+            else {
+                //TODO
+                //get data from API
+                //lookinto portfolio and update the model
+                //return data
+            }
             //TODO this will move to async task
             mData = getSearchResult(query);
             mAdapter.resetData(mData);
@@ -163,5 +180,10 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         mToast = Toast.makeText(this,toastMessage, Toast.LENGTH_LONG);
         mToast.show();
 
+
+
+
+        Intent startChildActivityIntent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
+        startActivity(startChildActivityIntent);
     }
 }
