@@ -79,7 +79,6 @@ public class Common {
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setMaxWidth(500);
-
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(activity.getComponentName()));
 
