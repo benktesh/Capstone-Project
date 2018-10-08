@@ -1,5 +1,6 @@
 package benktesh.smartstock;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -94,7 +95,41 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-       return mCommon.ConfigureSearchFromMenu(menu);
+
+
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setMaxWidth(500);
+
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                // do your search on change or save the last string in search
+                mData = getSearchResult(s);
+                mAdapter.resetData(mData);
+                return false;
+            }
+        });
+
+
+       return true;
     }
 
     @Override
@@ -102,6 +137,12 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         if (mCommon.MakeMenu(item)) return true;
         return super.onOptionsItemSelected(item);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mCommon.showToast("Restarted");
     }
 
     private ArrayList<SearchRow> getSearchResult(String query)

@@ -4,14 +4,18 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import benktesh.smartstock.R;
 import benktesh.smartstock.SearchActivity;
+import benktesh.smartstock.SearchRow;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
 import static android.content.Intent.ACTION_SEARCH;
@@ -75,10 +79,39 @@ public class Common {
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setMaxWidth(500);
+
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(activity.getComponentName()));
 
         return true;
     }
+
+    public void showToast(String msg) {
+        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public ArrayList<SearchRow> getSearchResult(String query)
+    {
+        Log.d(TAG, "getSearchResult: " + query);
+        ArrayList<SearchRow> searchResult;
+        searchResult = new ArrayList<>();
+        if(query.equals(SmartStockConstant.PortfolioQueryString)) {
+            //TODO
+            //Get portfolio
+            //call latest data from server
+            //save portfolio
+            //return data
+            searchResult.add(new SearchRow(1, "ABC", 1.0, "PortFolio1"));
+            searchResult.add(new SearchRow(2, "ABC", 0.0, "PortFolio2"));
+        }
+        else {
+            searchResult.add(new SearchRow(1, "ABC", 0.0, ""));
+            searchResult.add(new SearchRow(2, "ABC", -1.0, ""));
+            searchResult.add(new SearchRow(3, "ABC", -2.0, ""));
+        }
+        return searchResult;
+
+    }
+
 
 }

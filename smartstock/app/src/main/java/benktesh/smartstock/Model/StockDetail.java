@@ -6,69 +6,19 @@ import android.os.Parcelable;
 import java.util.Date;
 
 public class StockDetail implements Parcelable{
-    private String mSymbol;
-    private Double mChange;
-    private boolean mInPortoflio;
-    private String mMarket;
-    private Double mDayHigh;
-    private Double mDayLow;
-    private Double mPrice;
 
-    public String getmSymbol() {
-        return mSymbol;
+    public  String mSymbol;
+    public  Double mChange;
+    public boolean mInPortoflio;
+    public String mMarket;
+    public Double mDayHigh;
+    public Double mDayLow;
+    public Double mPrice;
+
+    public StockDetail() {
+
     }
 
-    public void setmSymbol(String mSymbol) {
-        this.mSymbol = mSymbol;
-    }
-
-    public Double getmChange() {
-        return mChange;
-    }
-
-    public void setmChange(Double mChange) {
-        this.mChange = mChange;
-    }
-
-    public boolean ismInPortoflio() {
-        return mInPortoflio;
-    }
-
-    public void setmInPortoflio(boolean mInPortoflio) {
-        this.mInPortoflio = mInPortoflio;
-    }
-
-    public String getmMarket() {
-        return mMarket;
-    }
-
-    public void setmMarket(String mMarket) {
-        this.mMarket = mMarket;
-    }
-
-    public Double getmDayHigh() {
-        return mDayHigh;
-    }
-
-    public void setmDayHigh(Double mDayHigh) {
-        this.mDayHigh = mDayHigh;
-    }
-
-    public Double getmDayLow() {
-        return mDayLow;
-    }
-
-    public void setmDayLow(Double mDayLow) {
-        this.mDayLow = mDayLow;
-    }
-
-    public Double getmPrice() {
-        return mPrice;
-    }
-
-    public void setmPrice(Double mPrice) {
-        this.mPrice = mPrice;
-    }
 
     public StockDetail(String mSymbol, Double mChange, boolean mInPortoflio, String mMarket, Double mDayHigh, Double mDayLow, Double mPrice) {
         this.mSymbol = mSymbol;

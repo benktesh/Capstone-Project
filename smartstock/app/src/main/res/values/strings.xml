@@ -6,4 +6,5 @@
     <string name="search_title">Search Symbol</string>
     <string name="title_activity_stock_detail">StockDetailActivity</string>
     <string name="title_activity_portfolio">PortfolioActivity</string>
+    <string name="api_URL">https://api.url.com</string>
 </resources>
