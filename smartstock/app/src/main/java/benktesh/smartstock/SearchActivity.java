@@ -16,12 +16,15 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import benktesh.smartstock.UI.Common;
 import benktesh.smartstock.UI.StockDetailActivity;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
 public class SearchActivity extends AppCompatActivity implements SearchAdapter.ListItemClickListener {
 
     private static String TAG = SearchActivity.class.getSimpleName();
+
+    Common mCommon;
 
     ArrayList<SearchRow> mData;
 
@@ -37,6 +40,11 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        if(mCommon == null)
+        {
+            mCommon = new Common(this);
+        }
 
         /*
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
@@ -74,25 +82,11 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
 
 
 
-
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            if(query.equals(SmartStockConstant.PortfolioQueryString)) {
-                //TODO
-                //Get portfolio
-                //call latest data from server
-                //save portfolio
-                //return data
-            }
-            else {
-                //TODO
-                //get data from API
-                //lookinto portfolio and update the model
-                //return data
-            }
             //TODO this will move to async task
             mData = getSearchResult(query);
             mAdapter.resetData(mData);
@@ -100,68 +94,35 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the options menu from XML
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setMaxWidth(500);
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-
-        return true;
+       return mCommon.ConfigureSearchFromMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            //TODO
-            ShowMessage("Settings is shown");
-            return true;
-        }
-        if (id == R.id.action_exit) {
-            ShowMessage("Exiting SmartStock.");
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            return true;
-        }
-        if (id == R.id.action_portfolio) {
-            //TODO
-            ShowMessage("Portfolio is shown");
-            return true;
-        }
-        if(id == R.id.action_search) {
-            //TODO
-            ShowMessage("Search is handled");
-
-        }
-        //TODO
-        ShowMessage("TO BE DONE");
+        if (mCommon.MakeMenu(item)) return true;
         return super.onOptionsItemSelected(item);
+
     }
 
     private ArrayList<SearchRow> getSearchResult(String query)
     {
+        Log.d(TAG, "getSearchResult: " + query);
         ArrayList<SearchRow> searchResult;
         searchResult = new ArrayList<>();
-        searchResult.add(new SearchRow(1, "ABC", 1.0, ""));
-        searchResult.add(new SearchRow(2, "ABC", 0.0, ""));
-        searchResult.add(new SearchRow(3, "ABC", 0.0, ""));
-        searchResult.add(new SearchRow(4, "ABC", -1.0, ""));
-        searchResult.add(new SearchRow(5, "ABC", -2.0, ""));
-
+        if(query.equals(SmartStockConstant.PortfolioQueryString)) {
+            //TODO
+            //Get portfolio
+            //call latest data from server
+            //save portfolio
+            //return data
+            searchResult.add(new SearchRow(1, "ABC", 1.0, "PortFolio1"));
+            searchResult.add(new SearchRow(2, "ABC", 0.0, "PortFolio2"));
+        }
+        else {
+            searchResult.add(new SearchRow(1, "ABC", 0.0, ""));
+            searchResult.add(new SearchRow(2, "ABC", -1.0, ""));
+            searchResult.add(new SearchRow(3, "ABC", -2.0, ""));
+        }
         return searchResult;
 
     }
