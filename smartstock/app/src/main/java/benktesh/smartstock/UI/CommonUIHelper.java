@@ -14,18 +14,15 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import benktesh.smartstock.R;
-import benktesh.smartstock.SearchActivity;
 import benktesh.smartstock.SearchRow;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
-import static android.content.Intent.ACTION_SEARCH;
-
-public class Common {
+public class CommonUIHelper {
 
     Context mContext;
 
-    private static String TAG = Common.class.getSimpleName();
-    public Common(Context context) {
+    private static String TAG = CommonUIHelper.class.getSimpleName();
+    public CommonUIHelper(Context context) {
         mContext = context;
     }
 
