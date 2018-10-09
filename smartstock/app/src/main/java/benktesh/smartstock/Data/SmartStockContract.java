@@ -2,7 +2,7 @@ package benktesh.smartstock.Data;
 
 import android.provider.BaseColumns;
 
-public class Contract {
+public class SmartStockContract {
 
     public static final class PortfolioEntry implements BaseColumns {
         public static final String TABLE_NAME = "portfolio";
