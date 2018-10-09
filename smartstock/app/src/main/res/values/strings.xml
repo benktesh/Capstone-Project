@@ -7,4 +7,6 @@
     <string name="title_activity_stock_detail">StockDetailActivity</string>
     <string name="title_activity_portfolio">PortfolioActivity</string>
     <string name="api_URL">https://api.url.com</string>
+    <string name="label_symbol">Symbol</string>
+    <string name="market_summary">Market Summary</string>
 </resources>

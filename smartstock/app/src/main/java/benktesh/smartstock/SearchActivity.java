@@ -1,6 +1,5 @@
 package benktesh.smartstock;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import benktesh.smartstock.UI.Common;
+import benktesh.smartstock.UI.CommonUIHelper;
 import benktesh.smartstock.UI.StockDetailActivity;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
@@ -25,7 +24,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
 
     private static String TAG = SearchActivity.class.getSimpleName();
 
-    Common mCommon;
+    CommonUIHelper mCommonUIHelper;
 
     ArrayList<SearchRow> mData;
 
@@ -42,9 +41,9 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        if(mCommon == null)
+        if(mCommonUIHelper == null)
         {
-            mCommon = new Common(this);
+            mCommonUIHelper = new CommonUIHelper(this);
         }
 
         /*
@@ -134,7 +133,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mCommon.MakeMenu(item)) return true;
+        if (mCommonUIHelper.MakeMenu(item)) return true;
         return super.onOptionsItemSelected(item);
 
     }
@@ -142,7 +141,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     @Override
     protected void onStart() {
         super.onStart();
-        mCommon.showToast("Restarted");
+        mCommonUIHelper.showToast("Restarted");
     }
 
     private ArrayList<SearchRow> getSearchResult(String query)

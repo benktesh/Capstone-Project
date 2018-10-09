@@ -20,7 +20,7 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
 
     private static String TAG = PortfolioActivity.class.getSimpleName();
 
-    Common mCommon;
+    CommonUIHelper mCommonUIHelper;
     ArrayList<SearchRow> mData;
 
 
@@ -37,8 +37,8 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        if (mCommon == null) {
-            mCommon = new Common(this);
+        if (mCommonUIHelper == null) {
+            mCommonUIHelper = new CommonUIHelper(this);
         }
 
         mSearchList = (RecyclerView) findViewById(R.id.rv_stocks);
@@ -58,26 +58,26 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
 
 
         //TODO this will move to async task
-        mData = mCommon.getSearchResult(SmartStockConstant.PortfolioQueryString);
+        mData = mCommonUIHelper.getSearchResult(SmartStockConstant.PortfolioQueryString);
         mAdapter.resetData(mData);
 
 
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        return mCommon.ConfigureSearchFromMenu(menu);
+        return mCommonUIHelper.ConfigureSearchFromMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mCommon.MakeMenu(item)) return true;
+        if (mCommonUIHelper.MakeMenu(item)) return true;
         return super.onOptionsItemSelected(item);
 
     }
 
     @Override
     public void onListItemClick(SearchRow stock) {
-        mCommon.showToast(stock.getSymbol());
+        mCommonUIHelper.showToast(stock.getSymbol());
         Intent startChildActivityIntent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
         startActivity(startChildActivityIntent);
     }
