@@ -21,8 +21,8 @@ public class Contract {
     public static final class MarketEntry implements BaseColumns {
         public static final String TABLE_NAME = "market";
 
-        public static final String COLUMN_CHANGESYMBOL = "symbol";
-        public static final String COLUMN_ = "change";
+        public static final String COLUMN_SYMBOL = "symbol";
+        public static final String COLUMN_CHANGE = "change";
         public static final String COLUMN_VALUE = "value";
         public static final String COLUMN_DAY_HIGH = "dayHigh";
         public static final String COLUMN_DAY_LOW = "dayLow";
