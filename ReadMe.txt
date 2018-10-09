@@ -17,18 +17,18 @@ TASKS								STAUS
 Task 1: Project Setup						
 +Create repository						DONE
 +Create default project  					DONE
-+Create firebase project
++Create firebase project					Progress
 +Configure libraries
-+Configure menu
++Configure menu							Done
 +Configure Database/persistence
 
 Task 2: Implement UI for Each Activity and Fragment		
-+Build UI for MainActivity					PRORESS
++Build UI for MainActivity					PROGESS
 +Build/refine database
 +Add Firebase related logic
-+Build UI for detailed activity
++Build UI for detailed activity					Progress
 +Build UI for portfolio view and edit
-+Add unit test as much as possible
++Add unit test as much as possible				Progress
 
 Task 3: Implement App Widget 
 +Implement app widget
@@ -49,5 +49,7 @@ Task 5: Create variants and Integrate with Google Play Service
 Design:
 Main activity lists the market summary and portfolio summary using list adapter.
 In both the adapters, the onClick listerner will call detailed activity and display the result
+
+Add padding
 
 
