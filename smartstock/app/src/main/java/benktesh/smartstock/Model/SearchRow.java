@@ -1,4 +1,4 @@
-package benktesh.smartstock;
+package benktesh.smartstock.Model;
 
 public class SearchRow {
     private int Id;

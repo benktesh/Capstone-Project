@@ -1,7 +1,6 @@
 package benktesh.smartstock.Utils;
 
 
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,12 +11,10 @@ import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
 
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -25,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import benktesh.smartstock.Model.StockDetail;
+import benktesh.smartstock.Model.Market;
+import benktesh.smartstock.Model.SearchRow;
+import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.R;
 
 /**
@@ -42,7 +41,7 @@ public class NetworkUtilities {
     /*
     This method returns the list of Recipe from json
      */
-    public static ArrayList<StockDetail> stockDetails(Context context) {
+    public static ArrayList<Stock> stockDetails(Context context) {
         Log.d(TAG, "Calling context: " + context);
 
         String jsonText = null;
@@ -83,7 +82,7 @@ public class NetworkUtilities {
     public static String getBitmapString(String fileUrl) {
         String bitmapString = null;
         try {
-            URL myFileUrl = new URL (fileUrl);
+            URL myFileUrl = new URL(fileUrl);
             HttpURLConnection conn =
                     (HttpURLConnection) myFileUrl.openConnection();
             conn.setDoInput(true);
@@ -100,9 +99,8 @@ public class NetworkUtilities {
     }
 
 
-    public static String encodeToBase64(Bitmap image)
-    {
-        if(image == null)
+    public static String encodeToBase64(Bitmap image) {
+        if (image == null)
             return null;
         Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
         int quality = 100;
@@ -111,15 +109,12 @@ public class NetworkUtilities {
         return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
     }
 
-    public static Bitmap decodeBase64(String input)
-    {
-        if(input == null || input.isEmpty())
+    public static Bitmap decodeBase64(String input) {
+        if (input == null || input.isEmpty())
             return null;
         byte[] decodedBytes = Base64.decode(input, 0);
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
-
-
 
 
     public static Bitmap GetBitmap(String encodedString) {
@@ -198,4 +193,56 @@ public class NetworkUtilities {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    public static ArrayList<Market> getMarketData() {
+        //load the market stat from Database
+        //get latest data from api
+        //parse through json and return the object
+        Log.d(TAG, "getMarketData: ");
+        ArrayList<Market> marketData = new ArrayList<>();
+
+        Market m = new Market();
+        m.Symbol = "SPY";
+
+
+        marketData.add(makeMarket("SPY", 1000.0, 1.0, "NYSE"));
+        marketData.add(makeMarket("DJI", 1000.0, 1.0, "SYSE"));
+
+        return marketData;
+    }
+
+    private static Market makeMarket(String symbol, Double price, Double change, String marketInfo) {
+
+        Market m = new Market();
+        m.Symbol = symbol;
+        m.Price = price;
+        m.Change = change;
+        m.Market = marketInfo;
+        return m;
+    }
+
+    public static ArrayList<Stock> getStockData(String query) {
+        Log.d(TAG, "getStockData: " + query);
+        ArrayList<Stock> searchResult;
+        searchResult = new ArrayList<>();
+
+
+        //public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
+        // Double DayLow, Double Price) {
+
+            searchResult.add(new Stock ("EGOV", 1.0,
+                    false, "NASDAQ", 100.0, 99.0, 100.0));
+        searchResult.add(new Stock ("SPY", 1.0,
+                true, "NYSE", 100.0, 99.0, 100.0));
+
+        searchResult.add(new Stock ("ARR", 1.0,
+                false, "NYSE", 100.0, 99.0, 100.0));
+
+        searchResult.add(new Stock ("GE", 1.0,
+                true, "NYSE", 100.0, 99.0, 100.0));
+
+        searchResult.add(new Stock ("SPY", 1.0,
+                true, "NYSE", 100.0, 99.0, 100.0));
+
+        return searchResult;
+    }
 }

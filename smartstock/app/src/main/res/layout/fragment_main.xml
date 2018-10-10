@@ -25,7 +25,7 @@
 
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/in_app_friends"
+                android:id="@+id/rv_market_summary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -50,11 +50,7 @@
                 android:gravity="center"
                 android:text="Portfolio Summary" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/friends_to_invite"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/Green" />
+            <include layout="@layout/recycle_stock" />
         </LinearLayout>
     </LinearLayout>
 

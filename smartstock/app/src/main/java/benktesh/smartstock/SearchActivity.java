@@ -16,8 +16,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import benktesh.smartstock.Model.SearchRow;
 import benktesh.smartstock.UI.CommonUIHelper;
 import benktesh.smartstock.UI.StockDetailActivity;
+import benktesh.smartstock.Utils.MarketAdapter;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
 public class SearchActivity extends AppCompatActivity implements SearchAdapter.ListItemClickListener {
@@ -50,7 +52,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
          * do things like set the adapter of the RecyclerView and toggle the visibility.
          */
-        mSearchList = (RecyclerView) findViewById(R.id.rv_stocks);
+        mSearchList = findViewById(R.id.rv_stocks);
 
         /*
          * A LinearLayoutManager is responsible for measuring and positioning item views within a

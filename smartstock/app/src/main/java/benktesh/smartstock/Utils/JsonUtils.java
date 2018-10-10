@@ -8,9 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import benktesh.smartstock.Model.StockDetail;
+import benktesh.smartstock.Model.Stock;
 
 
 @SuppressWarnings("SpellCheckingInspection")
@@ -18,12 +17,12 @@ class JsonUtilities {
 
     private static final String TAG = JsonUtilities.class.getSimpleName();
 
-    public static ArrayList<StockDetail> parseStockDetails(String json) {
+    public static ArrayList<Stock> parseStockDetails(String json) {
 
         Log.d(TAG, " entering parseReceipeJson " + json);
 
-        StockDetail stockDetail;
-        ArrayList<StockDetail> stockDetails = new ArrayList<>();
+        Stock stock;
+        ArrayList<Stock> stocks = new ArrayList<>();
 
         try {
 
@@ -31,11 +30,11 @@ class JsonUtilities {
 
             int len = recipeArray.length();
             for (int i = 0; i < len; i++) {
-                stockDetail = new StockDetail();
+                stock = new Stock();
 
                 JSONObject recipeObject = recipeArray.getJSONObject(i);
 
-                stockDetail.mSymbol = recipeObject.optString("symbol", "");
+                stock.Symbol = recipeObject.optString("symbol", "");
 
                 /*
                 JSONArray ingredientsArray = new JSONArray(recipeObject.optString("ingredients",
@@ -51,7 +50,7 @@ class JsonUtilities {
                     ingredient.measure = ingredientObject.optString("measure", "");
                     ingredients.add(ingredient);
                 }
-                stockDetail.ingredients = ingredients;
+                stock.ingredients = ingredients;
 
 
                 JSONArray stepsArray = new JSONArray(recipeObject.optString("steps",
@@ -70,18 +69,18 @@ class JsonUtilities {
                     step.thumbnailURL = object.optString("thumbnailURL", "");
                     steps.add(step);
                 }
-                stockDetail.steps = steps;
+                stock.steps = steps;
 
-                recipies.add(stockDetail);
+                recipies.add(stock);
                 */
 
-                stockDetails.add(stockDetail);
+                stocks.add(stock);
 
             }
 
-            Log.d(TAG, " exiting parseReceipeJson - results " + stockDetails.get(0).toString());
+            Log.d(TAG, " exiting parseReceipeJson - results " + stocks.get(0).toString());
 
-            return stockDetails;
+            return stocks;
 
         } catch (Exception ex) {
             Log.e(TAG + " parseRecipeJson", "Could not parse json " + ex.toString());

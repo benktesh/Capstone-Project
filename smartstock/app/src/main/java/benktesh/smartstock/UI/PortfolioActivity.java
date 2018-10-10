@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import benktesh.smartstock.R;
 import benktesh.smartstock.SearchAdapter;
-import benktesh.smartstock.SearchRow;
+import benktesh.smartstock.Model.SearchRow;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
 public class PortfolioActivity extends AppCompatActivity implements SearchAdapter.ListItemClickListener {
@@ -41,7 +41,7 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
             mCommonUIHelper = new CommonUIHelper(this);
         }
 
-        mSearchList = (RecyclerView) findViewById(R.id.rv_stocks);
+        mSearchList = findViewById(R.id.rv_stocks);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mSearchList.setLayoutManager(layoutManager);

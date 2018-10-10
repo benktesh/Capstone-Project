@@ -14,7 +14,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import benktesh.smartstock.R;
-import benktesh.smartstock.SearchRow;
+import benktesh.smartstock.Model.SearchRow;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
 public class CommonUIHelper {
