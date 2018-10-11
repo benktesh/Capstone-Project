@@ -78,7 +78,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         /*
          * The GreenAdapter is responsible for displaying each item in the list.
          */
-        //mData = getSearchResult("hhh");
+        //mMarketData = getSearchResult("hhh");
         mAdapter = new SearchAdapter(mData, this) ;
         mSearchList.setAdapter(mAdapter);
 

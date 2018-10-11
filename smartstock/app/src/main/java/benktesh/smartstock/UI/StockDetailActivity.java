@@ -14,7 +14,7 @@ public class StockDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stock_detail);
 
 
-        Stock detail = new Stock("ABC", 2.0, true, "NYSE", 100.0, 99.0, 100.0 );
+        Stock detail = new Stock("ABC", 2.0, true, "NYSE", 100.0, 99.0, 100.0,false );
 
 
 

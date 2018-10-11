@@ -12,13 +12,18 @@ public class Stock implements Parcelable{
     public Double DayHigh;
     public Double DayLow;
     public Double Price;
+    public boolean IsMarket;
+
+
+
 
     public Stock() {
 
     }
 
 
-    public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh, Double DayLow, Double Price) {
+    public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
+                 Double DayLow, Double Price, boolean IsMarket) {
         this.Symbol = Symbol;
         this.Change = Change;
         this.InPortoflio = InPortoflio;
@@ -26,6 +31,7 @@ public class Stock implements Parcelable{
         this.DayHigh = DayHigh;
         this.DayLow = DayLow;
         this.Price = Price;
+        this.IsMarket = IsMarket;
     }
 
     protected Stock(Parcel in) {
@@ -52,6 +58,7 @@ public class Stock implements Parcelable{
         } else {
             Price = in.readDouble();
         }
+        IsMarket = in.readByte() != 0;
     }
 
     public static final Creator<Stock> CREATOR = new Creator<Stock>() {
@@ -100,5 +107,7 @@ public class Stock implements Parcelable{
             dest.writeByte((byte) 1);
             dest.writeDouble(Price);
         }
+        dest.writeByte((byte) (IsMarket ? 1 : 0));
+
     }
 }

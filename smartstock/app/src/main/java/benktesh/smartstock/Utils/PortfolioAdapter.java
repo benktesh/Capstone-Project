@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import benktesh.smartstock.Model.Market;
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.R;
 

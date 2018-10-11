@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import benktesh.smartstock.Model.Market;
 import benktesh.smartstock.Model.SearchRow;
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.R;
@@ -193,16 +192,12 @@ public class NetworkUtilities {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    public static ArrayList<Market> getMarketData() {
+    public static ArrayList<Stock> getMarketData() {
         //load the market stat from Database
         //get latest data from api
         //parse through json and return the object
         Log.d(TAG, "getMarketData: ");
-        ArrayList<Market> marketData = new ArrayList<>();
-
-        Market m = new Market();
-        m.Symbol = "SPY";
-
+        ArrayList<Stock> marketData = new ArrayList<>();
 
         marketData.add(makeMarket("SPY", 1000.0, 1.0, "NYSE"));
         marketData.add(makeMarket("DJI", 1000.0, 1.0, "SYSE"));
@@ -210,13 +205,14 @@ public class NetworkUtilities {
         return marketData;
     }
 
-    private static Market makeMarket(String symbol, Double price, Double change, String marketInfo) {
+    private static Stock makeMarket(String symbol, Double price, Double change, String marketInfo) {
 
-        Market m = new Market();
+        Stock m = new Stock();
         m.Symbol = symbol;
         m.Price = price;
         m.Change = change;
         m.Market = marketInfo;
+        m.IsMarket = true;
         return m;
     }
 
@@ -229,19 +225,19 @@ public class NetworkUtilities {
         //public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
         // Double DayLow, Double Price) {
 
-            searchResult.add(new Stock ("EGOV", 1.0,
-                    false, "NASDAQ", 100.0, 99.0, 100.0));
+        searchResult.add(new Stock ("EGOV", 1.0,
+                    false, "NASDAQ", 100.0, 99.0, 100.0, false));
         searchResult.add(new Stock ("SPY", 1.0,
-                true, "NYSE", 100.0, 99.0, 100.0));
+                true, "NYSE", 100.0, 99.0, 100.0, false));
 
         searchResult.add(new Stock ("ARR", 1.0,
-                false, "NYSE", 100.0, 99.0, 100.0));
+                false, "NYSE", 100.0, 99.0, 100.0, false));
 
         searchResult.add(new Stock ("GE", 1.0,
-                true, "NYSE", 100.0, 99.0, 100.0));
+                true, "NYSE", 100.0, 99.0, 100.0, false));
 
         searchResult.add(new Stock ("SPY", 1.0,
-                true, "NYSE", 100.0, 99.0, 100.0));
+                true, "NYSE", 100.0, 99.0, 100.0, false));
 
         return searchResult;
     }

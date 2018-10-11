@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import benktesh.smartstock.Model.Market;
+import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.R;
 
 
@@ -21,7 +21,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
     private static String TAG = MarketAdapter.class.getSimpleName();
 
     private Context mContext;
-    private ArrayList<Market> mData;
+    private ArrayList<Stock> mData;
     private int mViewHolderCount;
     private int mNumberItems;
 
@@ -36,7 +36,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
 
 
     // The constructor receives list of data and listern callback. It initilizes with a viewholder count of 0.
-    public MarketAdapter(ArrayList<Market> data, ListItemClickListener listener) {
+    public MarketAdapter(ArrayList<Stock> data, ListItemClickListener listener) {
 
         mData = data;
         mOnClickListener = listener;
@@ -48,7 +48,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
     //  An interface called ListItemClickListener receives onClick message. Within that interface,
     // we can define a void method called onListItemClick that takes any arguement as paramter.
     public interface ListItemClickListener {
-        void onListItemClick(Market market);
+        void onListItemClick(Stock market);
     }
 
 
@@ -101,7 +101,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
         holder.bind(position);
     }
 
-    public void resetData(ArrayList<Market> data) {
+    public void resetData(ArrayList<Stock> data) {
         mData = data;
         notifyDataSetChanged();
     }
@@ -152,7 +152,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
          */
         void bind(int listIndex) {
 
-            Market market = mData.get(listIndex);
+            Stock market = mData.get(listIndex);
             symbolView.setText(market.Symbol);
             changeView.setText(market.Change.toString());
             summaryView.setText(market.Market);
@@ -170,7 +170,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
-            Market market = mData.get(clickedPosition);
+            Stock market = mData.get(clickedPosition);
             mOnClickListener.onListItemClick(market);
         }
     }
