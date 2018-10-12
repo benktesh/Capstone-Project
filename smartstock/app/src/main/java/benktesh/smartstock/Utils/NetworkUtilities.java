@@ -216,28 +216,42 @@ public class NetworkUtilities {
         return m;
     }
 
+    /*
+    This method returns a list of stock data based on query.
+    If query is for Portfolio, it will return list of stocks in portfolio
+    Else it searches for query string, and returns a list of matching stock items (some paritial matach and upto 10 results)
+     */
     public static ArrayList<Stock> getStockData(String query) {
         Log.d(TAG, "getStockData: " + query);
-        ArrayList<Stock> searchResult;
-        searchResult = new ArrayList<>();
+        ArrayList<Stock> searchResult = new ArrayList<>();
+        if(query.equals(SmartStockConstant.PortfolioQueryString)) {
 
-
-        //public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
-        // Double DayLow, Double Price) {
-
-        searchResult.add(new Stock ("EGOV", 1.0,
+            //load portfolio data from database
+            //get latest stat from network
+            //save latest into db
+            //return data
+            searchResult.add(new Stock ("EGOV", 1.0,
                     false, "NASDAQ", 100.0, 99.0, 100.0, false));
-        searchResult.add(new Stock ("SPY", 1.0,
-                true, "NYSE", 100.0, 99.0, 100.0, false));
+            searchResult.add(new Stock ("SPY", 1.0,
+                    true, "NYSE", 100.0, 99.0, 100.0, false));
 
-        searchResult.add(new Stock ("ARR", 1.0,
-                false, "NYSE", 100.0, 99.0, 100.0, false));
+            searchResult.add(new Stock ("ARR", 1.0,
+                    false, "NYSE", 100.0, 99.0, 100.0, false));
 
-        searchResult.add(new Stock ("GE", 1.0,
-                true, "NYSE", 100.0, 99.0, 100.0, false));
+            searchResult.add(new Stock ("GE", 1.0,
+                    true, "NYSE", 100.0, 99.0, 100.0, false));
 
-        searchResult.add(new Stock ("SPY", 1.0,
-                true, "NYSE", 100.0, 99.0, 100.0, false));
+            searchResult.add(new Stock ("SPY", 1.0,
+                    true, "NYSE", 100.0, 99.0, 100.0, false));
+        }
+        else {
+            //search for query string on api
+            //return a list upto matching number
+
+            LibraryHelper.Trim(searchResult, SmartStockConstant.MaximumSearchResult);
+        }
+
+
 
         return searchResult;
     }

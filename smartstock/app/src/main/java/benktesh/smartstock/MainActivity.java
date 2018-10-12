@@ -155,12 +155,12 @@ public class MainActivity extends AppCompatActivity implements
             query = params[0];
             //Make the progressBar visiable
             spinner.setVisibility(View.VISIBLE);
-            try {
-                Thread.sleep(5000);
-            }
-            catch( Exception ex) {
-                Log.e(TAG, ex.toString());
-            }
+//            try {
+//                Thread.sleep(5000);
+//            }
+//            catch( Exception ex) {
+//                Log.e(TAG, ex.toString());
+//            }
 
 
             ArrayList<Stock> searchResults = null;
