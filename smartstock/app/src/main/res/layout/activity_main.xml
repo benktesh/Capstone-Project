@@ -6,18 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ProgressBar
-        android:id="@+id/progressbar"
-        android:elevation="16dp"
-        android:layout_gravity="center"
-
-        android:indeterminate="true"
-        android:layout_centerInParent="true"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
+    <include layout="@layout/progress_spinner" />
 
     <include layout="@layout/common_main" />
 
