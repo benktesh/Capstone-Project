@@ -98,10 +98,6 @@ public class MainActivity extends AppCompatActivity implements
 
             new NetworkQueryTask().execute(SmartStockConstant.QueryMarket);
             new NetworkQueryTask().execute(SmartStockConstant.QueryStock);
-
-
-
-
     }
 
 
@@ -147,29 +143,22 @@ public class MainActivity extends AppCompatActivity implements
      */
     class NetworkQueryTask extends AsyncTask<String, Void, ArrayList<Stock>> {
 
-
         private String query;
         @Override
         protected ArrayList<Stock> doInBackground(String... params) {
             AsyncTaskCount++;
             query = params[0];
-            //Make the progressBar visiable
             spinner.setVisibility(View.VISIBLE);
-//            try {
-//                Thread.sleep(5000);
-//            }
-//            catch( Exception ex) {
-//                Log.e(TAG, ex.toString());
-//            }
-
-
             ArrayList<Stock> searchResults = null;
             try {
                 if(query == SmartStockConstant.QueryMarket) {
                     searchResults = NetworkUtilities.getMarketData();
                 }
                 else {
+
                     searchResults = NetworkUtilities.getStockData(query);
+                    Log.d(TAG, "Calling getStockData" + query + searchResults.size());
+
                 }
 
             } catch (Exception e) {
@@ -183,17 +172,13 @@ public class MainActivity extends AppCompatActivity implements
             super.onPostExecute(searchResults);
 
             if(query != null) {
-                //super.onPostExecute(searchResults);
                 if (searchResults != null && searchResults.size() != 0) {
                     if(query == SmartStockConstant.QueryMarket) {
                         mAdapter.resetData(searchResults);
-                        //spinner.setVisibility(View.GONE);
                     }
                     else if(query == SmartStockConstant.QueryStock) {
                         mStockAdapter.resetData(searchResults);
-                        //spinner.setVisibility(View.GONE);
                     }
-
 
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();
@@ -205,8 +190,6 @@ public class MainActivity extends AppCompatActivity implements
             if(AsyncTaskCount == AsyncTaskRequested) {
                 spinner.setVisibility(View.GONE);
             }
-
-
         }
     }
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import benktesh.smartstock.Model.SearchRow;
+import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.Utils.ColorUtils;
 
 
@@ -21,7 +22,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     private static String TAG = SearchAdapter.class.getSimpleName();
 
     private Context mContext;
-    private ArrayList<SearchRow> mData;
+    private ArrayList<Stock> mData;
     private int mViewHolderCount;
     private int mNumberItems;
 
@@ -36,22 +37,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
 
     // The constructor receives list of data and listern callback. It initilizes with a viewholder count of 0.
-    public SearchAdapter(ArrayList<SearchRow> data, ListItemClickListener listener) {
+    public SearchAdapter(ArrayList<Stock> data, ListItemClickListener listener) {
 
         mData = data;
         mOnClickListener = listener;
         mViewHolderCount = 0;
-
     }
-
 
     //  An interface called ListItemClickListener receives onClick message. Within that interface,
     // we can define a void method called onListItemClick that takes any arguement as paramter.
     public interface ListItemClickListener {
-        void onListItemClick(SearchRow stock);
+        void onListItemClick(Stock stock);
     }
-
-
 
 
     /**
@@ -103,7 +100,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         holder.bind(position);
     }
 
-    public void resetData(ArrayList<SearchRow> data) {
+    public void resetData(ArrayList<Stock> data) {
         mData = data;
         notifyDataSetChanged();
     }
@@ -153,14 +150,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
          * @param listIndex Position of the item in the list
          */
         void bind(int listIndex) {
-
-            SearchRow stock = mData.get(listIndex);
-            symbolView.setText(stock.getSymbol());
-            changeView.setText(stock.getChange().toString());
-            summaryView.setText(stock.getDetail());
-
-            itemView.setBackgroundColor(ColorUtils.getViewBackGroundColorForStock(mContext, stock.getChange()));
-
+            Stock stock = mData.get(listIndex);
+            symbolView.setText(stock.Symbol);
+            changeView.setText(stock.Change.toString());
+            summaryView.setText(stock.Market);
+            itemView.setBackgroundColor(ColorUtils.getViewBackGroundColorForStock(mContext, stock.Change));
         }
 
 
@@ -172,7 +166,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
-            SearchRow stock = mData.get(clickedPosition);
+            Stock stock = mData.get(clickedPosition);
             mOnClickListener.onListItemClick(stock);
         }
     }

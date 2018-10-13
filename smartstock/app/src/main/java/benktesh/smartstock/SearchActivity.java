@@ -3,6 +3,7 @@ package benktesh.smartstock;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,15 +12,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import benktesh.smartstock.Model.SearchRow;
+import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.UI.CommonUIHelper;
 import benktesh.smartstock.UI.StockDetailActivity;
-import benktesh.smartstock.Utils.MarketAdapter;
+import benktesh.smartstock.Utils.NetworkUtilities;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
 public class SearchActivity extends AppCompatActivity implements SearchAdapter.ListItemClickListener {
@@ -27,9 +30,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     private static String TAG = SearchActivity.class.getSimpleName();
 
     CommonUIHelper mCommonUIHelper;
-
-    ArrayList<SearchRow> mData;
-
+    ArrayList<Stock> mData;
 
     /*
      * References to RecyclerView and Adapter to reset the list to its
@@ -39,14 +40,17 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     private RecyclerView mSearchList;
     private Toast mToast;
 
+    ProgressBar spinner;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        if(mCommonUIHelper == null)
-        {
+        if (mCommonUIHelper == null) {
             mCommonUIHelper = new CommonUIHelper(this);
         }
+
+        spinner = (ProgressBar) findViewById(R.id.progressbar);
 
         /*
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
@@ -73,30 +77,19 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
          * change the child layout size in the RecyclerView
          */
         mSearchList.setHasFixedSize(true);
-
-        // COMPLETE (13) Pass in this as the ListItemClickListener to the GreenAdapter constructor
-        /*
-         * The GreenAdapter is responsible for displaying each item in the list.
-         */
-        //mMarketData = getSearchResult("hhh");
-        mAdapter = new SearchAdapter(mData, this) ;
+        mAdapter = new SearchAdapter(mData, this);
         mSearchList.setAdapter(mAdapter);
-
-
 
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            //TODO this will move to async task
-            mData = getSearchResult(query);
-            mAdapter.resetData(mData);
+            new NetworkQueryTask().execute(query);
         }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-
 
 
         MenuInflater inflater = getMenuInflater();
@@ -130,7 +123,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         });
 
 
-       return true;
+        return true;
     }
 
     @Override
@@ -146,26 +139,12 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         mCommonUIHelper.showToast("Restarted");
     }
 
-    private ArrayList<SearchRow> getSearchResult(String query)
-    {
+    private ArrayList<Stock> getSearchResult(String query) {
         Log.d(TAG, "getSearchResult: " + query);
-        ArrayList<SearchRow> searchResult;
-        searchResult = new ArrayList<>();
-        if(query.equals(SmartStockConstant.PortfolioQueryString)) {
-            //TODO
-            //Get portfolio
-            //call latest data from server
-            //save portfolio
-            //return data
-            searchResult.add(new SearchRow(1, "ABC", 1.0, "PortFolio1"));
-            searchResult.add(new SearchRow(2, "ABC", 0.0, "PortFolio2"));
-        }
-        else {
-            searchResult.add(new SearchRow(1, "ABC", 0.0, ""));
-            searchResult.add(new SearchRow(2, "ABC", -1.0, ""));
-            searchResult.add(new SearchRow(3, "ABC", -2.0, ""));
-        }
-        return searchResult;
+
+
+        return NetworkUtilities.getStockData("");
+
 
     }
 
@@ -175,18 +154,60 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     }
 
     @Override
-    public void onListItemClick(SearchRow stock) {
-        if(mToast != null){
+    public void onListItemClick(Stock stock) {
+        if (mToast != null) {
             mToast.cancel();
         }
-        String toastMessage = "Item #" + stock.getSymbol() + " clicked.";
-        mToast = Toast.makeText(this,toastMessage, Toast.LENGTH_LONG);
+        String toastMessage = "Item #" + stock.Symbol + " clicked.";
+        mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
         mToast.show();
-
-
-
 
         Intent startChildActivityIntent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
         startActivity(startChildActivityIntent);
     }
+
+
+    //asynctask handling
+    class NetworkQueryTask extends AsyncTask<String, Void, ArrayList<Stock>> {
+
+        private String query;
+
+        @Override
+        protected ArrayList<Stock> doInBackground(String... params) {
+            query = params[0];
+            spinner.setVisibility(View.VISIBLE);
+            ArrayList<Stock> searchResults = null;
+            try {
+
+                searchResults = NetworkUtilities.getStockData(query);
+
+
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            return searchResults;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Stock> searchResults) {
+            super.onPostExecute(searchResults);
+
+            if (query != null) {
+                if (searchResults != null && searchResults.size() != 0) {
+                    mAdapter.resetData(searchResults);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Log.e(TAG, "onPostExecute: Query is Null in Async. Nothing Done");
+            }
+            spinner.setVisibility(View.GONE);
+        }
+    }
 }
+

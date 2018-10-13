@@ -11,9 +11,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.R;
 import benktesh.smartstock.SearchAdapter;
 import benktesh.smartstock.Model.SearchRow;
+import benktesh.smartstock.Utils.NetworkUtilities;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
 public class PortfolioActivity extends AppCompatActivity implements SearchAdapter.ListItemClickListener {
@@ -21,7 +23,7 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
     private static String TAG = PortfolioActivity.class.getSimpleName();
 
     CommonUIHelper mCommonUIHelper;
-    ArrayList<SearchRow> mData;
+    ArrayList<Stock> mData;
 
 
     /*
@@ -56,9 +58,7 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
         mAdapter = new SearchAdapter(mData, this);
         mSearchList.setAdapter(mAdapter);
 
-
-        //TODO this will move to async task
-        mData = mCommonUIHelper.getSearchResult(SmartStockConstant.PortfolioQueryString);
+        mData = NetworkUtilities.getStockData(SmartStockConstant.PortfolioQueryString);
         mAdapter.resetData(mData);
 
 
@@ -76,8 +76,8 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
     }
 
     @Override
-    public void onListItemClick(SearchRow stock) {
-        mCommonUIHelper.showToast(stock.getSymbol());
+    public void onListItemClick(Stock stock) {
+        mCommonUIHelper.showToast(stock.Symbol);
         Intent startChildActivityIntent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
         startActivity(startChildActivityIntent);
     }
