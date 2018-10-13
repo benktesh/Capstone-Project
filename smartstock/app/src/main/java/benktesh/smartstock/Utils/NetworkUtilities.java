@@ -224,6 +224,20 @@ public class NetworkUtilities {
     public static ArrayList<Stock> getStockData(String query) {
         Log.d(TAG, "getStockData: " + query);
         ArrayList<Stock> searchResult = new ArrayList<>();
+        searchResult.add(new Stock ("EGOV", 1.0,
+                false, "NASDAQ", 100.0, 99.0, 100.0, false));
+        searchResult.add(new Stock ("SPY", 1.0,
+                true, "NYSE", 100.0, 99.0, 100.0, false));
+
+        searchResult.add(new Stock ("ARR", 1.0,
+                false, "NYSE", 100.0, 99.0, 100.0, false));
+
+        searchResult.add(new Stock ("GE", 1.0,
+                true, "NYSE", 100.0, 99.0, 100.0, false));
+
+        searchResult.add(new Stock ("SPY", 1.0,
+                true, "NYSE", 100.0, 99.0, 100.0, false));
+
         if(query.equals(SmartStockConstant.PortfolioQueryString)) {
 
             //load portfolio data from database
