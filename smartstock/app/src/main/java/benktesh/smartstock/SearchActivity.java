@@ -84,13 +84,12 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-
             new NetworkQueryTask().execute(query);
         }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-
+/*
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
@@ -116,13 +115,14 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
             @Override
             public boolean onQueryTextChange(String s) {
                 // do your search on change or save the last string in search
-                mData = getSearchResult(s);
-                mAdapter.resetData(mData);
-                return false;
+                new NetworkQueryTask().execute(s);
+                //mData = getSearchResult(s);
+               // mAdapter.resetData(mData);
+                return true;
             }
         });
 
-
+*/
         return true;
     }
 
@@ -137,15 +137,6 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     protected void onStart() {
         super.onStart();
         mCommonUIHelper.showToast("Restarted");
-    }
-
-    private ArrayList<Stock> getSearchResult(String query) {
-        Log.d(TAG, "getSearchResult: " + query);
-
-
-        return NetworkUtilities.getStockData("");
-
-
     }
 
 
@@ -175,11 +166,12 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         @Override
         protected ArrayList<Stock> doInBackground(String... params) {
             query = params[0];
-            spinner.setVisibility(View.VISIBLE);
+
+
             ArrayList<Stock> searchResults = null;
             try {
 
-                searchResults = NetworkUtilities.getStockData(query);
+                searchResults = NetworkUtilities.searchStock(query);
 
 
             } catch (Exception e) {
@@ -193,20 +185,25 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
             super.onPostExecute(searchResults);
 
             if (query != null) {
-                if (searchResults != null && searchResults.size() != 0) {
+                if (searchResults != null ) {
+                    if(searchResults.size() == 0){
+                        Toast.makeText(getApplicationContext(), "No stock found", Toast.LENGTH_LONG).show();
+
+                    }
                     mAdapter.resetData(searchResults);
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Searching: " + R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();
                 }
             } else {
                 Log.e(TAG, "onPostExecute: Query is Null in Async. Nothing Done");
             }
-            spinner.setVisibility(View.GONE);
+
         }
     }
 }

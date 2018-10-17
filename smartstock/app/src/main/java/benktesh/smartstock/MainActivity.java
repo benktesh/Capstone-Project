@@ -148,16 +148,20 @@ public class MainActivity extends AppCompatActivity implements
         protected ArrayList<Stock> doInBackground(String... params) {
             AsyncTaskCount++;
             query = params[0];
-            spinner.setVisibility(View.VISIBLE);
+            if(spinner != null ) {
+                spinner.setVisibility(View.VISIBLE);
+            }
             ArrayList<Stock> searchResults = null;
             try {
                 if(query == SmartStockConstant.QueryMarket) {
                     searchResults = NetworkUtilities.getMarketData();
+
+                    Log.d(TAG, query + ": Calling getMarketData() "  + " " + searchResults.size());
                 }
                 else {
 
                     searchResults = NetworkUtilities.getStockData(query);
-                    Log.d(TAG, "Calling getStockData" + query + searchResults.size());
+                    Log.d(TAG,  "Calling getStockData( " + query + ") " + searchResults.size());
 
                 }
 
@@ -187,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements
                 Log.e(TAG, "onPostExecute: Query is Null in Async. Nothing Done");
             }
 
-            if(AsyncTaskCount == AsyncTaskRequested) {
+            if(AsyncTaskCount == AsyncTaskRequested && spinner != null && spinner.getVisibility() == View.VISIBLE) {
                 spinner.setVisibility(View.GONE);
             }
         }

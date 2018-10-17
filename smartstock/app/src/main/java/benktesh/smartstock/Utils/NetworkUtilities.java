@@ -37,6 +37,9 @@ public class NetworkUtilities {
     private static final String TAG = NetworkUtilities.class.getSimpleName();
 
 
+    private static ArrayList<Stock> searchResult = new ArrayList<>();
+
+
     /*
     This method returns the list of Recipe from json
      */
@@ -216,6 +219,21 @@ public class NetworkUtilities {
         return m;
     }
 
+    public static ArrayList<Stock> searchStock(String query){
+        ArrayList<Stock> result = new ArrayList<>();
+        if(query == null || query.length() == 0) {
+            Log.d(TAG, "Empty query string: " + query);
+            return result;
+        }
+        //TODO
+        //do a search
+        //transform result
+        //return
+
+        LibraryHelper.Trim(searchResult, SmartStockConstant.MaximumSearchResult);
+        return searchResult;
+    }
+
     /*
     This method returns a list of stock data based on query.
     If query is for Portfolio, it will return list of stocks in portfolio
@@ -223,20 +241,6 @@ public class NetworkUtilities {
      */
     public static ArrayList<Stock> getStockData(String query) {
         Log.d(TAG, "getStockData: " + query);
-        ArrayList<Stock> searchResult = new ArrayList<>();
-        searchResult.add(new Stock ("EGOV", 1.0,
-                false, "NASDAQ", 100.0, 99.0, 100.0, false));
-        searchResult.add(new Stock ("SPY", 1.0,
-                true, "NYSE", 100.0, 99.0, 100.0, false));
-
-        searchResult.add(new Stock ("ARR", 1.0,
-                false, "NYSE", 100.0, 99.0, 100.0, false));
-
-        searchResult.add(new Stock ("GE", 1.0,
-                true, "NYSE", 100.0, 99.0, 100.0, false));
-
-        searchResult.add(new Stock ("SPY", 1.0,
-                true, "NYSE", 100.0, 99.0, 100.0, false));
 
         if(query.equals(SmartStockConstant.PortfolioQueryString)) {
 
@@ -261,6 +265,22 @@ public class NetworkUtilities {
         else {
             //search for query string on api
             //return a list upto matching number
+            searchResult.add(new Stock ("EGOV", 1.0,
+                    false, "NASDAQ", 100.0, 99.0, 100.0, false));
+            searchResult.add(new Stock ("SPY", 1.0,
+                    true, "NYSE", 100.0, 99.0, 100.0, false));
+
+            searchResult.add(new Stock ("ARR", 1.0,
+                    false, "NYSE", 100.0, 99.0, 100.0, false));
+
+            searchResult.add(new Stock ("GE", 1.0,
+                    true, "NYSE", 100.0, 99.0, 100.0, false));
+
+            searchResult.add(new Stock ("SPY", 1.0,
+                    true, "NYSE", 100.0, 99.0, 100.0, false));
+
+            Log.d(TAG, "Original searchresuult size: " + searchResult.size()
+                    + " max searchsize: " + SmartStockConstant.MaximumSearchResult );
 
             LibraryHelper.Trim(searchResult, SmartStockConstant.MaximumSearchResult);
         }

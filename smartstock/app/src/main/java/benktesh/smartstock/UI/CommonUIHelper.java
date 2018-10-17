@@ -86,28 +86,6 @@ public class CommonUIHelper {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }
 
-    public ArrayList<SearchRow> getSearchResult(String query)
-    {
-        Log.d(TAG, "getSearchResult: " + query);
-        ArrayList<SearchRow> searchResult;
-        searchResult = new ArrayList<>();
-        if(query.equals(SmartStockConstant.PortfolioQueryString)) {
-            //TODO
-            //Get portfolio
-            //call latest data from server
-            //save portfolio
-            //return data
-            searchResult.add(new SearchRow(1, "ABC", 1.0, "PortFolio1"));
-            searchResult.add(new SearchRow(2, "ABC", 0.0, "PortFolio2"));
-        }
-        else {
-            searchResult.add(new SearchRow(1, "ABC", 0.0, ""));
-            searchResult.add(new SearchRow(2, "ABC", -1.0, ""));
-            searchResult.add(new SearchRow(3, "ABC", -2.0, ""));
-        }
-        return searchResult;
-
-    }
 
 
 }
