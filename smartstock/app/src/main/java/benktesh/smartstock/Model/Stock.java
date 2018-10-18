@@ -110,4 +110,5 @@ public class Stock implements Parcelable{
         dest.writeByte((byte) (IsMarket ? 1 : 0));
 
     }
+
 }

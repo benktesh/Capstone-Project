@@ -89,6 +89,10 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
     public void onListItemClick(Stock stock) {
         mCommonUIHelper.showToast(stock.Symbol);
         Intent startChildActivityIntent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
+
+        Log.d(TAG, "received stock: " + stock.Symbol);
+        stock.InPortoflio = true;
+        startChildActivityIntent.putExtra(SmartStockConstant.ParcelableStock, stock);
         startActivity(startChildActivityIntent);
     }
 
@@ -133,7 +137,7 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
                 Log.e(TAG, "onPostExecute: Query is Null in Async. Nothing Done");
             }
 
-            if (mSpinner.getVisibility() == View.VISIBLE) {
+            if (mSpinner != null && mSpinner.getVisibility() == View.VISIBLE) {
                 //mSpinner.setVisibility(View.GONE);
             }
         }
