@@ -53,3 +53,15 @@ In both the adapters, the onClick listerner will call detailed activity and disp
 Add padding
 
 
+api logic:
+https://iextrading.com/developer/docs/#authentication
+
+call api
+create json object
+parse into model
+
+charting library
+
+
+
+
