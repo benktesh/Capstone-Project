@@ -22,8 +22,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import benktesh.smartstock.Data.SmartStrockDbHelper;
 import benktesh.smartstock.Model.SearchRow;
 import benktesh.smartstock.Model.Stock;
+import benktesh.smartstock.Model.Symbol;
 import benktesh.smartstock.R;
 
 /**
@@ -46,44 +48,57 @@ public class NetworkUtilities {
     public static final String STOCKURL = "https://api.iextrading.com/1.0/stock/";
 
 
-    public static void populateSymbol(Context context, boolean force)
+    public static boolean populateSymbol(Context context, boolean force)
     {
+        String result = "";
         if(force == true)
         {
-            loadSymbol(context);
+            result = getSymbols(context);
         }
         else {
             //check database for updateflag for symbolentry table
             //if no record found populate symbol
-            loadSymbol(context);
+            result = getSymbols(context);
         }
+
+        //TODO Handle the update form result
+        ArrayList<Symbol> dataArray = JsonUtilities.parseSymbol(result);
+        if(dataArray == null) {
+            Log.e(TAG, "No data. Could not parse json");
+        }
+        //update the database table
+        //update the flag
+
+
+        Log.d(TAG, result);
+        return result != null;
 
     }
 
-    private static void loadSymbol(Context context)
+    private static String getSymbols(Context context)
     {
         URL url = null;
+        String response;
         try {
             url = new URL(SymbolURL);
 
-            String response = getResponseFromHttpUrl(url, context);
-            Log.d(TAG, response);
+            response = getResponseFromHttpUrl(url, context);
+            return response;
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            return null;
         }
         catch (IOException e) {
 
             e.printStackTrace();
+            return null;
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            return null;
         }
-
-
-
-
 
     }
     /*

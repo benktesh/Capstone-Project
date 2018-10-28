@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import benktesh.smartstock.Model.Stock;
+import benktesh.smartstock.Model.Symbol;
 
 
 @SuppressWarnings("SpellCheckingInspection")
@@ -17,23 +18,44 @@ class JsonUtilities {
 
     private static final String TAG = JsonUtilities.class.getSimpleName();
 
+
+    public static ArrayList<Symbol>  parseSymbol(String json) {
+        Symbol element;
+        ArrayList<Symbol> parsedArray = new ArrayList<>();
+        try {
+            JSONArray dataArray = new JSONArray(json);
+
+            int len = dataArray.length();
+            for(int i = 0 ;i < len; i++) {
+                element = new Symbol();
+                JSONObject elementObject = dataArray.getJSONObject(i);
+                element.symbol = elementObject.optString("symbol", "");
+                element.name = elementObject.optString("name", "");
+                element.date = elementObject.optString("date", "");
+                element.isenabled = elementObject.optString("isenabled", "");
+                element.type = elementObject.optString("type", "");
+                element.iexid = elementObject.optString("date", "");
+                parsedArray.add(element);
+            }
+        }catch (Exception ex) {
+            Log.e(TAG, "Could not parse to symbol " + json);
+            return null;
+        }
+        return parsedArray;
+
+    }
+
     public static ArrayList<Stock> parseStockDetails(String json) {
 
         Log.d(TAG, " entering parseReceipeJson " + json);
-
         Stock stock;
         ArrayList<Stock> stocks = new ArrayList<>();
-
         try {
-
             JSONArray recipeArray = new JSONArray(json);
-
             int len = recipeArray.length();
             for (int i = 0; i < len; i++) {
                 stock = new Stock();
-
                 JSONObject recipeObject = recipeArray.getJSONObject(i);
-
                 stock.Symbol = recipeObject.optString("symbol", "");
 
                 /*

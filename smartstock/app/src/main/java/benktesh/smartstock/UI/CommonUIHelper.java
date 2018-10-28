@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 import benktesh.smartstock.R;
 import benktesh.smartstock.Model.SearchRow;
+import benktesh.smartstock.Utils.NetworkUtilities;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
 public class CommonUIHelper {
@@ -55,6 +57,12 @@ public class CommonUIHelper {
             ShowMessage("Search is handled");
 
         }
+
+        if(id == R.id.action_update) {
+
+            new NetworkTask().execute();
+            ShowMessage("It may take a while. Symbols will be updated");
+        }
         //TODO
         ShowMessage("TO BE DONE");
         return false;
@@ -87,5 +95,29 @@ public class CommonUIHelper {
     }
 
 
+    //NetWorkTask
+    private class NetworkTask extends AsyncTask<String, Integer, Boolean> {
 
+        protected Boolean doInBackground(String... params) {
+            boolean result = false;
+            try {
+                result = NetworkUtilities.populateSymbol(mContext, true);
+            }
+            catch (Exception ex){
+                Log.d(TAG, ex.toString());
+            }
+
+            return result;
+
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            //setProgressPercent(progress[0]);
+        }
+
+        protected void onPostExecute(boolean result) {
+            showToast("Update completed");
+            //showDialog("Downloaded " + result + " bytes");
+        }
+    }
 }
