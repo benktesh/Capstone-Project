@@ -39,6 +39,17 @@ public class SmartStrockDbHelper extends SQLiteOpenHelper {
                 "); ";
         db.execSQL(SQL_CREATE_PORTFOLIO_TABLE);
 
+
+
+
+        final String SQL_CREATE_UPDATEENTRY_TABLE = "CREATE TABLE " + SmartStockContract.UpdateEntry.TABLE_NAME + " (" +
+                SmartStockContract.UpdateEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                SmartStockContract.UpdateEntry.COLUMN_TABLE + " STRING NOT NULL, " +
+                SmartStockContract.UpdateEntry.COLUMN_DATE + " STRING NOT NULL, " +
+                SmartStockContract.UpdateEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                "); ";
+        db.execSQL(SQL_CREATE_UPDATEENTRY_TABLE);
+
         final String SQL_CREATE_MARKET_TABLE = "CREATE TABLE " + SmartStockContract.MarketEntry.TABLE_NAME + " (" +
                 SmartStockContract.MarketEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 SmartStockContract.MarketEntry.COLUMN_SYMBOL + " STRING NOT NULL, " +
@@ -49,6 +60,24 @@ public class SmartStrockDbHelper extends SQLiteOpenHelper {
                 SmartStockContract.MarketEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 "); ";
         db.execSQL(SQL_CREATE_MARKET_TABLE);
+
+        final String SQL_CREATE_SYMBOLENTRY_TABLE = "CREATE TABLE " + SmartStockContract.SymbolEntry.TABLE_NAME + " (" +
+                SmartStockContract.SymbolEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " STRING NOT NULL, " +
+                SmartStockContract.SymbolEntry.COLUMN_NAME + " STRING DEFAULT 0, " +
+                SmartStockContract.SymbolEntry.COLUMN_DATE + " STRING DEFAULT 0, " +
+                SmartStockContract.SymbolEntry.COLUMN_ISENABLED + " STRING DEFAULT 1, " +
+                SmartStockContract.SymbolEntry.COLUMN_TYPE + " STRING DEFAULT 0, " +
+                SmartStockContract.SymbolEntry.COLUMN_IEXID + " STRING DEFAULT 0, " +
+                SmartStockContract.SymbolEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                "); ";
+        db.execSQL(SQL_CREATE_SYMBOLENTRY_TABLE);
+
+
+
+
+
+
     }
 
     @Override
@@ -58,6 +87,8 @@ public class SmartStrockDbHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + SmartStockContract.PortfolioEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SmartStockContract.MarketEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + SmartStockContract.SymbolEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + SmartStockContract.UpdateEntry.TABLE_NAME);
 
         onCreate(db);
     }

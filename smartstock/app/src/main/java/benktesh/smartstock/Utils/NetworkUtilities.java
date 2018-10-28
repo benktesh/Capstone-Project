@@ -40,6 +40,52 @@ public class NetworkUtilities {
     private static ArrayList<Stock> searchResult = new ArrayList<>();
 
 
+    // Api related parameters
+    public static final String BaseAddress = "https://api.iextrading.com/1.0";
+    public static final String SymbolURL = "https://api.iextrading.com/1.0/ref-data/symbols";
+    public static final String STOCKURL = "https://api.iextrading.com/1.0/stock/";
+
+
+    public static void populateSymbol(Context context, boolean force)
+    {
+        if(force == true)
+        {
+            loadSymbol(context);
+        }
+        else {
+            //check database for updateflag for symbolentry table
+            //if no record found populate symbol
+            loadSymbol(context);
+        }
+
+    }
+
+    private static void loadSymbol(Context context)
+    {
+        URL url = null;
+        try {
+            url = new URL(SymbolURL);
+
+            String response = getResponseFromHttpUrl(url, context);
+            Log.d(TAG, response);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+
+
+
+    }
     /*
     This method returns the list of Recipe from json
      */
@@ -79,6 +125,33 @@ public class NetworkUtilities {
         Log.d(TAG, jsonText);
         return JsonUtilities.parseStockDetails(jsonText);
 
+    }
+
+
+    public static String getResponseFromHttpUrl(URL url, Context context) throws IOException {
+        if (!isOnline(context)) {
+            Log.e(TAG, "There is no network connection");
+            return null;
+        }
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setConnectTimeout(10000); //sets connection timeout to 10 seconds
+        urlConnection.setReadTimeout(20000); //sets read time out to 20 seconds
+        try {
+            InputStream in = urlConnection.getInputStream();
+
+            Scanner scanner = new Scanner(in);
+            scanner.useDelimiter("\\A");
+
+            boolean hasInput = scanner.hasNext();
+            if (hasInput) {
+                return scanner.next();
+            } else {
+                scanner.close();
+                return null;
+            }
+        } finally {
+            urlConnection.disconnect();
+        }
     }
 
     public static String getBitmapString(String fileUrl) {
@@ -151,38 +224,6 @@ public class NetworkUtilities {
     }
 
 
-    /**
-     * This method returns the entire result from the HTTP response.
-     *
-     * @param url The URL to fetch the HTTP response from.
-     * @return The contents of the HTTP response.
-     * @throws IOException Related to network and stream reading
-     */
-    private static String getResponseFromHttpUrl(URL url, Context context) throws IOException {
-        if (!isOnline(context)) {
-            Log.e(TAG, "There is no network connection");
-            return null;
-        }
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setConnectTimeout(10000); //sets connection timeout to 10 seconds
-        urlConnection.setReadTimeout(20000); //sets read time out to 20 seconds
-        try {
-            InputStream in = urlConnection.getInputStream();
-
-            Scanner scanner = new Scanner(in);
-            scanner.useDelimiter("\\A");
-
-            boolean hasInput = scanner.hasNext();
-            if (hasInput) {
-                return scanner.next();
-            } else {
-                scanner.close();
-                return null;
-            }
-        } finally {
-            urlConnection.disconnect();
-        }
-    }
 
     /**
      * This method checks network connection. This code was derived from
@@ -226,7 +267,8 @@ public class NetworkUtilities {
             return result;
         }
         //TODO
-        //do a search
+        //do a search on database for symbol
+        //get data from network for each symbol
         //transform result
         //return
 

@@ -13,6 +13,11 @@
         app:showAsAction="never"
         android:orderInCategory="90"/>
     <item
+        android:id="@+id/action_update"
+        android:title="Update"
+        app:showAsAction="never"
+        android:orderInCategory="91"/>
+    <item
         android:id="@+id/action_exit"
         android:orderInCategory="101"
         app:showAsAction="never"

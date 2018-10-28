@@ -29,4 +29,24 @@ public class SmartStockContract {
         public static final String COLUMN_TIMESTAMP = "timestamp";
 
     }
+
+    public static final class SymbolEntry implements BaseColumns {
+        public static final String TABLE_NAME = "symbol";
+        public static final String COLUMN_SYMBOL = "symbol";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_DATE = "date";
+        public static final String COLUMN_ISENABLED = "isenabled";
+        public static final String COLUMN_TYPE = "type";
+        public static final String COLUMN_IEXID = "iexid";
+        public static final String COLUMN_TIMESTAMP = "timestamp";
+
+    }
+
+    public static final class UpdateEntry implements BaseColumns {
+        public static final String TABLE_NAME = "update";
+        public static final String COLUMN_TABLE = "table";
+        public static final String COLUMN_DATE = "date";
+        public static final String COLUMN_TIMESTAMP = "timestamp";
+
+    }
 }
