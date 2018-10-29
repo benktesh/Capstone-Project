@@ -19,14 +19,14 @@ class JsonUtilities {
     private static final String TAG = JsonUtilities.class.getSimpleName();
 
 
-    public static ArrayList<Symbol>  parseSymbol(String json) {
+    public static ArrayList<Symbol> parseSymbol(String json) {
         Symbol element;
         ArrayList<Symbol> parsedArray = new ArrayList<>();
         try {
             JSONArray dataArray = new JSONArray(json);
 
             int len = dataArray.length();
-            for(int i = 0 ;i < len; i++) {
+            for (int i = 0; i < len; i++) {
                 element = new Symbol();
                 JSONObject elementObject = dataArray.getJSONObject(i);
                 element.symbol = elementObject.optString("symbol", "");
@@ -37,11 +37,33 @@ class JsonUtilities {
                 element.iexid = elementObject.optString("date", "");
                 parsedArray.add(element);
             }
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             Log.e(TAG, "Could not parse to symbol " + json);
             return null;
         }
         return parsedArray;
+
+    }
+
+    public static Stock parseStockQuote(String json) {
+        Stock element = null;
+
+        try {
+            JSONObject elementObject = new JSONObject(json);
+            element = new Stock();
+            element.Symbol = elementObject.optString("symbol", "");
+            element.InPortoflio = false;
+            element.Price = elementObject.optDouble("latestPrice", 0.0);
+            element.Change = elementObject.optDouble("change", 0.0);
+            element.Market = elementObject.optString("primaryExchange", "");
+            element.DayHigh = elementObject.optDouble("high", 0.0);
+            element.DayLow = elementObject.optDouble("low", 0.0);
+
+        } catch (Exception ex) {
+            Log.e(TAG, "Could not parse to symbol " + json);
+            return null;
+        }
+        return element;
 
     }
 

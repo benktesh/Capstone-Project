@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/generic"
                     tools:text="1.00"
-                    android:text="@{Double.toString(stock.Change)}" />
+                    android:text="@{Double.toString(safeUnbox(stock.Change))}" />
 
 
             </LinearLayout>

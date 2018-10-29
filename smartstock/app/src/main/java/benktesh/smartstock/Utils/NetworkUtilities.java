@@ -1,7 +1,10 @@
 package benktesh.smartstock.Utils;
 
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -15,13 +18,16 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Scanner;
 
+import benktesh.smartstock.Data.SmartStockContract;
 import benktesh.smartstock.Data.SmartStrockDbHelper;
 import benktesh.smartstock.Model.SearchRow;
 import benktesh.smartstock.Model.Stock;
@@ -37,7 +43,8 @@ import benktesh.smartstock.R;
 
 public class NetworkUtilities {
     private static final String TAG = NetworkUtilities.class.getSimpleName();
-
+    private static SmartStrockDbHelper mDbHelper;
+    private static SQLiteDatabase db;
 
     private static ArrayList<Stock> searchResult = new ArrayList<>();
 
@@ -48,35 +55,57 @@ public class NetworkUtilities {
     public static final String STOCKURL = "https://api.iextrading.com/1.0/stock/";
 
 
-    public static boolean populateSymbol(Context context, boolean force)
-    {
+    public static boolean populateSymbol(Context context, boolean force) {
         String result = "";
-        if(force == true)
-        {
+        if (force == true) {
             result = getSymbols(context);
-        }
-        else {
+        } else {
             //check database for updateflag for symbolentry table
             //if no record found populate symbol
             result = getSymbols(context);
         }
 
-        //TODO Handle the update form result
         ArrayList<Symbol> dataArray = JsonUtilities.parseSymbol(result);
-        if(dataArray == null) {
+        if (dataArray == null) {
             Log.e(TAG, "No data. Could not parse json");
+            return false;
         }
-        //update the database table
-        //update the flag
 
+        mDbHelper = new SmartStrockDbHelper(context);
+        // Gets the data repository in write mode
+        db = mDbHelper.getWritableDatabase();
+        ContentValues values;
+        long rows = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME,null, null);
+        Log.d(TAG, "Deleted # of rows: " + rows);
+        for (int i = 0; i < dataArray.size(); i++) {
+            Symbol symbol = dataArray.get(i);
+            // Create a new map of values, where column names are the keys
+            values = new ContentValues();
+            values.put(SmartStockContract.SymbolEntry.COLUMN_SYMBOL, symbol.symbol);
+            values.put(SmartStockContract.SymbolEntry.COLUMN_NAME, symbol.name);
+            values.put(SmartStockContract.SymbolEntry.COLUMN_DATE, symbol.date);
+            values.put(SmartStockContract.SymbolEntry.COLUMN_IEXID, symbol.iexid);
+            values.put(SmartStockContract.SymbolEntry.COLUMN_ISENABLED, symbol.isenabled);
+            values.put(SmartStockContract.SymbolEntry.COLUMN_TYPE, symbol.type);
+            // Insert the new row, returning the primary key value of the new row
+            long newRowId = db.insert(SmartStockContract.SymbolEntry.TABLE_NAME, null, values);
+            //Log.d(TAG, "Loading Symbol: " + symbol.symbol + " (" + i + ")");
+        }
+
+        values = new ContentValues();
+        values.put(SmartStockContract.UpdateEntry.COLUMN_TABLE, SmartStockContract.SymbolEntry.TABLE_NAME);
+        values.put(SmartStockContract.UpdateEntry.COLUMN_DATE, new Date().toString());
+
+        long newRowId = db.insert(SmartStockContract.UpdateEntry.TABLE_NAME, null, values);
+        db.close();
+
+        Log.d(TAG, "Done updating Symbol: ");
 
         Log.d(TAG, result);
         return result != null;
-
     }
 
-    private static String getSymbols(Context context)
-    {
+    private static String getSymbols(Context context) {
         URL url = null;
         String response;
         try {
@@ -88,19 +117,17 @@ public class NetworkUtilities {
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
 
             e.printStackTrace();
             return null;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
 
     }
+
     /*
     This method returns the list of Recipe from json
      */
@@ -131,7 +158,6 @@ public class NetworkUtilities {
                     jsonText = getLocal(context);
                 }
             }
-
         }
         if (jsonText == null) {
 
@@ -169,56 +195,6 @@ public class NetworkUtilities {
         }
     }
 
-    public static String getBitmapString(String fileUrl) {
-        String bitmapString = null;
-        try {
-            URL myFileUrl = new URL(fileUrl);
-            HttpURLConnection conn =
-                    (HttpURLConnection) myFileUrl.openConnection();
-            conn.setDoInput(true);
-            conn.connect();
-
-            InputStream is = conn.getInputStream();
-            Bitmap temp = BitmapFactory.decodeStream(is);
-            bitmapString = encodeToBase64(temp);
-
-        } catch (IOException e) {
-            Log.e(TAG, "getMap:" + e.getStackTrace());
-        }
-        return bitmapString;
-    }
-
-
-    public static String encodeToBase64(Bitmap image) {
-        if (image == null)
-            return null;
-        Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
-        int quality = 100;
-        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        image.compress(compressFormat, quality, byteArrayOS);
-        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
-    }
-
-    public static Bitmap decodeBase64(String input) {
-        if (input == null || input.isEmpty())
-            return null;
-        byte[] decodedBytes = Base64.decode(input, 0);
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-    }
-
-
-    public static Bitmap GetBitmap(String encodedString) {
-        try {
-            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch (NullPointerException e) {
-            e.getMessage();
-            return null;
-        } catch (OutOfMemoryError e) {
-            return null;
-        }
-    }
 
     private static String getLocal(Context context) {
         BufferedReader reader = null;
@@ -237,7 +213,6 @@ public class NetworkUtilities {
         }
         return url;
     }
-
 
 
     /**
@@ -275,20 +250,58 @@ public class NetworkUtilities {
         return m;
     }
 
-    public static ArrayList<Stock> searchStock(String query){
+    public static ArrayList<Stock> searchStock(Context context, String query) {
+        Log.d(TAG, "Start SearchStock");
         ArrayList<Stock> result = new ArrayList<>();
-        if(query == null || query.length() == 0) {
+        if (query == null || query.length() == 0) {
             Log.d(TAG, "Empty query string: " + query);
             return result;
         }
         //TODO
         //do a search on database for symbol
-        //get data from network for each symbol
-        //transform result
-        //return
 
-        LibraryHelper.Trim(searchResult, SmartStockConstant.MaximumSearchResult);
+        mDbHelper = new SmartStrockDbHelper(context);
+        // Gets the data repository in write mode
+        db = mDbHelper.getReadableDatabase();
+
+        Cursor c = db.rawQuery("SELECT " +
+                SmartStockContract.SymbolEntry.COLUMN_SYMBOL +
+                " FROM " + SmartStockContract.SymbolEntry.TABLE_NAME + " Where " +
+                SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " = '" + query +"' "
+                , null);
+        ArrayList<String> matchingSymbol = new ArrayList<>();
+        if (c.moveToFirst()){
+            do {
+                String symbol = c.getString(0);
+                matchingSymbol.add(symbol);
+            } while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+        searchResult = new ArrayList<Stock>();
+        //Instead of loop, use batch
+        for(int i = 0; i < matchingSymbol.size(); i++){
+            String symbol = matchingSymbol.get(i);
+            Log.d(TAG, "Getting Detailed Data for " + symbol);
+            try {
+                String stockUrl = STOCKURL + symbol + "/quote";
+                URL url = new URL(stockUrl);
+                String response = getResponseFromHttpUrl(url, context);
+                Stock parsedData = JsonUtilities.parseStockQuote(response);
+                //if this stock is in portfolio, then mark it true
+                searchResult.add(parsedData);
+            }
+            catch (Exception ex)
+            {
+                Log.e(TAG, ex.toString());
+            }
+        }
+        Log.d(TAG, "End SearchStock " + searchResult.size() + " " + searchResult.toString());
+        //LibraryHelper.Trim(searchResult, SmartStockConstant.MaximumSearchResult);
+
+
         return searchResult;
+
     }
 
     /*
@@ -299,49 +312,47 @@ public class NetworkUtilities {
     public static ArrayList<Stock> getStockData(String query) {
         Log.d(TAG, "getStockData: " + query);
 
-        if(query.equals(SmartStockConstant.PortfolioQueryString)) {
+        if (query.equals(SmartStockConstant.PortfolioQueryString)) {
 
             //load portfolio data from database
             //get latest stat from network
             //save latest into db
             //return data
-            searchResult.add(new Stock ("EGOV", 1.0,
+            searchResult.add(new Stock("EGOV", 1.0,
                     false, "NASDAQ", 100.0, 99.0, 100.0, false));
-            searchResult.add(new Stock ("SPY", 1.0,
+            searchResult.add(new Stock("SPY", 1.0,
                     true, "NYSE", 100.0, 99.0, 100.0, false));
 
-            searchResult.add(new Stock ("ARR", 1.0,
+            searchResult.add(new Stock("ARR", 1.0,
                     false, "NYSE", 100.0, 99.0, 100.0, false));
 
-            searchResult.add(new Stock ("GE", 1.0,
+            searchResult.add(new Stock("GE", 1.0,
                     true, "NYSE", 100.0, 99.0, 100.0, false));
 
-            searchResult.add(new Stock ("SPY", 1.0,
+            searchResult.add(new Stock("SPY", 1.0,
                     true, "NYSE", 100.0, 99.0, 100.0, false));
-        }
-        else {
+        } else {
             //search for query string on api
             //return a list upto matching number
-            searchResult.add(new Stock ("EGOV", 1.0,
+            searchResult.add(new Stock("EGOV", 1.0,
                     false, "NASDAQ", 100.0, 99.0, 100.0, false));
-            searchResult.add(new Stock ("SPY", 1.0,
+            searchResult.add(new Stock("SPY", 1.0,
                     true, "NYSE", 100.0, 99.0, 100.0, false));
 
-            searchResult.add(new Stock ("ARR", 1.0,
+            searchResult.add(new Stock("ARR", 1.0,
                     false, "NYSE", 100.0, 99.0, 100.0, false));
 
-            searchResult.add(new Stock ("GE", 1.0,
+            searchResult.add(new Stock("GE", 1.0,
                     true, "NYSE", 100.0, 99.0, 100.0, false));
 
-            searchResult.add(new Stock ("SPY", 1.0,
+            searchResult.add(new Stock("SPY", 1.0,
                     true, "NYSE", 100.0, 99.0, 100.0, false));
 
             Log.d(TAG, "Original searchresuult size: " + searchResult.size()
-                    + " max searchsize: " + SmartStockConstant.MaximumSearchResult );
+                    + " max searchsize: " + SmartStockConstant.MaximumSearchResult);
 
             LibraryHelper.Trim(searchResult, SmartStockConstant.MaximumSearchResult);
         }
-
 
 
         return searchResult;

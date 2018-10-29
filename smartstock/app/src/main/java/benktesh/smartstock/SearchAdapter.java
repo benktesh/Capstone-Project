@@ -120,6 +120,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         TextView changeView;
         ImageView imageView;
         TextView summaryView;
+        TextView priceView;
         // Will display which ViewHolder is displaying this data
         TextView viewHolderIndex;
 
@@ -137,7 +138,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             viewHolderIndex = itemView.findViewById(R.id.search_result_change);
             changeView = itemView.findViewById(R.id.search_result_change);
             imageView = itemView.findViewById(R.id.search_result_image);
+            priceView = itemView.findViewById(R.id.search_result_price);
             summaryView = itemView.findViewById(R.id.search_result_summary);
+
             // COMPLETED (7) Call setOnClickListener on the View passed into the constructor (use 'this' as the OnClickListener)
 
             itemView.setOnClickListener(this);
@@ -154,6 +157,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             symbolView.setText(stock.Symbol);
             changeView.setText(stock.Change.toString());
             summaryView.setText(stock.Market);
+            priceView.setText(stock.Price.toString());
             itemView.setBackgroundColor(ColorUtils.getViewBackGroundColorForStock(mContext, stock.Change));
         }
 

@@ -171,8 +171,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
             ArrayList<Stock> searchResults = null;
             try {
 
-                searchResults = NetworkUtilities.searchStock(query);
-
+                searchResults = NetworkUtilities.searchStock(getApplicationContext(), query);
 
             } catch (Exception e) {
                 Log.e(TAG, e.toString());

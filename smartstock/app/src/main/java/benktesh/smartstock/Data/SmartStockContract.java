@@ -43,8 +43,8 @@ public class SmartStockContract {
     }
 
     public static final class UpdateEntry implements BaseColumns {
-        public static final String TABLE_NAME = "update";
-        public static final String COLUMN_TABLE = "table";
+        public static final String TABLE_NAME = "audit";
+        public static final String COLUMN_TABLE = "tablename";
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_TIMESTAMP = "timestamp";
 

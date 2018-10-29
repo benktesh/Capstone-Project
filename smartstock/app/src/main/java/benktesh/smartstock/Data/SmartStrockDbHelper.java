@@ -40,8 +40,6 @@ public class SmartStrockDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_PORTFOLIO_TABLE);
 
 
-
-
         final String SQL_CREATE_UPDATEENTRY_TABLE = "CREATE TABLE " + SmartStockContract.UpdateEntry.TABLE_NAME + " (" +
                 SmartStockContract.UpdateEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 SmartStockContract.UpdateEntry.COLUMN_TABLE + " STRING NOT NULL, " +
