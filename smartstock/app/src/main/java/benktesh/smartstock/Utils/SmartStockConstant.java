@@ -7,5 +7,7 @@ public class SmartStockConstant {
     public static int MaximumSearchResult = 10;
 
     public static String IsPortfolioItem;
-    public static String ParcelableStock;
+    public static String ParcelableStock = "Stock";
+
+
 }

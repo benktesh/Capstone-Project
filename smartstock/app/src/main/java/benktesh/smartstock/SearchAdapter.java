@@ -141,8 +141,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             priceView = itemView.findViewById(R.id.search_result_price);
             summaryView = itemView.findViewById(R.id.search_result_summary);
 
-            // COMPLETED (7) Call setOnClickListener on the View passed into the constructor (use 'this' as the OnClickListener)
-
             itemView.setOnClickListener(this);
         }
 
@@ -160,7 +158,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             priceView.setText(stock.Price.toString());
             itemView.setBackgroundColor(ColorUtils.getViewBackGroundColorForStock(mContext, stock.Change));
         }
-
 
         // COMPLETED (6) Override onClick, passing the clicked item's position (getAdapterPosition()) to mOnClickListener via its onListItemClick method
         /**

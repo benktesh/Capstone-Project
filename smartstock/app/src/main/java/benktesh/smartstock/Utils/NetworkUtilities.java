@@ -250,6 +250,35 @@ public class NetworkUtilities {
         return m;
     }
 
+    public static boolean addPortfolio(Context context, String symbol)
+    {
+        Log.d(TAG, "Starting addPortfolio" );
+        mDbHelper = new SmartStrockDbHelper(context);
+        // Gets the data repository in write mode
+        db = mDbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(SmartStockContract.PortfolioEntry.COLUMN_SYMBOL, symbol);
+
+        long newRowId = db.insert(SmartStockContract.PortfolioEntry.TABLE_NAME, null, values);
+        db.close();
+        Log.d(TAG, "Completing addPortfolio" );
+        return true;
+    }
+
+    public static boolean removePortfolio(Context context, String symbol)
+    {
+        Log.d(TAG, "Starting removePortfolio" );
+        mDbHelper = new SmartStrockDbHelper(context);
+        // Gets the data repository in write mode
+        db = mDbHelper.getWritableDatabase();
+        boolean result =  db.delete(SmartStockContract.PortfolioEntry.TABLE_NAME,
+                SmartStockContract.PortfolioEntry.COLUMN_SYMBOL + " = '" + symbol + "'", null) > 0;
+        db.close();
+        Log.d(TAG, "Completing removePortfolio" );
+        return result;
+    }
+
     public static ArrayList<Stock> searchStock(Context context, String query) {
         Log.d(TAG, "Start SearchStock");
         ArrayList<Stock> result = new ArrayList<>();
@@ -257,8 +286,6 @@ public class NetworkUtilities {
             Log.d(TAG, "Empty query string: " + query);
             return result;
         }
-        //TODO
-        //do a search on database for symbol
 
         mDbHelper = new SmartStrockDbHelper(context);
         // Gets the data repository in write mode
@@ -277,7 +304,21 @@ public class NetworkUtilities {
             } while(c.moveToNext());
         }
         c.close();
+
+        ArrayList<String> portfolio = new ArrayList<>();
+        c = db.rawQuery("SELECT symbol FROM portfolio", null);
+        if (c.moveToFirst()) {
+            do {
+                portfolio.add(c.getString(0));
+            } while (c.moveToNext());
+        }
+        c.close();
+
         db.close();
+        Log.d(TAG, "Matching Symbols Count: " + matchingSymbol.size());
+
+        //TODO - if matching symbol is 0, then either there is no data in the symbol table or symbol is not matching
+        //
         searchResult = new ArrayList<Stock>();
         //Instead of loop, use batch
         for(int i = 0; i < matchingSymbol.size(); i++){
@@ -287,7 +328,11 @@ public class NetworkUtilities {
                 String stockUrl = STOCKURL + symbol + "/quote";
                 URL url = new URL(stockUrl);
                 String response = getResponseFromHttpUrl(url, context);
+                Log.d(TAG, "Details for " + symbol + " : " + response );
                 Stock parsedData = JsonUtilities.parseStockQuote(response);
+                if(portfolio.contains(symbol)) {
+                    parsedData.InPortoflio = true;
+                }
                 //if this stock is in portfolio, then mark it true
                 searchResult.add(parsedData);
             }

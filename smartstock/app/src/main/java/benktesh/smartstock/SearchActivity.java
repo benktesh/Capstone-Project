@@ -25,6 +25,8 @@ import benktesh.smartstock.UI.StockDetailActivity;
 import benktesh.smartstock.Utils.NetworkUtilities;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
+import static benktesh.smartstock.Utils.SmartStockConstant.ParcelableStock;
+
 public class SearchActivity extends AppCompatActivity implements SearchAdapter.ListItemClickListener {
 
     private static String TAG = SearchActivity.class.getSimpleName();
@@ -84,7 +86,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            new NetworkQueryTask().execute(query);
+            new NetworkQueryTask().execute(query.toUpperCase());
         }
     }
 
@@ -153,8 +155,9 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
         mToast.show();
 
-        Intent startChildActivityIntent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
-        startActivity(startChildActivityIntent);
+        Intent intent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
+        intent.putExtra(ParcelableStock, stock);
+        startActivity(intent);
     }
 
 
