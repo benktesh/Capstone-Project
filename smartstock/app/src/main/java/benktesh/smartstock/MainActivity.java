@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 else {
 
-                    searchResults = NetworkUtilities.getStockData(query);
+                    searchResults = NetworkUtilities.getStockData(getApplicationContext(), query);
                     Log.d(TAG,  "Calling getStockData( " + query + ") " + searchResults.size());
 
                 }

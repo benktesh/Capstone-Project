@@ -1,5 +1,6 @@
 package benktesh.smartstock.UI;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
 
     CommonUIHelper mCommonUIHelper;
     ArrayList<Stock> mData;
+    Context mContext;
 
 
     /*
@@ -68,6 +70,7 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
         mSpinner = (ProgressBar) findViewById(R.id.progressbar);
 
         mAdapter.resetData(mData);
+        mContext = getApplicationContext();
 
         new NetworkQueryTask().execute(SmartStockConstant.PortfolioQueryString);
 
@@ -109,7 +112,7 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
             ArrayList<Stock> searchResults = null;
             try {
 
-                searchResults = NetworkUtilities.getStockData(SmartStockConstant.PortfolioQueryString);
+                searchResults = NetworkUtilities.getStockData(mContext, SmartStockConstant.PortfolioQueryString);
 
                 Log.d(TAG, query + ": Calling getMarketData() " + " " + searchResults.size());
 

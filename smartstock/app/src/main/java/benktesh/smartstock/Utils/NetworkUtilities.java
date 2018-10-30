@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
@@ -105,6 +106,9 @@ public class NetworkUtilities {
         return result != null;
     }
 
+    /*
+    Method gets list of symbols supported by API
+     */
     private static String getSymbols(Context context) {
         URL url = null;
         String response;
@@ -256,10 +260,8 @@ public class NetworkUtilities {
         mDbHelper = new SmartStrockDbHelper(context);
         // Gets the data repository in write mode
         db = mDbHelper.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(SmartStockContract.PortfolioEntry.COLUMN_SYMBOL, symbol);
-
         long newRowId = db.insert(SmartStockContract.PortfolioEntry.TABLE_NAME, null, values);
         db.close();
         Log.d(TAG, "Completing addPortfolio" );
@@ -305,42 +307,13 @@ public class NetworkUtilities {
         }
         c.close();
 
-        ArrayList<String> portfolio = new ArrayList<>();
-        c = db.rawQuery("SELECT symbol FROM portfolio", null);
-        if (c.moveToFirst()) {
-            do {
-                portfolio.add(c.getString(0));
-            } while (c.moveToNext());
-        }
-        c.close();
+        ArrayList<String> portfolio = getPortfolio();
 
         db.close();
         Log.d(TAG, "Matching Symbols Count: " + matchingSymbol.size());
 
-        //TODO - if matching symbol is 0, then either there is no data in the symbol table or symbol is not matching
-        //
-        searchResult = new ArrayList<Stock>();
         //Instead of loop, use batch
-        for(int i = 0; i < matchingSymbol.size(); i++){
-            String symbol = matchingSymbol.get(i);
-            Log.d(TAG, "Getting Detailed Data for " + symbol);
-            try {
-                String stockUrl = STOCKURL + symbol + "/quote";
-                URL url = new URL(stockUrl);
-                String response = getResponseFromHttpUrl(url, context);
-                Log.d(TAG, "Details for " + symbol + " : " + response );
-                Stock parsedData = JsonUtilities.parseStockQuote(response);
-                if(portfolio.contains(symbol)) {
-                    parsedData.InPortoflio = true;
-                }
-                //if this stock is in portfolio, then mark it true
-                searchResult.add(parsedData);
-            }
-            catch (Exception ex)
-            {
-                Log.e(TAG, ex.toString());
-            }
-        }
+        searchResult = getDetails(context, matchingSymbol, portfolio);
         Log.d(TAG, "End SearchStock " + searchResult.size() + " " + searchResult.toString());
         //LibraryHelper.Trim(searchResult, SmartStockConstant.MaximumSearchResult);
 
@@ -350,19 +323,75 @@ public class NetworkUtilities {
     }
 
     /*
+    This method returns details of stock
+     */
+    private static ArrayList<Stock> getDetails(Context context,
+                                               ArrayList<String> matchingSymbol,
+                                               ArrayList<String> portfolio) {
+
+        ArrayList<Stock> searchResult = new ArrayList<>();
+        for(int i = 0; i < matchingSymbol.size(); i++){
+            String symbol = matchingSymbol.get(i);
+            Log.d(TAG, "Getting Detailed Data for " + symbol);
+            try {
+                String stockUrl = STOCKURL + symbol + "/quote";
+                URL url = new URL(stockUrl);
+                String response = getResponseFromHttpUrl(url, context);
+                Log.d(TAG, "Details for " + symbol + " : " + response );
+                Stock parsedData = JsonUtilities.parseStockQuote(response);
+                //if this stock is in portfolio, then mark it true
+                if(portfolio != null && portfolio.contains(symbol)) {
+                    parsedData.InPortoflio = true;
+                }
+                searchResult.add(parsedData);
+            }
+            catch (Exception ex)
+            {
+                Log.e(TAG, ex.toString());
+                return null;
+            }
+        }
+        return searchResult;
+    }
+
+    @NonNull
+    private static ArrayList<String> getPortfolio() {
+        Cursor c;
+        ArrayList<String> portfolio = new ArrayList<>();
+        c = db.rawQuery("SELECT symbol FROM portfolio", null);
+        if (c.moveToFirst()) {
+            do {
+                portfolio.add(c.getString(0));
+            } while (c.moveToNext());
+        }
+        c.close();
+        return portfolio;
+    }
+
+    /*
     This method returns a list of stock data based on query.
     If query is for Portfolio, it will return list of stocks in portfolio
     Else it searches for query string, and returns a list of matching stock items (some paritial matach and upto 10 results)
      */
-    public static ArrayList<Stock> getStockData(String query) {
-        Log.d(TAG, "getStockData: " + query);
-
+    public static ArrayList<Stock> getStockData(Context context, String query) {
+        Log.d(TAG, "Starting getStockData: " + query);
         if (query.equals(SmartStockConstant.PortfolioQueryString)) {
 
-            //load portfolio data from database
-            //get latest stat from network
-            //save latest into db
-            //return data
+            mDbHelper = new SmartStrockDbHelper(context);
+            // Gets the data repository in write mode
+            db = mDbHelper.getWritableDatabase();
+
+            ArrayList<String> portfolioSymbol = getPortfolio();
+
+            ArrayList<Stock> portfolio = getDetails(context, portfolioSymbol, portfolioSymbol);
+
+            db.close();
+            Log.d(TAG, "Completing Portfolio" );
+
+            //TODO save to network
+            return portfolio;
+
+            /*
             searchResult.add(new Stock("EGOV", 1.0,
                     false, "NASDAQ", 100.0, 99.0, 100.0, false));
             searchResult.add(new Stock("SPY", 1.0,
@@ -376,6 +405,7 @@ public class NetworkUtilities {
 
             searchResult.add(new Stock("SPY", 1.0,
                     true, "NYSE", 100.0, 99.0, 100.0, false));
+                    */
         } else {
             //search for query string on api
             //return a list upto matching number
