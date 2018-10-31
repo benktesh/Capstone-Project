@@ -16,11 +16,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import benktesh.smartstock.MainActivity;
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.R;
 import benktesh.smartstock.SearchAdapter;
-import benktesh.smartstock.Model.SearchRow;
 import benktesh.smartstock.Utils.NetworkUtilities;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
@@ -72,7 +70,7 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
         mAdapter.resetData(mData);
         mContext = getApplicationContext();
 
-        new NetworkQueryTask().execute(SmartStockConstant.PortfolioQueryString);
+        new NetworkQueryTask().execute(SmartStockConstant.QueryPortfolio);
 
 
     }
@@ -112,7 +110,7 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
             ArrayList<Stock> searchResults = null;
             try {
 
-                searchResults = NetworkUtilities.getStockData(mContext, SmartStockConstant.PortfolioQueryString);
+                searchResults = NetworkUtilities.getStockData(mContext, SmartStockConstant.QueryPortfolio);
 
                 Log.d(TAG, query + ": Calling getMarketData() " + " " + searchResults.size());
 

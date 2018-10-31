@@ -5,21 +5,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Base64;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,7 +25,6 @@ import java.util.Scanner;
 
 import benktesh.smartstock.Data.SmartStockContract;
 import benktesh.smartstock.Data.SmartStrockDbHelper;
-import benktesh.smartstock.Model.SearchRow;
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.Model.Symbol;
 import benktesh.smartstock.R;
@@ -375,7 +369,7 @@ public class NetworkUtilities {
      */
     public static ArrayList<Stock> getStockData(Context context, String query) {
         Log.d(TAG, "Starting getStockData: " + query);
-        if (query.equals(SmartStockConstant.PortfolioQueryString)) {
+        if (query.equals(SmartStockConstant.QueryPortfolio)) {
 
             mDbHelper = new SmartStrockDbHelper(context);
             // Gets the data repository in write mode
@@ -385,8 +379,10 @@ public class NetworkUtilities {
 
             ArrayList<Stock> portfolio = getDetails(context, portfolioSymbol, portfolioSymbol);
 
+
+
             db.close();
-            Log.d(TAG, "Completing Portfolio" );
+            Log.d(TAG, "Completing Portfolio " + portfolio.size() );
 
             //TODO save to network
             return portfolio;

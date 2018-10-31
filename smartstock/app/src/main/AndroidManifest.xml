@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="benktesh.smartstock">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -55,12 +56,11 @@
         </activity>
         <activity
             android:name=".UI.PortfolioActivity"
-            android:launchMode="singleTop"
-            android:label="@string/title_activity_portfolio">
+            android:label="@string/title_activity_portfolio"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -68,6 +68,15 @@
                 android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
+
+        <service
+            android:name=".Utils.FCMService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

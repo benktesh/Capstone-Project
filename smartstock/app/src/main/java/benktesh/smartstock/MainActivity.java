@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements
             AsyncTaskRequested = 2; //we are requesting two asynctasks
 
             new NetworkQueryTask().execute(SmartStockConstant.QueryMarket);
-            new NetworkQueryTask().execute(SmartStockConstant.QueryStock);
+            new NetworkQueryTask().execute(SmartStockConstant.QueryPortfolio);
     }
 
 
@@ -131,8 +131,10 @@ public class MainActivity extends AppCompatActivity implements
         mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
         mToast.show();
 
-        Intent startChildActivityIntent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
-        startActivity(startChildActivityIntent);
+        Intent intent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
+        intent.putExtra(SmartStockConstant.ParcelableStock, data);
+
+        startActivity(intent);
 
     }
 
@@ -180,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements
                     if(query == SmartStockConstant.QueryMarket) {
                         mAdapter.resetData(searchResults);
                     }
-                    else if(query == SmartStockConstant.QueryStock) {
+                    else if(query == SmartStockConstant.QueryPortfolio) {
                         mStockAdapter.resetData(searchResults);
                     }
 

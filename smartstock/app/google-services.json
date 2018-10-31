@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1006056258333-vk09f1uq5ujqb3qioqhbo1tseuct7t4e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "benktesh.smartstock",
+            "certificate_hash": "aa410fd4505ba72d67bb2a792042765b82ac7a97"
+          }
+        },
+        {
           "client_id": "1006056258333-lb0vmno782jm0r6r8ff1l2rmo0gr443h.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006056258333-lb0vmno782jm0r6r8ff1l2rmo0gr443h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

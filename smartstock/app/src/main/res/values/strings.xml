@@ -11,4 +11,5 @@
     <string name="market_summary">Market Summary</string>
     <string name="Network_Error_Prompt">Error getting data over network</string>
     <string name="Error_Loading_Detail">Could not display the result.</string>
+    <string name="notification_message">Message</string>
 </resources>
