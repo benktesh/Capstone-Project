@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1006056258333",
+    "firebase_url": "https://smartstock-359f7.firebaseio.com",
+    "project_id": "smartstock-359f7",
+    "storage_bucket": "smartstock-359f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006056258333:android:ee05d53a92d04990",
+        "android_client_info": {
+          "package_name": "benktesh.smartstock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006056258333-lb0vmno782jm0r6r8ff1l2rmo0gr443h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk80HrFlWz1XleH5s3zHAFcJAzibdmJ-c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
