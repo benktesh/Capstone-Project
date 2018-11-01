@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements
                 else if(query == SmartStockConstant.QueryPopulate) {
 
                     boolean result = NetworkUtilities.populateSymbol(getApplicationContext(), false);
-                    Log.d(TAG, query + ": Calling poplate symabole(contxt, false) returned: " + result);
+                    Log.d(TAG, query + ": Calling poplate symbole(contxt, false) returned: " + result);
 
                 }
                 else {
@@ -183,6 +183,10 @@ public class MainActivity extends AppCompatActivity implements
         protected void onPostExecute(ArrayList<Stock> searchResults) {
             super.onPostExecute(searchResults);
 
+            if(query == SmartStockConstant.QueryPopulate) {
+                Toast.makeText(getApplicationContext(), "Database Update Completed", Toast.LENGTH_LONG).show();
+            }
+
             if(query != null) {
                 if (searchResults != null && searchResults.size() != 0) {
                     if(query == SmartStockConstant.QueryMarket) {
@@ -191,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements
                     else if(query == SmartStockConstant.QueryPortfolio) {
                         mStockAdapter.resetData(searchResults);
                     }
+
 
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();

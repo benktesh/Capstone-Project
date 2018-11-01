@@ -73,6 +73,7 @@ public class NetworkUtilities {
             Log.d(TAG,"Database is being populated.");
             result = getSymbols(context);
         }
+        Log.i(TAG, "Symbols loadeding: " + result);
 
         ArrayList<Symbol> dataArray = JsonUtilities.parseSymbol(result);
         if (dataArray == null) {
@@ -86,7 +87,7 @@ public class NetworkUtilities {
         Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.SymbolEntry.TABLE_NAME + rows);
 
         rows = db.delete(SmartStockContract.UpdateEntry.TABLE_NAME,
-                SmartStockContract.UpdateEntry.COLUMN_TABLE + " = " + SmartStockContract.SymbolEntry.TABLE_NAME, null);
+                SmartStockContract.UpdateEntry.COLUMN_TABLE + " = '" + SmartStockContract.SymbolEntry.TABLE_NAME +"'", null);
         Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.UpdateEntry.TABLE_NAME + rows);
 
         for (int i = 0; i < dataArray.size(); i++) {
@@ -250,6 +251,7 @@ public class NetworkUtilities {
         marketData.add(makeMarket("SPY", 1000.0, 1.0, "NYSE"));
         marketData.add(makeMarket("DJI", 1000.0, 1.0, "SYSE"));
 
+        Log.d(TAG, "returnedMarketData: " + marketData.toString());
         return marketData;
     }
 

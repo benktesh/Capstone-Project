@@ -42,7 +42,7 @@ public class StockDetailActivity extends AppCompatActivity {
         }
         else {
             Log.d(TAG, "Stock " + stock.Symbol);
-            binding.setStock(stock);
+
 
             //TODO replace data point with real
             GraphView graph = (GraphView) findViewById(R.id.graph_stock_detail);
@@ -55,11 +55,9 @@ public class StockDetailActivity extends AppCompatActivity {
                 dp[i] = new DataPoint(t.timestamp, t.price);
             }
 
-
-
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
             graph.addSeries(series);
-
+            binding.setStock(stock);
 
 
             if(stock.InPortoflio){
