@@ -52,11 +52,25 @@ public class NetworkUtilities {
 
     public static boolean populateSymbol(Context context, boolean force) {
         String result = "";
+        mDbHelper = new SmartStrockDbHelper(context);
+        // Gets the data repository in write mode
+        db = mDbHelper.getWritableDatabase();
+
         if (force == true) {
             result = getSymbols(context);
         } else {
             //check database for updateflag for symbolentry table
             //if no record found populate symbol
+
+            String[] columns = new String []{SmartStockContract.UpdateEntry.COLUMN_TABLE};
+            Cursor c = db.query(SmartStockContract.UpdateEntry.TABLE_NAME, columns, null, null, null, null, null);
+            if(c != null && c.getCount() > 0 ){
+                Log.d(TAG,"Database has previously been populated.");
+                c.close();
+                db.close();
+                return true;
+            }
+            Log.d(TAG,"Database is being populated.");
             result = getSymbols(context);
         }
 
@@ -66,12 +80,15 @@ public class NetworkUtilities {
             return false;
         }
 
-        mDbHelper = new SmartStrockDbHelper(context);
-        // Gets the data repository in write mode
-        db = mDbHelper.getWritableDatabase();
+
         ContentValues values;
         long rows = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME,null, null);
-        Log.d(TAG, "Deleted # of rows: " + rows);
+        Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.SymbolEntry.TABLE_NAME + rows);
+
+        rows = db.delete(SmartStockContract.UpdateEntry.TABLE_NAME,
+                SmartStockContract.UpdateEntry.COLUMN_TABLE + " = " + SmartStockContract.SymbolEntry.TABLE_NAME, null);
+        Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.UpdateEntry.TABLE_NAME + rows);
+
         for (int i = 0; i < dataArray.size(); i++) {
             Symbol symbol = dataArray.get(i);
             // Create a new map of values, where column names are the keys
@@ -90,7 +107,6 @@ public class NetworkUtilities {
         values = new ContentValues();
         values.put(SmartStockContract.UpdateEntry.COLUMN_TABLE, SmartStockContract.SymbolEntry.TABLE_NAME);
         values.put(SmartStockContract.UpdateEntry.COLUMN_DATE, new Date().toString());
-
         long newRowId = db.insert(SmartStockContract.UpdateEntry.TABLE_NAME, null, values);
         db.close();
 
@@ -294,14 +310,16 @@ public class NetworkUtilities {
                 , null);
         ArrayList<String> matchingSymbol = new ArrayList<>();
 
-        if(!c.moveToFirst())
+        if(c == null || c.getCount()==0)
         {
+            Log.d(TAG, "First time populating");
             populateSymbol(context, true);
             c = db.rawQuery("SELECT " +
                             SmartStockContract.SymbolEntry.COLUMN_SYMBOL +
                             " FROM " + SmartStockContract.SymbolEntry.TABLE_NAME + " Where " +
                             SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " = '" + query +"' "
                     , null);
+            Log.d(TAG, "Done  populating");
         }
 
         if (c.moveToFirst()){

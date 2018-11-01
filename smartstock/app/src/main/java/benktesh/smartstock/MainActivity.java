@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements
     private void LoadView() {
         Log.d(TAG, "Getting Market Data Async");
 
-            AsyncTaskRequested = 2; //we are requesting two asynctasks
-
+            AsyncTaskRequested = 3; //we are requesting two asynctasks
+            new NetworkQueryTask().execute(SmartStockConstant.QueryPopulate);
             new NetworkQueryTask().execute(SmartStockConstant.QueryMarket);
             new NetworkQueryTask().execute(SmartStockConstant.QueryPortfolio);
     }
@@ -159,6 +159,12 @@ public class MainActivity extends AppCompatActivity implements
                     searchResults = NetworkUtilities.getMarketData();
 
                     Log.d(TAG, query + ": Calling getMarketData() "  + " " + searchResults.size());
+                }
+                else if(query == SmartStockConstant.QueryPopulate) {
+
+                    boolean result = NetworkUtilities.populateSymbol(getApplicationContext(), false);
+                    Log.d(TAG, query + ": Calling poplate symabole(contxt, false) returned: " + result);
+
                 }
                 else {
 
