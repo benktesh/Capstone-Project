@@ -292,15 +292,16 @@ public class NetworkUtilities {
     }
 
     public static ArrayList<Stock> searchStock(Context context, String query) {
-        Log.d(TAG, "Start SearchStock");
         ArrayList<Stock> result = new ArrayList<>();
+
+        //check for null;
         if (query == null || query.length() == 0) {
             Log.d(TAG, "Empty query string: " + query);
-            return result;
+            return null;
         }
 
+        Log.d(TAG, "Start SearchStock: " + query);
         mDbHelper = new SmartStrockDbHelper(context);
-        // Gets the data repository in write mode
         db = mDbHelper.getReadableDatabase();
 
         Cursor c = db.rawQuery("SELECT " +
@@ -308,39 +309,26 @@ public class NetworkUtilities {
                 " FROM " + SmartStockContract.SymbolEntry.TABLE_NAME + " Where " +
                 SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " = '" + query +"' "
                 , null);
+
         ArrayList<String> matchingSymbol = new ArrayList<>();
-
-        if(c == null || c.getCount()==0)
-        {
-            Log.d(TAG, "First time populating");
-            populateSymbol(context, true);
-            c = db.rawQuery("SELECT " +
-                            SmartStockContract.SymbolEntry.COLUMN_SYMBOL +
-                            " FROM " + SmartStockContract.SymbolEntry.TABLE_NAME + " Where " +
-                            SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " = '" + query +"' "
-                    , null);
-            Log.d(TAG, "Done  populating");
-        }
-
         if (c.moveToFirst()){
             do {
                 String symbol = c.getString(0);
                 matchingSymbol.add(symbol);
             } while(c.moveToNext());
         }
-
         c.close();
+        db.close();
+
+        Log.d(TAG, "Matching Symbols Count: " + matchingSymbol.size());
 
         ArrayList<String> portfolio = getPortfolio();
 
-        db.close();
-        Log.d(TAG, "Matching Symbols Count: " + matchingSymbol.size());
-
+        Log.d(TAG, " Portfolio Size: " + portfolio.size());
         //Instead of loop, use batch
         searchResult = getDetails(context, matchingSymbol, portfolio);
         Log.d(TAG, "End SearchStock " + searchResult.size() + " " + searchResult.toString());
         //LibraryHelper.Trim(searchResult, SmartStockConstant.MaximumSearchResult);
-
 
         return searchResult;
 
@@ -380,8 +368,11 @@ public class NetworkUtilities {
 
     @NonNull
     private static ArrayList<String> getPortfolio() {
+        Log.d(TAG, " Getting Portfolio");
         Cursor c;
+
         ArrayList<String> portfolio = new ArrayList<>();
+        db = mDbHelper.getReadableDatabase();
         c = db.rawQuery("SELECT symbol FROM portfolio", null);
         if (c.moveToFirst()) {
             do {
@@ -389,6 +380,9 @@ public class NetworkUtilities {
             } while (c.moveToNext());
         }
         c.close();
+        db.close();
+
+        Log.d(TAG, " Ending Portfolio");
         return portfolio;
     }
 
