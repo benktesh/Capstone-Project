@@ -9,13 +9,16 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.Model.Trade;
@@ -29,6 +32,8 @@ public class StockDetailActivity extends AppCompatActivity {
 
     private static String TAG = StockDetailActivity.class.getSimpleName();
     private Stock stock;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +60,24 @@ public class StockDetailActivity extends AppCompatActivity {
                 dp[i] = new DataPoint(t.timestamp, t.price);
             }
 
+            Date date = new Date();
+
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
             graph.addSeries(series);
+            graph.getGridLabelRenderer().setLabelFormatter(
+                    new DefaultLabelFormatter(){
+                        @Override
+                        public String formatLabel(double value, boolean isValuex){
+                            if(isValuex){
+                                return sdf.format(new Date((long) value));
+                            }
+                            else {
+                                return super.formatLabel(value, isValuex);
+                            }
+                        }
+                    }
+            );
+            //graph.getGridLabelRenderer().setNumHorizontalLabels(9);
             binding.setStock(stock);
 
 
