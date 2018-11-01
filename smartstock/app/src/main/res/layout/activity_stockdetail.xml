@@ -109,10 +109,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <android.support.v7.widget.AppCompatImageView
+            <com.jjoe64.graphview.GraphView
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:src="@mipmap/ic_launcher" />
+                android:layout_height="200dip"
+                android:id="@+id/graph_stock_detail" />
         </LinearLayout>
 
 

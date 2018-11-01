@@ -293,12 +293,24 @@ public class NetworkUtilities {
                 SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " = '" + query +"' "
                 , null);
         ArrayList<String> matchingSymbol = new ArrayList<>();
+
+        if(!c.moveToFirst())
+        {
+            populateSymbol(context, true);
+            c = db.rawQuery("SELECT " +
+                            SmartStockContract.SymbolEntry.COLUMN_SYMBOL +
+                            " FROM " + SmartStockContract.SymbolEntry.TABLE_NAME + " Where " +
+                            SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " = '" + query +"' "
+                    , null);
+        }
+
         if (c.moveToFirst()){
             do {
                 String symbol = c.getString(0);
                 matchingSymbol.add(symbol);
             } while(c.moveToNext());
         }
+
         c.close();
 
         ArrayList<String> portfolio = getPortfolio();
@@ -328,7 +340,7 @@ public class NetworkUtilities {
             String symbol = matchingSymbol.get(i);
             Log.d(TAG, "Getting Detailed Data for " + symbol);
             try {
-                String stockUrl = STOCKURL + symbol + "/quote";
+                String stockUrl = STOCKURL + symbol + "/book";
                 URL url = new URL(stockUrl);
                 String response = getResponseFromHttpUrl(url, context);
                 Log.d(TAG, "Details for " + symbol + " : " + response );

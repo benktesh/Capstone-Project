@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.Model.Symbol;
+import benktesh.smartstock.Model.Trade;
 
 
 @SuppressWarnings("SpellCheckingInspection")
@@ -45,12 +46,16 @@ class JsonUtilities {
 
     }
 
+
+
     public static Stock parseStockQuote(String json) {
         Stock element = null;
 
         try {
-            JSONObject elementObject = new JSONObject(json);
+            JSONObject bookObject = new JSONObject(json);
+
             element = new Stock();
+            JSONObject elementObject = bookObject.getJSONObject("quote");
             element.Symbol = elementObject.optString("symbol", "");
             element.InPortoflio = false;
             element.Price = elementObject.optDouble("latestPrice", 0.0);
@@ -58,9 +63,38 @@ class JsonUtilities {
             element.Market = elementObject.optString("primaryExchange", "");
             element.DayHigh = elementObject.optDouble("high", 0.0);
             element.DayLow = elementObject.optDouble("low", 0.0);
+            element.Trades = new ArrayList<>();
+            JSONArray tradeArray = new JSONArray(bookObject.optString("trades",  "[\"\"]"));
+
+
+            for(int i = 0; i < tradeArray.length(); i++) {
+
+                Trade t = null;
+                try {
+                    t = new Trade();
+
+                    JSONObject tradeObject = tradeArray.getJSONObject(i);
+                    double price = tradeObject.optDouble("price", 0.0);
+                    double size = tradeObject.optDouble("size", 0.0);
+                    long timestamp = tradeObject.optLong("timestamp", 0);
+                    t.size = size;
+                    t.price = price;
+                    t.timestamp = timestamp;
+                    element.Trades.add(t);
+
+                }
+                catch (Exception ex){
+                    Log.e(TAG, ex.getMessage());
+                }
+
+
+
+            }
+
+
 
         } catch (Exception ex) {
-            Log.e(TAG, "Could not parse to symbol " + json);
+            Log.e(TAG, "Could not parse to symbol " + ex.getMessage() + "\n" +json);
             return null;
         }
         return element;

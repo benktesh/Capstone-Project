@@ -9,9 +9,16 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import benktesh.smartstock.Model.Stock;
+import benktesh.smartstock.Model.Trade;
 import benktesh.smartstock.R;
 import benktesh.smartstock.Utils.NetworkUtilities;
 import benktesh.smartstock.Utils.SmartStockConstant;
@@ -36,6 +43,24 @@ public class StockDetailActivity extends AppCompatActivity {
         else {
             Log.d(TAG, "Stock " + stock.Symbol);
             binding.setStock(stock);
+
+            //TODO replace data point with real
+            GraphView graph = (GraphView) findViewById(R.id.graph_stock_detail);
+
+            DataPoint[] dp = new DataPoint[stock.Trades.size()];
+
+            Collections.sort(stock.Trades);
+            for(int i = 0; i < stock.Trades.size(); i++) {
+                Trade t = stock.Trades.get(i);
+                dp[i] = new DataPoint(t.timestamp, t.price);
+            }
+
+
+
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
+            graph.addSeries(series);
+
+
 
             if(stock.InPortoflio){
                 //display portfolio specific UIs

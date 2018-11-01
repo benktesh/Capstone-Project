@@ -3,7 +3,9 @@ package benktesh.smartstock.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Stock implements Parcelable{
+import java.util.ArrayList;
+
+public class Stock implements Parcelable {
 
     public  String Symbol;
     public  Double Change;
@@ -13,26 +15,8 @@ public class Stock implements Parcelable{
     public Double DayLow;
     public Double Price;
     public boolean IsMarket;
+    public ArrayList<Trade> Trades;
 
-
-
-
-    public Stock() {
-
-    }
-
-
-    public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
-                 Double DayLow, Double Price, boolean IsMarket) {
-        this.Symbol = Symbol;
-        this.Change = Change;
-        this.InPortoflio = InPortoflio;
-        this.Market = Market;
-        this.DayHigh = DayHigh;
-        this.DayLow = DayLow;
-        this.Price = Price;
-        this.IsMarket = IsMarket;
-    }
 
     protected Stock(Parcel in) {
         Symbol = in.readString();
@@ -59,6 +43,7 @@ public class Stock implements Parcelable{
             Price = in.readDouble();
         }
         IsMarket = in.readByte() != 0;
+        Trades = in.createTypedArrayList(Trade.CREATOR);
     }
 
     public static final Creator<Stock> CREATOR = new Creator<Stock>() {
@@ -72,6 +57,44 @@ public class Stock implements Parcelable{
             return new Stock[size];
         }
     };
+
+    public ArrayList<Trade> getTrades() {
+        return Trades;
+    }
+
+    public void setTrades(ArrayList<Trade> trades) {
+        Trades = trades;
+    }
+
+    public Stock() {
+
+    }
+
+
+    public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
+                 Double DayLow, Double Price, boolean IsMarket) {
+        this.Symbol = Symbol;
+        this.Change = Change;
+        this.InPortoflio = InPortoflio;
+        this.Market = Market;
+        this.DayHigh = DayHigh;
+        this.DayLow = DayLow;
+        this.Price = Price;
+        this.IsMarket = IsMarket;
+    }
+
+    public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
+                 Double DayLow, Double Price, boolean IsMarket, ArrayList<Trade> trades) {
+        this.Symbol = Symbol;
+        this.Change = Change;
+        this.InPortoflio = InPortoflio;
+        this.Market = Market;
+        this.DayHigh = DayHigh;
+        this.DayLow = DayLow;
+        this.Price = Price;
+        this.IsMarket = IsMarket;
+        this.Trades = trades;
+    }
 
     @Override
     public int describeContents() {
@@ -108,7 +131,6 @@ public class Stock implements Parcelable{
             dest.writeDouble(Price);
         }
         dest.writeByte((byte) (IsMarket ? 1 : 0));
-
+        dest.writeTypedList(Trades);
     }
-
 }

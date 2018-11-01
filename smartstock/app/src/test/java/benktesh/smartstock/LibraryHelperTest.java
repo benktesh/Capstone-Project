@@ -5,9 +5,13 @@ import android.util.Log;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import benktesh.smartstock.Model.Stock;
+import benktesh.smartstock.Model.Trade;
 import benktesh.smartstock.Utils.LibraryHelper;
 import benktesh.smartstock.Utils.SmartStockConstant;
 
@@ -48,5 +52,20 @@ public class LibraryHelperTest {
         Assert.assertTrue(searchResult.size() > 2);
         LibraryHelper.Trim(searchResult, 2);
         Assert.assertTrue(searchResult.size() == 2);
+    }
+
+    @Test
+    public void timeStampConverion()
+    {
+        Trade t = new Trade();
+        t.timestamp = Long.parseLong("1541016446379");
+
+        Date d = t.getTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        Assert.assertTrue(cal.get(Calendar.YEAR)  == 2018);
+
+
+
     }
 }

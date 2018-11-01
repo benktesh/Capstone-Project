@@ -119,7 +119,7 @@ public class FCMService extends FirebaseMessagingService {
 
         // If the message is longer than the max number of characters we want in our
         // notification, truncate it and add the unicode character for ellipsis
-        if (message.length() > NOTIFICATION_MAX_CHARACTERS) {
+        if (message != null && message.length() > NOTIFICATION_MAX_CHARACTERS) {
             message = message.substring(0, NOTIFICATION_MAX_CHARACTERS) + "\u2026";
         }
 
