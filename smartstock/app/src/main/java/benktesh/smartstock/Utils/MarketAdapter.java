@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -171,6 +172,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
             Stock market = mData.get(clickedPosition);
+            Toast.makeText(mContext, "Clicked stock: " + market.Symbol, Toast.LENGTH_SHORT).show();
             mOnClickListener.onListItemClick(market);
         }
     }

@@ -156,8 +156,7 @@ public class MainActivity extends AppCompatActivity implements
             ArrayList<Stock> searchResults = null;
             try {
                 if(query == SmartStockConstant.QueryMarket) {
-                    searchResults = NetworkUtilities.getMarketData();
-
+                    searchResults = NetworkUtilities.getStockData(getApplicationContext(), query);
                     Log.d(TAG, query + ": Calling getMarketData() "  + " " + searchResults.size());
                 }
                 else if(query == SmartStockConstant.QueryPopulate) {

@@ -51,12 +51,18 @@ public class NetworkUtilities {
 
 
     public static boolean populateSymbol(Context context, boolean force) {
+        Log.d(TAG, "Populating Symbols");
+
+        //startout marketSymbol
+        loadMarketSymbols(context, SmartStockConstant.MarketSymbols,force);
+
         String result = "";
         mDbHelper = new SmartStrockDbHelper(context);
         // Gets the data repository in write mode
         db = mDbHelper.getWritableDatabase();
 
         if (force == true) {
+            Log.d(TAG,"Loading new sets of symbols.");
             result = getSymbols(context);
         } else {
             //check database for updateflag for symbolentry table
@@ -65,15 +71,17 @@ public class NetworkUtilities {
             String[] columns = new String []{SmartStockContract.UpdateEntry.COLUMN_TABLE};
             Cursor c = db.query(SmartStockContract.UpdateEntry.TABLE_NAME, columns, null, null, null, null, null);
             if(c != null && c.getCount() > 0 ){
-                Log.d(TAG,"Database has previously been populated.");
+                //Log.d(TAG,"Database has previously been populated. Returning true");
                 c.close();
                 db.close();
+                mDbHelper.close();
                 return true;
             }
-            Log.d(TAG,"Database is being populated.");
+            Log.d(TAG,"Loading new sets of symbols.");
             result = getSymbols(context);
         }
-        Log.i(TAG, "Symbols loadeding: " + result);
+
+        Log.i(TAG, "Symbols loading: " + result);
 
         ArrayList<Symbol> dataArray = JsonUtilities.parseSymbol(result);
         if (dataArray == null) {
@@ -110,11 +118,58 @@ public class NetworkUtilities {
         values.put(SmartStockContract.UpdateEntry.COLUMN_DATE, new Date().toString());
         long newRowId = db.insert(SmartStockContract.UpdateEntry.TABLE_NAME, null, values);
         db.close();
-
-        Log.d(TAG, "Done updating Symbol: ");
-
-        Log.d(TAG, result);
+        mDbHelper.close();
+        Log.d(TAG, "Done updating Symbol: " + result);
         return result != null;
+    }
+
+    public static void loadMarketSymbols(Context context, String[] marketSymbols, boolean force)
+    {
+        try {
+            Log.d(TAG, "loadMarketSymbols");
+
+            SmartStrockDbHelper mDbHelper = new SmartStrockDbHelper(context);
+            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+            String[] columns = new String[]{SmartStockContract.UpdateEntry.COLUMN_TABLE};
+
+            Cursor c = db.query(SmartStockContract.UpdateEntry.TABLE_NAME, columns,
+                    SmartStockContract.UpdateEntry.COLUMN_TABLE + " = '" +
+                    SmartStockContract.MarketEntry.TABLE_NAME + "'", null, null, null, null, null);
+            if (force == false && c != null && c.getCount() > 0) {
+                Log.d(TAG, "Market symbols have previously been populated.");
+
+            } else {
+
+                long rows = db.delete(SmartStockContract.MarketEntry.TABLE_NAME, null, null);
+                Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.MarketEntry.TABLE_NAME + rows);
+
+                rows = db.delete(SmartStockContract.UpdateEntry.TABLE_NAME,
+                        SmartStockContract.UpdateEntry.COLUMN_TABLE + " = '" + SmartStockContract.MarketEntry.TABLE_NAME + "'", null);
+                Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.UpdateEntry.TABLE_NAME + rows);
+
+                ContentValues values;
+                for (String symbol : marketSymbols) {
+                    values = new ContentValues();
+                    values.put(SmartStockContract.MarketEntry.COLUMN_SYMBOL, symbol);
+                    db.insert(SmartStockContract.MarketEntry.TABLE_NAME, null, values);
+                }
+
+                values = new ContentValues();
+                values.put(SmartStockContract.UpdateEntry.COLUMN_TABLE, SmartStockContract.MarketEntry.TABLE_NAME);
+                values.put(SmartStockContract.UpdateEntry.COLUMN_DATE, new Date().toString());
+                long newRowId = db.insert(SmartStockContract.UpdateEntry.TABLE_NAME, null, values);
+            }
+
+            c.close();
+            db.close();
+            mDbHelper.close();
+        }
+        catch(Exception ex)
+        {
+            Log.e(TAG , "loadMarketSymbols: " + ex.toString());
+        }
+
     }
 
     /*
@@ -241,18 +296,33 @@ public class NetworkUtilities {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    public static ArrayList<Stock> getMarketData() {
-        //load the market stat from Database
-        //get latest data from api
-        //parse through json and return the object
-        Log.d(TAG, "getMarketData: ");
-        ArrayList<Stock> marketData = new ArrayList<>();
+    /*
+        This method returns a list of stocks as market data
+     */
+    public static ArrayList<String> getMarketList(Context context) {
+        Log.d(TAG, " Starting getMarketList");
 
-        marketData.add(makeMarket("SPY", 1000.0, 1.0, "NYSE"));
-        marketData.add(makeMarket("DJI", 1000.0, 1.0, "SYSE"));
+        ArrayList<String> data = new ArrayList<>();
+        SmartStrockDbHelper mDbHelper = new SmartStrockDbHelper(context);
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        Cursor c;
+        c = db.rawQuery("SELECT symbol FROM market", null);
+        if (c.moveToFirst()) {
+            do {
+                data.add(c.getString(0));
+            } while (c.moveToNext());
+        }
+        c.close();
+        db.close();
+        mDbHelper.close();
 
-        Log.d(TAG, "returnedMarketData: " + marketData.toString());
-        return marketData;
+        Log.d(TAG, " Ending getMarketList");
+        return data;
+
+
+
+
+
     }
 
     private static Stock makeMarket(String symbol, Double price, Double change, String marketInfo) {
@@ -391,6 +461,7 @@ public class NetworkUtilities {
     /*
     This method returns a list of stock data based on query.
     If query is for Portfolio, it will return list of stocks in portfolio
+    If query is for Market, it will return list of stocks in market
     Else it searches for query string, and returns a list of matching stock items (some paritial matach and upto 10 results)
      */
     public static ArrayList<Stock> getStockData(Context context, String query) {
@@ -405,30 +476,27 @@ public class NetworkUtilities {
 
             ArrayList<Stock> portfolio = getDetails(context, portfolioSymbol, portfolioSymbol);
 
-
-
             db.close();
             Log.d(TAG, "Completing Portfolio " + portfolio.size() );
-
-            //TODO save to network
             return portfolio;
+        }
+        else if(query.equals(SmartStockConstant.QueryMarket)) {
+            mDbHelper = new SmartStrockDbHelper(context);
+            // Gets the data repository in write mode
+            db = mDbHelper.getWritableDatabase();
 
-            /*
-            searchResult.add(new Stock("EGOV", 1.0,
-                    false, "NASDAQ", 100.0, 99.0, 100.0, false));
-            searchResult.add(new Stock("SPY", 1.0,
-                    true, "NYSE", 100.0, 99.0, 100.0, false));
+            ArrayList<String> symbols = getMarketList(context);
+            ArrayList<String> portfolioSymbol = getPortfolio();
 
-            searchResult.add(new Stock("ARR", 1.0,
-                    false, "NYSE", 100.0, 99.0, 100.0, false));
+            ArrayList<Stock> markets = getDetails(context, symbols, portfolioSymbol);
 
-            searchResult.add(new Stock("GE", 1.0,
-                    true, "NYSE", 100.0, 99.0, 100.0, false));
+            db.close();
+            Log.d(TAG, "Completing Portfolio " + markets.size() );
+            return markets;
+        }
 
-            searchResult.add(new Stock("SPY", 1.0,
-                    true, "NYSE", 100.0, 99.0, 100.0, false));
-                    */
-        } else {
+        /*
+        else {
             //search for query string on api
             //return a list upto matching number
             searchResult.add(new Stock("EGOV", 1.0,
@@ -450,7 +518,7 @@ public class NetworkUtilities {
 
             LibraryHelper.Trim(searchResult, SmartStockConstant.MaximumSearchResult);
         }
-
+*/
 
         return searchResult;
     }

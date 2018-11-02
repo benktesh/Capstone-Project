@@ -9,5 +9,10 @@ public class SmartStockConstant {
     public static String IsPortfolioItem;
     public static String ParcelableStock = "Stock";
 
+    //starting market symbol
+    public static String[] MarketSymbols = new String[] {
+            "DIA", "SPY", "IWM"
+    };
+
 
 }

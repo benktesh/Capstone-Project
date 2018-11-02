@@ -20,7 +20,6 @@ public class SmartStockContract {
 
     public static final class MarketEntry implements BaseColumns {
         public static final String TABLE_NAME = "market";
-
         public static final String COLUMN_SYMBOL = "symbol";
         public static final String COLUMN_CHANGE = "change";
         public static final String COLUMN_VALUE = "value";
