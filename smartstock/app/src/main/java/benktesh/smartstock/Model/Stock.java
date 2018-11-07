@@ -16,6 +16,7 @@ public class Stock implements Parcelable {
     public Double Price;
     public boolean IsMarket;
     public ArrayList<Trade> Trades;
+    public ArrayList<Chart> Charts;
 
 
     protected Stock(Parcel in) {
@@ -44,6 +45,46 @@ public class Stock implements Parcelable {
         }
         IsMarket = in.readByte() != 0;
         Trades = in.createTypedArrayList(Trade.CREATOR);
+        Charts = in.createTypedArrayList(Chart.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(Symbol);
+        if (Change == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(Change);
+        }
+        dest.writeByte((byte) (InPortoflio ? 1 : 0));
+        dest.writeString(Market);
+        if (DayHigh == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(DayHigh);
+        }
+        if (DayLow == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(DayLow);
+        }
+        if (Price == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(Price);
+        }
+        dest.writeByte((byte) (IsMarket ? 1 : 0));
+        dest.writeTypedList(Trades);
+        dest.writeTypedList(Charts);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Stock> CREATOR = new Creator<Stock>() {
@@ -84,7 +125,7 @@ public class Stock implements Parcelable {
     }
 
     public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
-                 Double DayLow, Double Price, boolean IsMarket, ArrayList<Trade> trades) {
+                 Double DayLow, Double Price, boolean IsMarket, ArrayList<Trade> trades, ArrayList<Chart> charts) {
         this.Symbol = Symbol;
         this.Change = Change;
         this.InPortoflio = InPortoflio;
@@ -94,43 +135,7 @@ public class Stock implements Parcelable {
         this.Price = Price;
         this.IsMarket = IsMarket;
         this.Trades = trades;
+        this.Charts = charts;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(Symbol);
-        if (Change == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(Change);
-        }
-        dest.writeByte((byte) (InPortoflio ? 1 : 0));
-        dest.writeString(Market);
-        if (DayHigh == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(DayHigh);
-        }
-        if (DayLow == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(DayLow);
-        }
-        if (Price == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(Price);
-        }
-        dest.writeByte((byte) (IsMarket ? 1 : 0));
-        dest.writeTypedList(Trades);
-    }
 }

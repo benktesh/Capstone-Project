@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import benktesh.smartstock.Model.Chart;
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.Model.Trade;
 import benktesh.smartstock.Utils.LibraryHelper;
@@ -66,6 +67,17 @@ public class LibraryHelperTest {
         Assert.assertTrue(cal.get(Calendar.YEAR)  == 2018);
 
 
+
+    }
+
+    @Test
+    public void chartMinuteFormatting()
+    {
+        Chart c = new Chart();
+        c.Date = "20181107";
+        c.Minute = "9:30";
+        Date d = c.getDateForChart();
+        Assert.assertTrue(d != null);
 
     }
 }

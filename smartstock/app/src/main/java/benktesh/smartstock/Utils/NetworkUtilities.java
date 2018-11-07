@@ -25,6 +25,7 @@ import java.util.Scanner;
 
 import benktesh.smartstock.Data.SmartStockContract;
 import benktesh.smartstock.Data.SmartStrockDbHelper;
+import benktesh.smartstock.Model.Chart;
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.Model.Symbol;
 import benktesh.smartstock.R;
@@ -48,6 +49,9 @@ public class NetworkUtilities {
     public static final String BaseAddress = "https://api.iextrading.com/1.0";
     public static final String SymbolURL = "https://api.iextrading.com/1.0/ref-data/symbols";
     public static final String STOCKURL = "https://api.iextrading.com/1.0/stock/";
+    public static final String CHARTSUFFIX = "/chart/1d";
+    public static final String BOOK_SUFFIX = "/book";
+    public static final String QUOTE_SUFFIX = "/quote";
 
 
     public static boolean populateSymbol(Context context, boolean force) {
@@ -418,15 +422,25 @@ public class NetworkUtilities {
             String symbol = matchingSymbol.get(i);
             Log.d(TAG, "Getting Detailed Data for " + symbol);
             try {
-                String stockUrl = STOCKURL + symbol + "/book";
+                String stockUrl = STOCKURL + symbol + QUOTE_SUFFIX;
+                Log.d(TAG, "getDetails: " + symbol);
                 URL url = new URL(stockUrl);
                 String response = getResponseFromHttpUrl(url, context);
-                Log.d(TAG, "Details for " + symbol + " : " + response );
+                Log.d(TAG, "Details for quote for " + symbol + " : " + response );
                 Stock parsedData = JsonUtilities.parseStockQuote(response);
                 //if this stock is in portfolio, then mark it true
                 if(portfolio != null && portfolio.contains(symbol)) {
                     parsedData.InPortoflio = true;
                 }
+                //TODO split to different thread for performance
+                url = new URL(STOCKURL + symbol + CHARTSUFFIX);
+                Log.d(TAG, "getDetails calling chart: " + url);
+                response = getResponseFromHttpUrl(url,context);
+                Log.d(TAG, "Detail for chart Data for " + symbol + " : " + response );
+
+                ArrayList<Chart> chartData = JsonUtilities.parseChartQuote(response);
+
+                parsedData.Charts = chartData == null ?  null : chartData;
                 searchResult.add(parsedData);
             }
             catch (Exception ex)

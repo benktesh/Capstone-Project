@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
+import benktesh.smartstock.Model.Chart;
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.Model.Trade;
 import benktesh.smartstock.R;
@@ -48,16 +49,17 @@ public class StockDetailActivity extends AppCompatActivity {
         else {
             Log.d(TAG, "Stock " + stock.Symbol);
 
+            //load chart only when there is data
+            if (stock.Charts != null) {
 
-            //TODO replace data point with real
-            GraphView graph = (GraphView) findViewById(R.id.graph_stock_detail);
+                GraphView graph = (GraphView) findViewById(R.id.graph_stock_detail);
 
-            DataPoint[] dp = new DataPoint[stock.Trades.size()];
+                DataPoint[] dp = new DataPoint[stock.Charts.size()];
 
-            Collections.sort(stock.Trades);
-            for(int i = 0; i < stock.Trades.size(); i++) {
-                Trade t = stock.Trades.get(i);
-                dp[i] = new DataPoint(t.timestamp, t.price);
+            Collections.sort(stock.Charts);
+            for (int i = 0; i < stock.Charts.size(); i++) {
+                Chart d = stock.Charts.get(i);
+                dp[i] = new DataPoint(d.getDateForChart(), (double) d.Average);
             }
 
             Date date = new Date();
@@ -65,19 +67,19 @@ public class StockDetailActivity extends AppCompatActivity {
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
             graph.addSeries(series);
             graph.getGridLabelRenderer().setLabelFormatter(
-                    new DefaultLabelFormatter(){
+                    new DefaultLabelFormatter() {
                         @Override
-                        public String formatLabel(double value, boolean isValuex){
-                            if(isValuex){
+                        public String formatLabel(double value, boolean isValuex) {
+                            if (isValuex) {
                                 return sdf.format(new Date((long) value));
-                            }
-                            else {
+                            } else {
                                 return super.formatLabel(value, isValuex);
                             }
                         }
                     }
             );
             //graph.getGridLabelRenderer().setNumHorizontalLabels(9);
+        }
             binding.setStock(stock);
 
 
