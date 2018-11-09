@@ -16,7 +16,9 @@
         android:contentDescription="@string/app_name"
         android:text="@string/app_name"
         android:textColor="#ffffff"
-        android:textSize="24sp"
+        android:textSize="8sp"
         android:textStyle="bold|italic" />
+
+    <include layout="@layout/activity_stockdetail" />
 
 </RelativeLayout>

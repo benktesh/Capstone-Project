@@ -140,7 +140,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
             viewHolderIndex = itemView.findViewById(R.id.search_result_change);
             changeView = itemView.findViewById(R.id.search_result_change);
             priceView = itemView.findViewById(R.id.search_result_price);
-            imageView = itemView.findViewById(R.id.search_result_image);
+            //imageView = itemView.findViewById(R.id.search_result_image);
             summaryView = itemView.findViewById(R.id.search_result_summary);
 
             itemView.setOnClickListener(this);

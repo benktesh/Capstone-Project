@@ -7,6 +7,14 @@
     tools:context=".UI.PortfolioActivity">
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:text="Portfolio List" />
+    <include layout="@layout/stock_row_header" />
 
 
     <include layout="@layout/content_portfolio" />

@@ -140,7 +140,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.Port
             viewHolderIndex = itemView.findViewById(R.id.search_result_change);
             priceView = itemView.findViewById(R.id.search_result_price);
             changeView = itemView.findViewById(R.id.search_result_change);
-            imageView = itemView.findViewById(R.id.search_result_image);
+            //imageView = itemView.findViewById(R.id.search_result_image);
             summaryView = itemView.findViewById(R.id.search_result_summary);
 
             itemView.setOnClickListener(this);

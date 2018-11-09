@@ -52,7 +52,7 @@
                     android:id="@+id/label_stock_change"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Change (%)" />
+                    android:text="@string/label_change" />
 
                 <TextView
                     android:id="@+id/stock_change"
@@ -82,19 +82,19 @@
                     android:layout_weight="1"
                     android:clickable="true"
                     android:focusable="true"
-                    android:contentDescription="Adds or remove stock from @string/title_activity_portfolio"
+                    android:contentDescription="@string/content_description_add_remove_portfolio"
                     android:fadingEdge="horizontal|vertical"
                     android:checked="@={stock.InPortoflio}"
                     android:onClick="onTogglePortfolio"
-                    android:textOff="Add Portfolio"
-                    android:textOn="Remove Portfolio" />
+                    android:textOff="@string/add_portfolio"
+                    android:textOn="@string/remove_portfolio" />
 
                 <TextView
                     android:id="@+id/label_portfolio_quantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Quantity" />
+                    android:text="@string/label_quantity" />
     <!-- Quantity is always one at this stage -->
                 <TextView
                     android:id="@+id/plain_text_input"
@@ -111,6 +111,7 @@
             android:layout_weight="1">
 
             <com.jjoe64.graphview.GraphView
+                android:contentDescription="@string/content_description"
                 android:layout_width="match_parent"
                 android:layout_height="200dip"
                 android:id="@+id/graph_stock_detail" />

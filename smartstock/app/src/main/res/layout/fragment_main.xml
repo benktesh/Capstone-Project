@@ -23,7 +23,9 @@
                 android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:text="@string/market_summary"
+                android:textColor="@android:color/white"
                 android:visibility="visible" />
+            <include layout="@layout/stock_row_header" />
 
 
             <android.support.v7.widget.RecyclerView
@@ -50,10 +52,16 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:gravity="center"
+                android:textColor="@android:color/white"
                 android:text="Portfolio Summary" />
+
+            <include layout="@layout/stock_row_header" />
+
 
             <include layout="@layout/recycle_stock" />
         </LinearLayout>
+
+
 
     </LinearLayout>
 

@@ -137,7 +137,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             symbolView = itemView.findViewById(R.id.search_result_symbol);
             viewHolderIndex = itemView.findViewById(R.id.search_result_change);
             changeView = itemView.findViewById(R.id.search_result_change);
-            imageView = itemView.findViewById(R.id.search_result_image);
+            //imageView = itemView.findViewById(R.id.search_result_image);
             priceView = itemView.findViewById(R.id.search_result_price);
             summaryView = itemView.findViewById(R.id.search_result_summary);
 
