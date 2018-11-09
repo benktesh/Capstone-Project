@@ -82,6 +82,13 @@ public class StockDetailActivity extends AppCompatActivity {
 
                 //graph.getGridLabelRenderer().setNumHorizontalLabels(9);
             }
+
+            if (stock.IsMarket)
+            {
+                //remove the view related to portforlio for market stocks
+                View portfolio = findViewById(R.id.stockdetail_portfolio);
+                portfolio.setVisibility(View.GONE);
+            }
             binding.setStock(stock);
 
 

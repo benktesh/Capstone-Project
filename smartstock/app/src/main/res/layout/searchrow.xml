@@ -38,6 +38,7 @@
     <ImageView
         android:id="@+id/search_result_image"
         android:layout_width="0dp"
+        android:contentDescription="@string/search_result_image_displayed_here"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 

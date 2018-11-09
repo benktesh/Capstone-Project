@@ -67,6 +67,7 @@
 
             <!-- PortFolio Logic -->
             <LinearLayout
+                android:id="@+id/stockdetail_portfolio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -80,6 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:clickable="true"
+                    android:focusable="true"
                     android:contentDescription="Adds or remove stock from @string/title_activity_portfolio"
                     android:fadingEdge="horizontal|vertical"
                     android:checked="@={stock.InPortoflio}"
@@ -98,8 +100,7 @@
                     android:id="@+id/plain_text_input"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-                    android:text="1"
-                    android:inputType="number"/>
+                    android:text="1"/>
             </LinearLayout>
         </LinearLayout>
 

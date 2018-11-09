@@ -160,6 +160,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
             priceView.setText(market.Price.toString());
             changeView.setText(market.Change.toString());
             summaryView.setText(market.Market);
+            market.IsMarket = true;
             itemView.setBackgroundColor(ColorUtils.getViewBackGroundColorForStock(mContext, market.Change));
 
         }
