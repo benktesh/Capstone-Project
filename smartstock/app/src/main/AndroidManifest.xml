@@ -69,16 +69,24 @@
                 android:value=".SearchActivity" />
         </activity>
 
-
-
         <service
             android:name=".fcm.FCMService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <receiver android:name=".SmartStockWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/smart_stock_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

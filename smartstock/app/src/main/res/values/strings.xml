@@ -13,4 +13,7 @@
     <string name="Error_Loading_Detail">Could not display the result.</string>
     <string name="notification_message">Message</string>
     <string name="Channel">SmartStockChannel</string>
+    <string name="search_result_image_displayed_here">search result image displayed here</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>
