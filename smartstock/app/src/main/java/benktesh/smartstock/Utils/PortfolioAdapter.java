@@ -121,6 +121,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.Port
         TextView changeView;
         ImageView imageView;
         TextView summaryView;
+        TextView priceView;
         // Will display which ViewHolder is displaying this data
         TextView viewHolderIndex;
 
@@ -137,6 +138,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.Port
 
             symbolView = itemView.findViewById(R.id.search_result_symbol);
             viewHolderIndex = itemView.findViewById(R.id.search_result_change);
+            priceView = itemView.findViewById(R.id.search_result_price);
             changeView = itemView.findViewById(R.id.search_result_change);
             imageView = itemView.findViewById(R.id.search_result_image);
             summaryView = itemView.findViewById(R.id.search_result_summary);
@@ -155,6 +157,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.Port
 
             Stock data = mData.get(listIndex);
             symbolView.setText(data.Symbol);
+            priceView.setText(data.Price.toString());
             changeView.setText(data.Change.toString());
             summaryView.setText(data.Market);
 

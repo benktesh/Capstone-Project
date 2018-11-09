@@ -121,6 +121,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
         TextView changeView;
         ImageView imageView;
         TextView summaryView;
+        TextView priceView;
         // Will display which ViewHolder is displaying this data
         TextView viewHolderIndex;
 
@@ -138,6 +139,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
             symbolView = itemView.findViewById(R.id.search_result_symbol);
             viewHolderIndex = itemView.findViewById(R.id.search_result_change);
             changeView = itemView.findViewById(R.id.search_result_change);
+            priceView = itemView.findViewById(R.id.search_result_price);
             imageView = itemView.findViewById(R.id.search_result_image);
             summaryView = itemView.findViewById(R.id.search_result_summary);
 
@@ -155,9 +157,9 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
 
             Stock market = mData.get(listIndex);
             symbolView.setText(market.Symbol);
+            priceView.setText(market.Price.toString());
             changeView.setText(market.Change.toString());
             summaryView.setText(market.Market);
-
             itemView.setBackgroundColor(ColorUtils.getViewBackGroundColorForStock(mContext, market.Change));
 
         }

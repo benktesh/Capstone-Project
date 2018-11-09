@@ -85,15 +85,7 @@ public class StockDetailActivity extends AppCompatActivity {
             binding.setStock(stock);
 
 
-            if (stock.InPortoflio) {
-                //display portfolio specific UIs
 
-                Toast.makeText(this, "Is Portfolio ", Toast.LENGTH_SHORT).show();
-
-            } else {
-                Toast.makeText(this, "Not In Portfolio ", Toast.LENGTH_SHORT).show();
-
-            }
 
         }
 
