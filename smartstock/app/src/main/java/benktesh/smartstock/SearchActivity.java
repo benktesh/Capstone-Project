@@ -1,6 +1,8 @@
 package benktesh.smartstock;
 
 import android.app.SearchManager;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -152,7 +154,11 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
             mToast.cancel();
         }
 
-        Log.d(TAG, "toastMessage");
+        //Upate Widget for selected Stock
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, SmartStockWidget.class));
+        SmartStockWidget.updateAppWidget(this, appWidgetManager, appWidgetIds, stock);
+
 
         Intent intent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
         intent.putExtra(ParcelableStock, stock);
