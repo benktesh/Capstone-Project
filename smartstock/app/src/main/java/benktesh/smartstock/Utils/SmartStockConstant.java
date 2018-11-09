@@ -1,6 +1,7 @@
 package benktesh.smartstock.Utils;
 
 public class SmartStockConstant {
+    public static final String ADMIN_MESSAGE_KEY = "Admin";
     public static String QueryPortfolio = "SmartStockPortfolio";
     public static String QueryPopulate = "SmartStockStockPopulate";
     public static String QueryMarket = "SmartStockMarket";
