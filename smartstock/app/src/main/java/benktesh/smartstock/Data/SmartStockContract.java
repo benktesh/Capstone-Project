@@ -8,6 +8,7 @@ public class SmartStockContract {
         public static final String TABLE_NAME = "portfolio";
 
         public static final String COLUMN_SYMBOL = "symbol";
+        public static final String COLUMN_POSITION = "position";
         public static final String COLUMN_CHANGE = "change";
         public static final String COLUMN_INPORTFOLIO = "inPortfolio";
         public static final String COLUMN_MARKET = "market";

@@ -82,6 +82,7 @@ class JsonUtilities {
 
             int len = chartArray.length();
             for (int i = 0; i < len; i++) {
+
                 chart = new Chart();
                 JSONObject chartObject = chartArray.getJSONObject(i);
                 chart.Date = chartObject.optString("date", "");
@@ -90,7 +91,11 @@ class JsonUtilities {
                 chart.Low = chartObject.optDouble("low", 0);
                 chart.Average = chartObject.optLong("average", 0);
                 chart.Volume = chartObject.optDouble("volume", 0);
-                result.add(chart);
+
+                //if(chart.Average >= 0 ) {
+                    result.add(chart);
+                //}
+
             }
 
         } catch (Exception ex) {

@@ -12,28 +12,28 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Hello" />
+        android:text="symbol" />
 
     <TextView
         android:id="@+id/search_result_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Hello" />
+        android:text="price" />
 
     <TextView
         android:id="@+id/search_result_change"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:text="Hello1" />
+        android:text="change" />
 
     <TextView
         android:id="@+id/search_result_summary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Hello2" />
+        android:text="summary" />
 
     <ImageView
         android:id="@+id/search_result_image"

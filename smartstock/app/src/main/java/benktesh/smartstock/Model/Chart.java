@@ -190,12 +190,12 @@ public class Chart implements Parcelable, Comparable {
     @Override
     public int compareTo(Object o) {
         Chart e = (Chart) o;
-        return this.getDate().compareTo(((Chart) o).getDate());
+        return this.getDateForChart().compareTo( ((Chart) o).getDateForChart());
     }
 
     @Override
     public boolean equals(Object obj) {
-        return ((Chart) obj).getDate() == getDate();
+        return ((Chart) obj).getDateForChart() == getDateForChart();
     }
 
 

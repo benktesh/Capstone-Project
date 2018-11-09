@@ -42,11 +42,9 @@ public class StockDetailActivity extends AppCompatActivity {
         stock = getIntent().getParcelableExtra(SmartStockConstant.ParcelableStock);
         ActivityStockdetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_stockdetail);
 
-        if(stock == null)
-        {
+        if (stock == null) {
             Toast.makeText(this, getString(R.string.Error_Loading_Detail), Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             Log.d(TAG, "Stock " + stock.Symbol);
 
             //load chart only when there is data
@@ -56,16 +54,19 @@ public class StockDetailActivity extends AppCompatActivity {
 
                 DataPoint[] dp = new DataPoint[stock.Charts.size()];
 
-            Collections.sort(stock.Charts);
-            for (int i = 0; i < stock.Charts.size(); i++) {
-                Chart d = stock.Charts.get(i);
-                dp[i] = new DataPoint(d.getDateForChart(), (double) d.Average);
-            }
+                Collections.sort(stock.Charts);
+                for (int i = 0; i < stock.Charts.size(); i++) {
+                    Chart d = stock.Charts.get(i);
+                    dp[i] = new DataPoint(d.getDateForChart(), (double) d.Average);
+                }
 
-            Date date = new Date();
+                Date date = new Date();
 
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
-            graph.addSeries(series);
+
+
+                LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
+                graph.addSeries(series);
+
             graph.getGridLabelRenderer().setLabelFormatter(
                     new DefaultLabelFormatter() {
                         @Override
@@ -78,18 +79,18 @@ public class StockDetailActivity extends AppCompatActivity {
                         }
                     }
             );
-            //graph.getGridLabelRenderer().setNumHorizontalLabels(9);
-        }
+
+                //graph.getGridLabelRenderer().setNumHorizontalLabels(9);
+            }
             binding.setStock(stock);
 
 
-            if(stock.InPortoflio){
+            if (stock.InPortoflio) {
                 //display portfolio specific UIs
 
                 Toast.makeText(this, "Is Portfolio ", Toast.LENGTH_SHORT).show();
 
-            }
-            else {
+            } else {
                 Toast.makeText(this, "Not In Portfolio ", Toast.LENGTH_SHORT).show();
 
             }
@@ -97,11 +98,10 @@ public class StockDetailActivity extends AppCompatActivity {
         }
 
 
-
     }
 
     public void onTogglePortfolio(View view) {
-        if(((ToggleButton) view).isChecked()) {
+        if (((ToggleButton) view).isChecked()) {
             Toast.makeText(this, "Add to Portfolio ", Toast.LENGTH_SHORT).show();
             new AddPortFolioTask().execute(stock.Symbol);
 

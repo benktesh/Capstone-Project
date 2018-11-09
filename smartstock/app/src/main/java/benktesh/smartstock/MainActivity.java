@@ -127,9 +127,9 @@ public class MainActivity extends AppCompatActivity implements
         if (mToast != null) {
             mToast.cancel();
         }
-        String toastMessage = "Item #" + data.Symbol + " clicked.";
-        mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
-        mToast.show();
+        //String toastMessage = "Item #" + data.Symbol + " clicked.";
+        //mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
+        //mToast.show();
 
         Intent intent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
         intent.putExtra(SmartStockConstant.ParcelableStock, data);
@@ -182,9 +182,11 @@ public class MainActivity extends AppCompatActivity implements
         protected void onPostExecute(ArrayList<Stock> searchResults) {
             super.onPostExecute(searchResults);
 
+
             if(query == SmartStockConstant.QueryPopulate) {
-                Toast.makeText(getApplicationContext(), "Database Update Completed", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Database Update Completed");
             }
+
 
             if(query != null) {
                 if (searchResults != null && searchResults.size() != 0) {
@@ -196,8 +198,6 @@ public class MainActivity extends AppCompatActivity implements
                     }
 
 
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();
                 }
             } else {
                 Log.e(TAG, "onPostExecute: Query is Null in Async. Nothing Done");

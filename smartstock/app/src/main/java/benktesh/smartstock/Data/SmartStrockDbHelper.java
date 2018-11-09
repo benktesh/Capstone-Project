@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import benktesh.smartstock.Utils.SmartStockConstant;
+
 
 public class SmartStrockDbHelper extends SQLiteOpenHelper {
 
@@ -28,6 +30,7 @@ public class SmartStrockDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_PORTFOLIO_TABLE = "CREATE TABLE " + SmartStockContract.PortfolioEntry.TABLE_NAME + " (" +
                 SmartStockContract.PortfolioEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                SmartStockContract.PortfolioEntry.COLUMN_POSITION + " INTEGER DEFAULT 1, " +
                 SmartStockContract.PortfolioEntry.COLUMN_SYMBOL + " STRING NOT NULL, " +
                 SmartStockContract.PortfolioEntry.COLUMN_MARKET + " STRING , " +
                 SmartStockContract.PortfolioEntry.COLUMN_PRICE + " DOUBLE DEFAULT 0, " +

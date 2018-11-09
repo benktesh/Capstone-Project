@@ -158,6 +158,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.Port
             changeView.setText(data.Change.toString());
             summaryView.setText(data.Market);
 
+
             itemView.setBackgroundColor(ColorUtils.getViewBackGroundColorForStock(mContext, data.Change));
 
         }
@@ -172,7 +173,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.Port
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
             Stock data = mData.get(clickedPosition);
-            Toast.makeText(mContext, "Clicked stock: " + data.Symbol, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "Clicked stock: " + data.Symbol, Toast.LENGTH_SHORT).show();
             mOnClickListener.onListItemClick(data);
         }
     }

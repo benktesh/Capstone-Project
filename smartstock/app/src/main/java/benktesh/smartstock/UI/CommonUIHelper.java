@@ -63,8 +63,6 @@ public class CommonUIHelper {
             new NetworkTask().execute();
             ShowMessage("It may take a while. Symbols will be updated");
         }
-        //TODO
-        ShowMessage("TO BE DONE");
         return false;
     }
 

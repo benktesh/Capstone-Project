@@ -138,7 +138,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     @Override
     protected void onStart() {
         super.onStart();
-        mCommonUIHelper.showToast("Restarted");
+        //mCommonUIHelper.showToast("Restarted");
     }
 
 
@@ -151,9 +151,8 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         if (mToast != null) {
             mToast.cancel();
         }
-        String toastMessage = "Item #" + stock.Symbol + " clicked.";
-        mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
-        mToast.show();
+
+        Log.d(TAG, "toastMessage");
 
         Intent intent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
         intent.putExtra(ParcelableStock, stock);

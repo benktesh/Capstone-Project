@@ -15,6 +15,7 @@ public class Stock implements Parcelable {
     public Double DayLow;
     public Double Price;
     public boolean IsMarket;
+    public int Position;
     public ArrayList<Trade> Trades;
     public ArrayList<Chart> Charts;
 
@@ -44,6 +45,7 @@ public class Stock implements Parcelable {
             Price = in.readDouble();
         }
         IsMarket = in.readByte() != 0;
+        Position = in.readInt();
         Trades = in.createTypedArrayList(Trade.CREATOR);
         Charts = in.createTypedArrayList(Chart.CREATOR);
     }
@@ -78,6 +80,7 @@ public class Stock implements Parcelable {
             dest.writeDouble(Price);
         }
         dest.writeByte((byte) (IsMarket ? 1 : 0));
+        dest.writeInt(Position);
         dest.writeTypedList(Trades);
         dest.writeTypedList(Charts);
     }
@@ -113,7 +116,7 @@ public class Stock implements Parcelable {
 
 
     public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
-                 Double DayLow, Double Price, boolean IsMarket) {
+                 Double DayLow, Double Price, boolean IsMarket, int Position) {
         this.Symbol = Symbol;
         this.Change = Change;
         this.InPortoflio = InPortoflio;
@@ -122,10 +125,13 @@ public class Stock implements Parcelable {
         this.DayLow = DayLow;
         this.Price = Price;
         this.IsMarket = IsMarket;
+        this.Position = Position;
     }
 
     public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
-                 Double DayLow, Double Price, boolean IsMarket, ArrayList<Trade> trades, ArrayList<Chart> charts) {
+                 Double DayLow, Double Price, boolean IsMarket,
+                 ArrayList<Trade> trades, ArrayList<Chart> charts,
+    int Position) {
         this.Symbol = Symbol;
         this.Change = Change;
         this.InPortoflio = InPortoflio;
@@ -136,6 +142,7 @@ public class Stock implements Parcelable {
         this.IsMarket = IsMarket;
         this.Trades = trades;
         this.Charts = charts;
+        this.Position = Position;
     }
 
 }
