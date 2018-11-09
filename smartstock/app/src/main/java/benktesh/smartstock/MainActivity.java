@@ -62,9 +62,16 @@ public class MainActivity extends AppCompatActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+
+                    Intent Email = new Intent(Intent.ACTION_SEND);
+                    Email.setType("text/email");
+                    Email.putExtra(Intent.EXTRA_EMAIL,
+                            new String[]{"benktesh1@gmail.com"});  //developer 's email
+                    Email.putExtra(Intent.EXTRA_SUBJECT,
+                            "Add your Subject"); // Email 's Subject
+                    Email.putExtra(Intent.EXTRA_TEXT, "Dear Developer Name," + "");  //Email 's Greeting text
+                    startActivity(Intent.createChooser(Email, "Send Feedback:"));
+                }
         });
 
         if (mCommonUIHelper == null) {
