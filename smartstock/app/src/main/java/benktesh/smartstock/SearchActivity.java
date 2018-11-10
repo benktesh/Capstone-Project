@@ -1,8 +1,6 @@
 package benktesh.smartstock;
 
 import android.app.SearchManager;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -22,6 +19,7 @@ import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.UI.CommonUIHelper;
 import benktesh.smartstock.UI.StockDetailActivity;
 import benktesh.smartstock.Utils.NetworkUtilities;
+import benktesh.smartstock.Utils.SmartStockConstant;
 
 import static benktesh.smartstock.Utils.SmartStockConstant.ParcelableStock;
 
@@ -80,9 +78,13 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         mAdapter = new SearchAdapter(mData, this);
         mSearchList.setAdapter(mAdapter);
 
-        // Get the intent, verify the action and get the query
         Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+        //if the intent is coming from widget, search for stock and display
+        Stock stock = intent.getParcelableExtra(SmartStockConstant.ParcelableStock);
+        if(stock != null) {
+            new NetworkQueryTask().execute(stock.Symbol.toUpperCase());
+        }
+        else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             new NetworkQueryTask().execute(query.toUpperCase());
         }
@@ -110,12 +112,6 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         if (mToast != null) {
             mToast.cancel();
         }
-
-        //Upate Widget for selected Stock
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, SmartStockWidget.class));
-        SmartStockWidget.updateAppWidget(this, appWidgetManager, appWidgetIds, stock);
-
 
         Intent intent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
         intent.putExtra(ParcelableStock, stock);
@@ -151,8 +147,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
             if (query != null) {
                 if (searchResults != null) {
                     if (searchResults.size() == 0) {
-                        Toast.makeText(getApplicationContext(), "No stock found", Toast.LENGTH_LONG).show();
-
+                        Toast.makeText(getApplicationContext(), getString(R.string.stock_not_found), Toast.LENGTH_LONG).show();
                     }
                     mAdapter.resetData(searchResults);
                     spinner.setVisibility(View.INVISIBLE);

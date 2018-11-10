@@ -1,5 +1,7 @@
 package benktesh.smartstock.UI;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import java.util.Date;
 import benktesh.smartstock.Model.Chart;
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.R;
+import benktesh.smartstock.SmartStockWidget;
 import benktesh.smartstock.Utils.NetworkUtilities;
 import benktesh.smartstock.Utils.SmartStockConstant;
 import benktesh.smartstock.databinding.ActivityStockdetailBinding;
@@ -46,21 +49,22 @@ public class StockDetailActivity extends AppCompatActivity {
         } else {
             Log.d(TAG, "Stock " + stock.Symbol);
 
+            //Upate widget for selected Stock
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, SmartStockWidget.class));
+            SmartStockWidget.updateAppWidget(this, appWidgetManager, appWidgetIds, stock);
+            Log.d(TAG, "OnCreate: Updated Widget");
+
+
             //load chart only when there is data
             if (stock.Charts != null) {
-
                 GraphView graph = findViewById(R.id.graph_stock_detail);
-
                 DataPoint[] dp = new DataPoint[stock.Charts.size()];
-
                 Collections.sort(stock.Charts);
                 for (int i = 0; i < stock.Charts.size(); i++) {
                     Chart d = stock.Charts.get(i);
                     dp[i] = new DataPoint(d.getDateForChart(), (double) d.Average);
                 }
-
-                Date date = new Date();
-
 
                 LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
                 graph.addSeries(series);
@@ -77,7 +81,6 @@ public class StockDetailActivity extends AppCompatActivity {
                             }
                         }
                 );
-
                 //graph.getGridLabelRenderer().setNumHorizontalLabels(9);
             }
 
@@ -87,8 +90,8 @@ public class StockDetailActivity extends AppCompatActivity {
             Picasso.get().load(stock.LogoUrl).into(imageView);
 
 
-            if (stock.IsMarket) {
-                //remove the view related to portforlio for market stocks
+            if (stock == null || stock.Symbol.length() == 0 || stock.IsMarket) {
+                //remove the view related to portforlio for market stocks or when stock does not have data
                 View portfolio = findViewById(R.id.stockdetail_portfolio);
                 portfolio.setVisibility(View.GONE);
             }
@@ -118,9 +121,7 @@ public class StockDetailActivity extends AppCompatActivity {
 
             ArrayList<Stock> searchResults = null;
             try {
-
                 return NetworkUtilities.addPortfolio(getApplicationContext(), query);
-
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
