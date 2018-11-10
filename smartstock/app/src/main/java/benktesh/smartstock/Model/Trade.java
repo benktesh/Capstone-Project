@@ -21,8 +21,8 @@ public class Trade implements Parcelable, Comparable{
             java.util.Date time=new java.util.Date(timestamp);
 
             return time;
-        } catch(Exception e) { //this generic but you can control nother types of exception
-            // look the origin of excption
+        } catch(Exception e) { //this generic but you can control other types of exception
+            // look the origin of exception
         }
 
         return null;
