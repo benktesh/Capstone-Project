@@ -23,7 +23,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <!-- Stock Logic -->
             <LinearLayout
@@ -44,7 +45,8 @@
                     android:id="@+id/stock_symbol"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/generic"
+                    android:paddingStart="@dimen/generic"
+                    android:paddingEnd="@dimen/generic"
                     android:text="@{stock.Symbol}"
                     tools:text="ARR" />
 
@@ -59,7 +61,8 @@
                     android:id="@+id/stock_change"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/generic"
+                    android:paddingStart="@dimen/generic"
+                    android:paddingEnd="@dimen/generic"
                     android:text="@{Double.toString(safeUnbox(stock.Change))}"
                     tools:text="1.00" />
             </LinearLayout>
@@ -99,14 +102,14 @@
                     android:id="@+id/plain_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="1" />
+                    android:text="@string/default_quantity" />
             </LinearLayout>
         </LinearLayout>
 
         <!--Short Chart -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1">
 
             <com.jjoe64.graphview.GraphView

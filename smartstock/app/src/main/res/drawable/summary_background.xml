@@ -7,11 +7,6 @@
         android:left="10dp"
         android:right="10dp"
         android:top="10dp" />
-    <margin
-        android:bottom="16dp"
-        android:left="16dp"
-        android:right="16dp"
-        android:top="16dp" />
     <stroke
         android:width="2dp"
         android:color="#0b0b0b" />

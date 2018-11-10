@@ -117,15 +117,8 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
 
         Intent intent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
         intent.putExtra(ParcelableStock, stock);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
-            startActivity(intent, bundle);
-        }
-        else {
-
-            startActivity(intent);
-        }
+        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
+        startActivity(intent, bundle);
     }
 
 
@@ -162,7 +155,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
                     mAdapter.resetData(searchResults);
                     spinner.setVisibility(View.INVISIBLE);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Searching: " + R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.text_searching) + R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();
                 }
             } else {
                 Log.e(TAG, "onPostExecute: Query is Null in Async. Nothing Done");

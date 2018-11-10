@@ -29,12 +29,11 @@ public class CommonUIHelper {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            //TODO
-            ShowMessage("Settings is shown");
+            ShowMessage(mContext.getString(R.string.msg_setting_shown));
             return true;
         }
         if (id == R.id.action_exit) {
-            ShowMessage("Exiting SmartStock.");
+            ShowMessage(mContext.getString(R.string.msg_existing));
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -42,22 +41,20 @@ public class CommonUIHelper {
             return true;
         }
         if (id == R.id.action_portfolio) {
-            //TODO
-            ShowMessage("Portfolio is shown");
+            ShowMessage(mContext.getString(R.string.msg_portfolio_shown));
             Intent intent = new Intent(mContext, PortfolioActivity.class);
             mContext.startActivity(intent);
             return true;
         }
         if (id == R.id.action_search) {
-            //TODO
-            ShowMessage("Search is handled");
+            ShowMessage(mContext.getString(R.string.msg_search_handled));
 
         }
 
         if (id == R.id.action_update) {
 
             new NetworkTask().execute();
-            ShowMessage("It may take a while. Symbols will be updated");
+            ShowMessage(mContext.getString(R.string.msg_update));
         }
         return false;
     }
@@ -109,8 +106,7 @@ public class CommonUIHelper {
         }
 
         protected void onPostExecute(boolean result) {
-            showToast("Update completed");
-            //showDialog("Downloaded " + result + " bytes");
+            showToast(mContext.getString(R.string.msg_update_completed));
         }
     }
 }

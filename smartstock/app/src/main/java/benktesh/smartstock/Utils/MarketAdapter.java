@@ -63,7 +63,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
         SearchViewHolder viewHolder = new SearchViewHolder(view);
 
-        viewHolder.viewHolderIndex.setText("ViewHolder index: " + mViewHolderCount);
+        viewHolder.viewHolderIndex.setText(mContext.getString(R.string.text_viewholder_index) + mViewHolderCount);
 
         //stock is up, one color, stock is down another color. Start with default color
         int backgroundColorForViewHolder = ColorUtils.getViewBackGroundColorForStock(mContext, 0);
@@ -169,7 +169,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
             Stock market = mData.get(clickedPosition);
-            Toast.makeText(mContext, "Clicked stock: " + market.Symbol, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "Clicked stock: " + market.Symbol, Toast.LENGTH_SHORT).show();
             mOnClickListener.onListItemClick(market);
         }
     }

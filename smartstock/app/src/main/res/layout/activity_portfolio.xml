@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:gravity="center"
-        android:text="Portfolio List"
+        android:text="@string/portfolio_list"
         android:textColor="@android:color/white" />
 
     <include layout="@layout/stock_row_header" />

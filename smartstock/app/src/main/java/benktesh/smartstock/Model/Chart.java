@@ -7,6 +7,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import benktesh.smartstock.Utils.SmartStockConstant;
+
 public class Chart implements Parcelable, Comparable {
     public static final Creator<Chart> CREATOR = new Creator<Chart>() {
         @Override
@@ -169,9 +171,9 @@ public class Chart implements Parcelable, Comparable {
 
     public Date getDateForChart() {
 
-        DateFormat sdf = new SimpleDateFormat("yyyyMMdd:hh:mm");
+        DateFormat sdf = new SimpleDateFormat(SmartStockConstant.CHART_TIME_PATTERN);
 
-        String yyyyMMddDatePattern = "yyyyMMdd";
+        String yyyyMMddDatePattern = SmartStockConstant.CHART_DATE_PATTERN;
 
 
         try {

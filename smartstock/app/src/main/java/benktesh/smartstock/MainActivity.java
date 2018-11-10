@@ -131,15 +131,8 @@ public class MainActivity extends AppCompatActivity implements
 
         Intent intent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
         intent.putExtra(SmartStockConstant.ParcelableStock, data);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
-            startActivity(intent, bundle);
-        }
-        else {
-
-            startActivity(intent);
-        }
+        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
+        startActivity(intent, bundle);
 
     }
 
