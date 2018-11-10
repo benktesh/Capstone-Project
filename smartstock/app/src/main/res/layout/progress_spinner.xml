@@ -10,6 +10,6 @@
     android:layout_centerInParent="true"
     android:layout_gravity="center"
 
-    android:elevation="16dp"
+    android:elevation="@dimen/progress_bar_elevation"
     android:indeterminate="true"
     tools:showIn="@layout/activity_main" />

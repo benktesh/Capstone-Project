@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:gravity="center"
-        android:text="Search Summary"
+        android:text="@string/search_summary"
         android:textColor="@android:color/white" />
 
     <include layout="@layout/stock_row_header" />

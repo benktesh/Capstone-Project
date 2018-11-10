@@ -37,8 +37,8 @@
 
                 <ImageView
                     android:id="@+id/stock_logo"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_width="@dimen/stock_logo_square"
+                    android:layout_height="@dimen/stock_logo_square" />
 
                 <TextView
                     android:id="@+id/stock_symbol"
@@ -62,8 +62,6 @@
                     android:paddingLeft="@dimen/generic"
                     android:text="@{Double.toString(safeUnbox(stock.Change))}"
                     tools:text="1.00" />
-
-
             </LinearLayout>
 
             <!-- PortFolio Logic -->
