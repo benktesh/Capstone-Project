@@ -88,44 +88,6 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         }
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-/*
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setMaxWidth(500);
-
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                // do your search on change or save the last string in search
-                new NetworkQueryTask().execute(s);
-                //mData = getSearchResult(s);
-               // mAdapter.resetData(mData);
-                return true;
-            }
-        });
-
-*/
-        return true;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mCommonUIHelper.MakeMenu(item)) return true;
@@ -136,7 +98,6 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     @Override
     protected void onStart() {
         super.onStart();
-        //mCommonUIHelper.showToast("Restarted");
     }
 
 
@@ -195,19 +156,12 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
                     }
                     mAdapter.resetData(searchResults);
                     spinner.setVisibility(View.INVISIBLE);
-                    /*try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }*/
-
                 } else {
                     Toast.makeText(getApplicationContext(), "Searching: " + R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();
                 }
             } else {
                 Log.e(TAG, "onPostExecute: Query is Null in Async. Nothing Done");
             }
-
         }
     }
 }
