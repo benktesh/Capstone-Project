@@ -154,8 +154,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             itemView.setBackgroundColor(ColorUtils.getViewBackGroundColorForStock(mContext, stock.Change));
         }
 
-        // COMPLETED (6) Override onClick, passing the clicked item's position (getAdapterPosition()) to mOnClickListener via its onListItemClick method
-
         /**
          * Called whenever a user clicks on an item in the list.
          *

@@ -1,7 +1,9 @@
 package benktesh.smartstock;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -125,14 +127,19 @@ public class MainActivity extends AppCompatActivity implements
         if (mToast != null) {
             mToast.cancel();
         }
-        //String toastMessage = "Item #" + data.Symbol + " clicked.";
-        //mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
-        //mToast.show();
+
 
         Intent intent = new Intent(this.getApplicationContext(), StockDetailActivity.class);
         intent.putExtra(SmartStockConstant.ParcelableStock, data);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
+            Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
+            startActivity(intent, bundle);
+        }
+        else {
 
-        startActivity(intent);
+            startActivity(intent);
+        }
 
     }
 
