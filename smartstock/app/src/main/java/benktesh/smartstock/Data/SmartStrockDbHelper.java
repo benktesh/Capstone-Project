@@ -38,11 +38,11 @@ public class SmartStrockDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_PORTFOLIO_TABLE);
 
 
-        final String SQL_CREATE_UPDATEENTRY_TABLE = "CREATE TABLE " + SmartStockContract.UpdateEntry.TABLE_NAME + " (" +
-                SmartStockContract.UpdateEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                SmartStockContract.UpdateEntry.COLUMN_TABLE + " STRING NOT NULL, " +
-                SmartStockContract.UpdateEntry.COLUMN_DATE + " STRING NOT NULL, " +
-                SmartStockContract.UpdateEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+        final String SQL_CREATE_UPDATEENTRY_TABLE = "CREATE TABLE " + SmartStockContract.AuditEntry.TABLE_NAME + " (" +
+                SmartStockContract.AuditEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                SmartStockContract.AuditEntry.COLUMN_TABLE + " STRING NOT NULL, " +
+                SmartStockContract.AuditEntry.COLUMN_DATE + " STRING NOT NULL, " +
+                SmartStockContract.AuditEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 "); ";
         db.execSQL(SQL_CREATE_UPDATEENTRY_TABLE);
 
@@ -80,7 +80,7 @@ public class SmartStrockDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + SmartStockContract.PortfolioEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SmartStockContract.MarketEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SmartStockContract.SymbolEntry.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + SmartStockContract.UpdateEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + SmartStockContract.AuditEntry.TABLE_NAME);
 
         onCreate(db);
     }

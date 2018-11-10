@@ -69,8 +69,8 @@ public class NetworkUtilities {
             //check database for updateflag for symbolentry table
             //if no record found populate symbol
 
-            String[] columns = new String[]{SmartStockContract.UpdateEntry.COLUMN_TABLE};
-            Cursor c = db.query(SmartStockContract.UpdateEntry.TABLE_NAME, columns, null, null, null, null, null);
+            String[] columns = new String[]{SmartStockContract.AuditEntry.COLUMN_TABLE};
+            Cursor c = db.query(SmartStockContract.AuditEntry.TABLE_NAME, columns, null, null, null, null, null);
             if (c != null && c.getCount() > 0) {
                 //Log.d(TAG,"Database has previously been populated. Returning true");
                 c.close();
@@ -95,9 +95,9 @@ public class NetworkUtilities {
         long rows = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME, null, null);
         Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.SymbolEntry.TABLE_NAME + rows);
 
-        rows = db.delete(SmartStockContract.UpdateEntry.TABLE_NAME,
-                SmartStockContract.UpdateEntry.COLUMN_TABLE + " = '" + SmartStockContract.SymbolEntry.TABLE_NAME + "'", null);
-        Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.UpdateEntry.TABLE_NAME + rows);
+        rows = db.delete(SmartStockContract.AuditEntry.TABLE_NAME,
+                SmartStockContract.AuditEntry.COLUMN_TABLE + " = '" + SmartStockContract.SymbolEntry.TABLE_NAME + "'", null);
+        Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.AuditEntry.TABLE_NAME + rows);
 
         for (int i = 0; i < dataArray.size(); i++) {
             Symbol symbol = dataArray.get(i);
@@ -115,9 +115,9 @@ public class NetworkUtilities {
         }
 
         values = new ContentValues();
-        values.put(SmartStockContract.UpdateEntry.COLUMN_TABLE, SmartStockContract.SymbolEntry.TABLE_NAME);
-        values.put(SmartStockContract.UpdateEntry.COLUMN_DATE, new Date().toString());
-        long newRowId = db.insert(SmartStockContract.UpdateEntry.TABLE_NAME, null, values);
+        values.put(SmartStockContract.AuditEntry.COLUMN_TABLE, SmartStockContract.SymbolEntry.TABLE_NAME);
+        values.put(SmartStockContract.AuditEntry.COLUMN_DATE, new Date().toString());
+        long newRowId = db.insert(SmartStockContract.AuditEntry.TABLE_NAME, null, values);
         db.close();
         mDbHelper.close();
         Log.d(TAG, "Done updating Symbol: " + result);
@@ -131,10 +131,10 @@ public class NetworkUtilities {
             SmartStrockDbHelper mDbHelper = new SmartStrockDbHelper(context);
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-            String[] columns = new String[]{SmartStockContract.UpdateEntry.COLUMN_TABLE};
+            String[] columns = new String[]{SmartStockContract.AuditEntry.COLUMN_TABLE};
 
-            Cursor c = db.query(SmartStockContract.UpdateEntry.TABLE_NAME, columns,
-                    SmartStockContract.UpdateEntry.COLUMN_TABLE + " = '" +
+            Cursor c = db.query(SmartStockContract.AuditEntry.TABLE_NAME, columns,
+                    SmartStockContract.AuditEntry.COLUMN_TABLE + " = '" +
                             SmartStockContract.MarketEntry.TABLE_NAME + "'", null, null, null, null, null);
             if (force == false && c != null && c.getCount() > 0) {
                 Log.d(TAG, "Market symbols have previously been populated.");
@@ -144,9 +144,9 @@ public class NetworkUtilities {
                 long rows = db.delete(SmartStockContract.MarketEntry.TABLE_NAME, null, null);
                 Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.MarketEntry.TABLE_NAME + rows);
 
-                rows = db.delete(SmartStockContract.UpdateEntry.TABLE_NAME,
-                        SmartStockContract.UpdateEntry.COLUMN_TABLE + " = '" + SmartStockContract.MarketEntry.TABLE_NAME + "'", null);
-                Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.UpdateEntry.TABLE_NAME + rows);
+                rows = db.delete(SmartStockContract.AuditEntry.TABLE_NAME,
+                        SmartStockContract.AuditEntry.COLUMN_TABLE + " = '" + SmartStockContract.MarketEntry.TABLE_NAME + "'", null);
+                Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.AuditEntry.TABLE_NAME + rows);
 
                 ContentValues values;
                 for (String symbol : marketSymbols) {
@@ -156,9 +156,9 @@ public class NetworkUtilities {
                 }
 
                 values = new ContentValues();
-                values.put(SmartStockContract.UpdateEntry.COLUMN_TABLE, SmartStockContract.MarketEntry.TABLE_NAME);
-                values.put(SmartStockContract.UpdateEntry.COLUMN_DATE, new Date().toString());
-                long newRowId = db.insert(SmartStockContract.UpdateEntry.TABLE_NAME, null, values);
+                values.put(SmartStockContract.AuditEntry.COLUMN_TABLE, SmartStockContract.MarketEntry.TABLE_NAME);
+                values.put(SmartStockContract.AuditEntry.COLUMN_DATE, new Date().toString());
+                long newRowId = db.insert(SmartStockContract.AuditEntry.TABLE_NAME, null, values);
             }
 
             c.close();
@@ -333,14 +333,10 @@ public class NetworkUtilities {
 
     public static boolean addPortfolio(Context context, String symbol) {
         Log.d(TAG, "Starting addPortfolio");
-        mDbHelper = new SmartStrockDbHelper(context);
-        // Gets the data repository in write mode
-        db = mDbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(SmartStockContract.PortfolioEntry.COLUMN_SYMBOL, symbol);
-        long newRowId = db.insert(SmartStockContract.PortfolioEntry.TABLE_NAME, null, values);
-        db.close();
-        Log.d(TAG, "Completing addPortfolio");
+        Uri uri = context.getContentResolver().insert(SmartStockContract.PortfolioEntry.PORTFOLIO_URI, values);
+        Log.d(TAG, "Completing addPortfolio: " + uri);
         return true;
     }
 
