@@ -87,6 +87,12 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/smart_stock_widget_info" />
         </receiver>
+
+        <provider
+            android:authorities="benktesh.smartstock"
+            android:name="benktesh.smartstock.Data.SmartStockContentProvider"
+            android:exported="false"
+            />
     </application>
 
 </manifest>
