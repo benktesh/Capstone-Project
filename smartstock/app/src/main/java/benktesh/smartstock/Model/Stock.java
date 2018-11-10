@@ -2,13 +2,12 @@ package benktesh.smartstock.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.ArrayList;
 
 public class Stock implements Parcelable {
 
-    public  String Symbol;
-    public  Double Change;
+    public String Symbol;
+    public Double Change;
     public boolean InPortoflio;
     public String Market;
     public Double DayHigh;
@@ -112,6 +111,9 @@ public class Stock implements Parcelable {
 
     public Stock() {
 
+        this.Charts = new ArrayList<Chart>();
+        this.Trades = new ArrayList<Trade>();
+
     }
 
 
@@ -131,7 +133,7 @@ public class Stock implements Parcelable {
     public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
                  Double DayLow, Double Price, boolean IsMarket,
                  ArrayList<Trade> trades, ArrayList<Chart> charts,
-    int Position) {
+                 int Position) {
         this.Symbol = Symbol;
         this.Change = Change;
         this.InPortoflio = InPortoflio;

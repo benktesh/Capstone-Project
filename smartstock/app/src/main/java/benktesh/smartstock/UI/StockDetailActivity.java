@@ -16,13 +16,11 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
 import benktesh.smartstock.Model.Chart;
 import benktesh.smartstock.Model.Stock;
-import benktesh.smartstock.Model.Trade;
 import benktesh.smartstock.R;
 import benktesh.smartstock.Utils.NetworkUtilities;
 import benktesh.smartstock.Utils.SmartStockConstant;
@@ -50,7 +48,7 @@ public class StockDetailActivity extends AppCompatActivity {
             //load chart only when there is data
             if (stock.Charts != null) {
 
-                GraphView graph = (GraphView) findViewById(R.id.graph_stock_detail);
+                GraphView graph = findViewById(R.id.graph_stock_detail);
 
                 DataPoint[] dp = new DataPoint[stock.Charts.size()];
 
@@ -63,51 +61,42 @@ public class StockDetailActivity extends AppCompatActivity {
                 Date date = new Date();
 
 
-
                 LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
                 graph.addSeries(series);
 
-            graph.getGridLabelRenderer().setLabelFormatter(
-                    new DefaultLabelFormatter() {
-                        @Override
-                        public String formatLabel(double value, boolean isValuex) {
-                            if (isValuex) {
-                                return sdf.format(new Date((long) value));
-                            } else {
-                                return super.formatLabel(value, isValuex);
+                graph.getGridLabelRenderer().setLabelFormatter(
+                        new DefaultLabelFormatter() {
+                            @Override
+                            public String formatLabel(double value, boolean isValuex) {
+                                if (isValuex) {
+                                    return sdf.format(new Date((long) value));
+                                } else {
+                                    return super.formatLabel(value, isValuex);
+                                }
                             }
                         }
-                    }
-            );
+                );
 
                 //graph.getGridLabelRenderer().setNumHorizontalLabels(9);
             }
 
-            if (stock.IsMarket)
-            {
+            if (stock.IsMarket) {
                 //remove the view related to portforlio for market stocks
                 View portfolio = findViewById(R.id.stockdetail_portfolio);
                 portfolio.setVisibility(View.GONE);
             }
             binding.setStock(stock);
-
-
-
-
         }
-
-
     }
 
     public void onTogglePortfolio(View view) {
         if (((ToggleButton) view).isChecked()) {
-            Toast.makeText(this, "Add to Portfolio ", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Add to Portfolio ", Toast.LENGTH_SHORT).show();
             new AddPortFolioTask().execute(stock.Symbol);
 
         } else {
-            Toast.makeText(this, "Remove from Portfolio ", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Remove from Portfolio ", Toast.LENGTH_SHORT).show();
             new RemovePortFolioTask().execute(stock.Symbol);
-
         }
     }
 
@@ -119,7 +108,6 @@ public class StockDetailActivity extends AppCompatActivity {
         protected Boolean doInBackground(String... params) {
             query = params[0];
 
-
             ArrayList<Stock> searchResults = null;
             try {
 
@@ -130,7 +118,6 @@ public class StockDetailActivity extends AppCompatActivity {
             }
             return true;
         }
-
     }
 
     class RemovePortFolioTask extends AsyncTask<String, Void, Boolean> {
@@ -141,7 +128,6 @@ public class StockDetailActivity extends AppCompatActivity {
         protected Boolean doInBackground(String... params) {
             query = params[0];
             try {
-
                 return NetworkUtilities.removePortfolio(getApplicationContext(), query);
 
             } catch (Exception e) {
@@ -149,7 +135,5 @@ public class StockDetailActivity extends AppCompatActivity {
                 return false;
             }
         }
-
     }
-
 }

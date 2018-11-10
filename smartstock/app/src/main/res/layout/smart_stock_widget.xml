@@ -1,9 +1,12 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appwidget_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/generic"
     android:background="#09C"
-    android:padding="@dimen/widget_margin"
-    android:id="@+id/appwidget_layout">
+    android:orientation="vertical"
+    android:padding="@dimen/widget_margin">
 
     <TextView
         android:id="@+id/appwidget_text"
@@ -11,14 +14,57 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/widget_text_margin"
         android:background="#09C"
         android:contentDescription="@string/app_name"
         android:text="@string/app_name"
         android:textColor="#ffffff"
-        android:textSize="8sp"
+        android:textSize="@dimen/app_title_text_size"
         android:textStyle="bold|italic" />
 
-    <include layout="@layout/activity_stockdetail" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/label_stock_symbol"
+        android:layout_width="match_parent"
+        android:layout_marginStart="@dimen/widget_text_margin"
+        android:layout_height="wrap_content"
+        android:text="@string/label_symbol" />
+
+    <TextView
+        android:id="@+id/stock_symbol"
+        android:layout_width="match_parent"
+        android:layout_marginStart="@dimen/widget_text_margin"
+        android:layout_height="wrap_content"
+        tools:text="ARR" />
+
+    <TextView
+        android:id="@+id/label_stock_change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/widget_text_margin"
+        android:text="@string/label_change" />
+
+    <TextView
+        android:id="@+id/stock_change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/widget_text_margin"
+        android:text=""
+        tools:text="1.00" />
+
+    <TextView
+        android:id="@+id/label_stock_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/widget_text_margin"
+        android:text="@string/label_price" />
+
+    <TextView
+        android:id="@+id/stock_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/widget_text_margin"
+        android:text=""
+        tools:text="1.00" />
+
+</LinearLayout>

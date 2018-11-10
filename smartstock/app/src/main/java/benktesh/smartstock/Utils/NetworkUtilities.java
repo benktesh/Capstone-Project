@@ -440,7 +440,7 @@ public class NetworkUtilities {
 
                 ArrayList<Chart> chartData = JsonUtilities.parseChartQuote(response);
 
-                parsedData.Charts = chartData == null ?  null : chartData;
+                parsedData.Charts = chartData;
                 searchResult.add(parsedData);
             }
             catch (Exception ex)

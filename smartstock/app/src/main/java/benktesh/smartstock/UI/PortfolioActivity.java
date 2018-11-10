@@ -65,7 +65,7 @@ public class PortfolioActivity extends AppCompatActivity implements SearchAdapte
         mAdapter = new SearchAdapter(mData, this);
         mSearchList.setAdapter(mAdapter);
 
-        mSpinner = (ProgressBar) findViewById(R.id.progressbar);
+        mSpinner = findViewById(R.id.progressbar);
 
         mAdapter.resetData(mData);
         mContext = getApplicationContext();

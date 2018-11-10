@@ -44,7 +44,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
     private RecyclerView mSearchList;
     private Toast mToast;
 
-    ProgressBar spinner;
+    private ProgressBar spinner;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +54,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
             mCommonUIHelper = new CommonUIHelper(this);
         }
 
-        spinner = (ProgressBar) findViewById(R.id.progressbar);
+        spinner = findViewById(R.id.progressbar);
 
         /*
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
@@ -198,11 +198,12 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
 
                     }
                     mAdapter.resetData(searchResults);
-                    try {
+                    spinner.setVisibility(View.INVISIBLE);
+                    /*try {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }
+                    }*/
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Searching: " + R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();

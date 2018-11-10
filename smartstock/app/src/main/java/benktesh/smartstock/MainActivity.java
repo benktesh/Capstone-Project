@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,22 +55,22 @@ public class MainActivity extends AppCompatActivity implements
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        spinner = (ProgressBar)findViewById(R.id.progressbar);
+        spinner = findViewById(R.id.progressbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                    Intent Email = new Intent(Intent.ACTION_SEND);
-                    Email.setType("text/email");
-                    Email.putExtra(Intent.EXTRA_EMAIL,
-                            new String[]{"benktesh1@gmail.com"});  //developer 's email
-                    Email.putExtra(Intent.EXTRA_SUBJECT,
-                            "Add your Subject"); // Email 's Subject
-                    Email.putExtra(Intent.EXTRA_TEXT, "Dear Developer Name," + "");  //Email 's Greeting text
-                    startActivity(Intent.createChooser(Email, "Send Feedback:"));
-                }
+                Intent Email = new Intent(Intent.ACTION_SEND);
+                Email.setType("text/email");
+                Email.putExtra(Intent.EXTRA_EMAIL,
+                        new String[]{"benktesh1@gmail.com"});  //developer 's email
+                Email.putExtra(Intent.EXTRA_SUBJECT,
+                        "Add your Subject"); // Email 's Subject
+                Email.putExtra(Intent.EXTRA_TEXT, "Dear Developer Name," + "");  //Email 's Greeting text
+                startActivity(Intent.createChooser(Email, "Send Feedback:"));
+            }
         });
 
         if (mCommonUIHelper == null) {
@@ -101,10 +100,10 @@ public class MainActivity extends AppCompatActivity implements
     private void LoadView() {
         Log.d(TAG, "Getting Market Data Async");
 
-            AsyncTaskRequested = 3; //we are requesting two asynctasks
-            new NetworkQueryTask().execute(SmartStockConstant.QueryPopulate);
-            new NetworkQueryTask().execute(SmartStockConstant.QueryMarket);
-            new NetworkQueryTask().execute(SmartStockConstant.QueryPortfolio);
+        AsyncTaskRequested = 3; //we are requesting two asynctasks
+        new NetworkQueryTask().execute(SmartStockConstant.QueryPopulate);
+        new NetworkQueryTask().execute(SmartStockConstant.QueryMarket);
+        new NetworkQueryTask().execute(SmartStockConstant.QueryPortfolio);
     }
 
 
@@ -121,11 +120,6 @@ public class MainActivity extends AppCompatActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         if (mCommonUIHelper.MakeMenu(item)) return true;
         return super.onOptionsItemSelected(item);
-    }
-
-
-    private void ShowMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -153,29 +147,28 @@ public class MainActivity extends AppCompatActivity implements
     class NetworkQueryTask extends AsyncTask<String, Void, ArrayList<Stock>> {
 
         private String query;
+
         @Override
         protected ArrayList<Stock> doInBackground(String... params) {
             AsyncTaskCount++;
             query = params[0];
-            if(spinner != null ) {
+            if (spinner != null) {
                 spinner.setVisibility(View.VISIBLE);
             }
             ArrayList<Stock> searchResults = null;
             try {
-                if(query == SmartStockConstant.QueryMarket) {
+                if (query == SmartStockConstant.QueryMarket) {
                     searchResults = NetworkUtilities.getStockData(getApplicationContext(), query);
-                    Log.d(TAG, query + ": Calling getMarketData() "  + " " + searchResults.size());
-                }
-                else if(query == SmartStockConstant.QueryPopulate) {
+                    Log.d(TAG, query + ": Calling getMarketData() " + " " + searchResults.size());
+                } else if (query == SmartStockConstant.QueryPopulate) {
 
                     boolean result = NetworkUtilities.populateSymbol(getApplicationContext(), false);
                     Log.d(TAG, query + ": Calling poplate symbole(contxt, false) returned: " + result);
 
-                }
-                else {
+                } else {
 
                     searchResults = NetworkUtilities.getStockData(getApplicationContext(), query);
-                    Log.d(TAG,  "Calling getStockData( " + query + ") " + searchResults.size());
+                    Log.d(TAG, "Calling getStockData( " + query + ") " + searchResults.size());
 
                 }
 
@@ -190,17 +183,16 @@ public class MainActivity extends AppCompatActivity implements
             super.onPostExecute(searchResults);
 
 
-            if(query == SmartStockConstant.QueryPopulate) {
+            if (query == SmartStockConstant.QueryPopulate) {
                 Log.d(TAG, "Database Update Completed");
             }
 
 
-            if(query != null) {
+            if (query != null) {
                 if (searchResults != null && searchResults.size() != 0) {
-                    if(query == SmartStockConstant.QueryMarket) {
+                    if (query == SmartStockConstant.QueryMarket) {
                         mAdapter.resetData(searchResults);
-                    }
-                    else if(query == SmartStockConstant.QueryPortfolio) {
+                    } else if (query == SmartStockConstant.QueryPortfolio) {
                         mStockAdapter.resetData(searchResults);
                     }
 
@@ -210,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements
                 Log.e(TAG, "onPostExecute: Query is Null in Async. Nothing Done");
             }
 
-            if(AsyncTaskCount == AsyncTaskRequested && spinner != null && spinner.getVisibility() == View.VISIBLE) {
+            if (AsyncTaskCount == AsyncTaskRequested && spinner != null && spinner.getVisibility() == View.VISIBLE) {
                 spinner.setVisibility(View.GONE);
             }
         }
