@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -20,19 +19,16 @@ import benktesh.smartstock.R;
 public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.PortfolioViewHolder> {
 
     private static String TAG = PortfolioAdapter.class.getSimpleName();
-
-    private Context mContext;
-    private ArrayList<Stock> mData;
-    private int mViewHolderCount;
-    private int mNumberItems;
-
     // I Create a final private ListItemClickListener called mOnClickListener
     /*
      * An on-click handler that we've defined to make it easy for an Activity to interface with
      * our RecyclerView
      */
     final private ListItemClickListener mOnClickListener;
-
+    private Context mContext;
+    private ArrayList<Stock> mData;
+    private int mViewHolderCount;
+    private int mNumberItems;
     private TextView mSymbolTextView;
 
 
@@ -44,14 +40,6 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.Port
         mViewHolderCount = 0;
 
     }
-
-
-    //  An interface called ListItemClickListener receives onClick message. Within that interface,
-    // we can define a void method called onListItemClick that takes any arguement as paramter.
-    public interface ListItemClickListener {
-        void onListItemClick(Stock data);
-    }
-
 
     /**
      * This method is called for each ViewHolder created when the RecyclerView
@@ -107,12 +95,17 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.Port
         notifyDataSetChanged();
     }
 
-
     @Override
     public int getItemCount() {
         return mData == null ? 0 : mData.size();
     }
 
+
+    //  An interface called ListItemClickListener receives onClick message. Within that interface,
+    // we can define a void method called onListItemClick that takes any arguement as paramter.
+    public interface ListItemClickListener {
+        void onListItemClick(Stock data);
+    }
 
     class PortfolioViewHolder extends ViewHolder implements View.OnClickListener {
 

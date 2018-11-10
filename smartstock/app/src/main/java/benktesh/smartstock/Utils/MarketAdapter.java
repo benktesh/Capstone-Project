@@ -20,19 +20,16 @@ import benktesh.smartstock.R;
 public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchViewHolder> {
 
     private static String TAG = MarketAdapter.class.getSimpleName();
-
-    private Context mContext;
-    private ArrayList<Stock> mData;
-    private int mViewHolderCount;
-    private int mNumberItems;
-
     // I Create a final private ListItemClickListener called mOnClickListener
     /*
      * An on-click handler that we've defined to make it easy for an Activity to interface with
      * our RecyclerView
      */
     final private ListItemClickListener mOnClickListener;
-
+    private Context mContext;
+    private ArrayList<Stock> mData;
+    private int mViewHolderCount;
+    private int mNumberItems;
     private TextView mSymbolTextView;
 
 
@@ -44,14 +41,6 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
         mViewHolderCount = 0;
 
     }
-
-
-    //  An interface called ListItemClickListener receives onClick message. Within that interface,
-    // we can define a void method called onListItemClick that takes any arguement as paramter.
-    public interface ListItemClickListener {
-        void onListItemClick(Stock market);
-    }
-
 
     /**
      * This method is called for each ViewHolder created when the RecyclerView
@@ -107,12 +96,17 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.SearchView
         notifyDataSetChanged();
     }
 
-
     @Override
     public int getItemCount() {
         return mData == null ? 0 : mData.size();
     }
 
+
+    //  An interface called ListItemClickListener receives onClick message. Within that interface,
+    // we can define a void method called onListItemClick that takes any arguement as paramter.
+    public interface ListItemClickListener {
+        void onListItemClick(Stock market);
+    }
 
     class SearchViewHolder extends ViewHolder implements View.OnClickListener {
 

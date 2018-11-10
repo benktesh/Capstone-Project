@@ -3,6 +3,15 @@ package benktesh.smartstock.Model;
 public class SearchRow {
     private int Id;
     private String Symbol;
+    private Double Change = 0.0;
+    private String Detail;
+
+    public SearchRow(int id, String symbol, Double change, String detail) {
+        Id = id;
+        Symbol = symbol;
+        Change = change;
+        Detail = detail;
+    }
 
     public Double getChange() {
         return Change;
@@ -10,16 +19,6 @@ public class SearchRow {
 
     public void setChange(Double change) {
         Change = change;
-    }
-
-    private Double Change = 0.0;
-    private String Detail;
-
-    public SearchRow(int id, String symbol, Double change ,String detail) {
-        Id = id;
-        Symbol = symbol;
-        Change = change;
-        Detail = detail;
     }
 
     public int getId() {

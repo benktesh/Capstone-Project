@@ -5,25 +5,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import benktesh.smartstock.Utils.SmartStockConstant;
-
 
 public class SmartStrockDbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = SmartStrockDbHelper.class.getSimpleName();
     private static final String DATABASE_NAME = "smartstock.db";
-
-    public static int getDatabaseVersion() {
-        return DATABASE_VERSION;
-    }
-
     private static final int DATABASE_VERSION = 1;
 
     public SmartStrockDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-
+    public static int getDatabaseVersion() {
+        return DATABASE_VERSION;
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -73,10 +68,6 @@ public class SmartStrockDbHelper extends SQLiteOpenHelper {
                 SmartStockContract.SymbolEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 "); ";
         db.execSQL(SQL_CREATE_SYMBOLENTRY_TABLE);
-
-
-
-
 
 
     }

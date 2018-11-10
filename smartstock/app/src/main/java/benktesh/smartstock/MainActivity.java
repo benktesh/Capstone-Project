@@ -31,18 +31,15 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = MainActivity.class.getSimpleName();
 
     CommonUIHelper mCommonUIHelper;
+    ArrayList<Stock> mMarketData;
+    ArrayList<Stock> mStockData;
     private Toast mToast;
-
     //The following are for market summary
     private MarketAdapter mAdapter;
     private RecyclerView mMarketRV;
-    ArrayList<Stock> mMarketData;
-
     //the following are for portfolio summary
     private PortfolioAdapter mStockAdapter;
     private RecyclerView mStockRV;
-    ArrayList<Stock> mStockData;
-
     private ProgressBar spinner;
 
     private int AsyncTaskCount = 0;

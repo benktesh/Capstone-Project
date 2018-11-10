@@ -3,7 +3,6 @@ package benktesh.smartstock;
 import android.app.SearchManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,11 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,7 +22,6 @@ import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.UI.CommonUIHelper;
 import benktesh.smartstock.UI.StockDetailActivity;
 import benktesh.smartstock.Utils.NetworkUtilities;
-import benktesh.smartstock.Utils.SmartStockConstant;
 
 import static benktesh.smartstock.Utils.SmartStockConstant.ParcelableStock;
 
@@ -192,8 +188,8 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
             super.onPostExecute(searchResults);
 
             if (query != null) {
-                if (searchResults != null ) {
-                    if(searchResults.size() == 0){
+                if (searchResults != null) {
+                    if (searchResults.size() == 0) {
                         Toast.makeText(getApplicationContext(), "No stock found", Toast.LENGTH_LONG).show();
 
                     }

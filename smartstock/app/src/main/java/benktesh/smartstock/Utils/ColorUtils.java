@@ -11,8 +11,8 @@ public class ColorUtils {
 
         int movement = 0;
 
-        if(change < 0) movement = -1;
-        if(change > 0) movement = 1;
+        if (change < 0) movement = -1;
+        if (change > 0) movement = 1;
 
         switch (movement) {
             case -1:

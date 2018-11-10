@@ -4,15 +4,33 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.text.DateFormat;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Chart implements Parcelable, Comparable {
+    public static final Creator<Chart> CREATOR = new Creator<Chart>() {
+        @Override
+        public Chart createFromParcel(Parcel in) {
+            return new Chart(in);
+        }
+
+        @Override
+        public Chart[] newArray(int size) {
+            return new Chart[size];
+        }
+    };
     public String Date;
     public String Minute;
     public double High;
     public double Low;
     public double Volume;
+    public long Average;
+    public double Open;
+    public double Close;
+    public double MarketHigh;
+    public double MarketLow;
+    public double MarketOpen;
+    public double MarketClose;
 
     protected Chart(Parcel in) {
         Date = in.readString();
@@ -29,17 +47,8 @@ public class Chart implements Parcelable, Comparable {
         MarketClose = in.readDouble();
     }
 
-    public static final Creator<Chart> CREATOR = new Creator<Chart>() {
-        @Override
-        public Chart createFromParcel(Parcel in) {
-            return new Chart(in);
-        }
-
-        @Override
-        public Chart[] newArray(int size) {
-            return new Chart[size];
-        }
-    };
+    public Chart() {
+    }
 
     public String getDate() {
         return Date;
@@ -137,17 +146,6 @@ public class Chart implements Parcelable, Comparable {
         MarketClose = marketClose;
     }
 
-    public long Average;
-    public double Open;
-    public double Close;
-    public double MarketHigh;
-    public double MarketLow;
-    public double MarketOpen;
-    public double MarketClose;
-
-    public Chart() {
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -168,6 +166,7 @@ public class Chart implements Parcelable, Comparable {
         dest.writeDouble(MarketOpen);
         dest.writeDouble(MarketClose);
     }
+
     public Date getDateForChart() {
 
         DateFormat sdf = new SimpleDateFormat("yyyyMMdd:hh:mm");
@@ -175,9 +174,8 @@ public class Chart implements Parcelable, Comparable {
         String yyyyMMddDatePattern = "yyyyMMdd";
 
 
-
         try {
-            String date = (Date != null ? Date : String.format(yyyyMMddDatePattern, new Date()) )+ ":" + Minute;
+            String date = (Date != null ? Date : String.format(yyyyMMddDatePattern, new Date())) + ":" + Minute;
             Date dateForChart = sdf.parse(date);
             return dateForChart;
         } catch (Exception e) {
@@ -190,7 +188,7 @@ public class Chart implements Parcelable, Comparable {
     @Override
     public int compareTo(Object o) {
         Chart e = (Chart) o;
-        return this.getDateForChart().compareTo( ((Chart) o).getDateForChart());
+        return this.getDateForChart().compareTo(((Chart) o).getDateForChart());
     }
 
     @Override

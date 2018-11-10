@@ -1,10 +1,8 @@
 package benktesh.smartstock.fcm;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,22 +10,17 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import benktesh.smartstock.MainActivity;
-import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.R;
 import benktesh.smartstock.Utils.NetworkUtilities;
 import benktesh.smartstock.Utils.SmartStockConstant;
@@ -60,7 +53,7 @@ public class FCMService extends FirebaseMessagingService {
         else if (remoteMessage.getNotification() != null) {
             String messageBody = remoteMessage.getNotification().getBody();
             Log.d(TAG, "Message Notification Body: " + messageBody);
-            sendNotification(messageBody );
+            sendNotification(messageBody);
         }
 
     }
@@ -75,7 +68,7 @@ public class FCMService extends FirebaseMessagingService {
     }
 
     private void sendNotification(String message) {
-        if(message == null || message.length() <= 0)
+        if (message == null || message.length() <= 0)
             return;
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -1,11 +1,8 @@
 package benktesh.smartstock;
 
-import android.util.Log;
-
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,9 +11,6 @@ import benktesh.smartstock.Model.Chart;
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.Model.Trade;
 import benktesh.smartstock.Utils.LibraryHelper;
-import benktesh.smartstock.Utils.SmartStockConstant;
-
-import static org.junit.Assert.*;
 
 public class LibraryHelperTest {
 
@@ -56,23 +50,20 @@ public class LibraryHelperTest {
     }
 
     @Test
-    public void timeStampConverion()
-    {
+    public void timeStampConverion() {
         Trade t = new Trade();
         t.timestamp = Long.parseLong("1541016446379");
 
         Date d = t.getTime();
         Calendar cal = Calendar.getInstance();
         cal.setTime(d);
-        Assert.assertTrue(cal.get(Calendar.YEAR)  == 2018);
-
+        Assert.assertTrue(cal.get(Calendar.YEAR) == 2018);
 
 
     }
 
     @Test
-    public void chartMinuteFormatting()
-    {
+    public void chartMinuteFormatting() {
         Chart c = new Chart();
         c.Date = "20181107";
         c.Minute = "9:30";

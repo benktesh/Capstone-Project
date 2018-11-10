@@ -38,13 +38,6 @@ import benktesh.smartstock.R;
 //TODO - this is from old code. Needs cleanup perhaps rename
 
 public class NetworkUtilities {
-    private static final String TAG = NetworkUtilities.class.getSimpleName();
-    private static SmartStrockDbHelper mDbHelper;
-    private static SQLiteDatabase db;
-
-    private static ArrayList<Stock> searchResult = new ArrayList<>();
-
-
     // Api related parameters
     public static final String BaseAddress = "https://api.iextrading.com/1.0";
     public static final String SymbolURL = "https://api.iextrading.com/1.0/ref-data/symbols";
@@ -52,15 +45,17 @@ public class NetworkUtilities {
     public static final String CHARTSUFFIX = "/chart/1d";
     public static final String BOOK_SUFFIX = "/book";
     public static final String QUOTE_SUFFIX = "/quote";
-
     public static final String LOGO_SUFFIX = "/logo";
-
+    private static final String TAG = NetworkUtilities.class.getSimpleName();
+    private static SmartStrockDbHelper mDbHelper;
+    private static SQLiteDatabase db;
+    private static ArrayList<Stock> searchResult = new ArrayList<>();
 
     public static boolean populateSymbol(Context context, boolean force) {
         Log.d(TAG, "Populating Symbols");
 
         //startout marketSymbol
-        loadMarketSymbols(context, SmartStockConstant.MarketSymbols,force);
+        loadMarketSymbols(context, SmartStockConstant.MarketSymbols, force);
 
         String result = "";
         mDbHelper = new SmartStrockDbHelper(context);
@@ -68,22 +63,22 @@ public class NetworkUtilities {
         db = mDbHelper.getWritableDatabase();
 
         if (force == true) {
-            Log.d(TAG,"Loading new sets of symbols.");
+            Log.d(TAG, "Loading new sets of symbols.");
             result = getSymbols(context);
         } else {
             //check database for updateflag for symbolentry table
             //if no record found populate symbol
 
-            String[] columns = new String []{SmartStockContract.UpdateEntry.COLUMN_TABLE};
+            String[] columns = new String[]{SmartStockContract.UpdateEntry.COLUMN_TABLE};
             Cursor c = db.query(SmartStockContract.UpdateEntry.TABLE_NAME, columns, null, null, null, null, null);
-            if(c != null && c.getCount() > 0 ){
+            if (c != null && c.getCount() > 0) {
                 //Log.d(TAG,"Database has previously been populated. Returning true");
                 c.close();
                 db.close();
                 mDbHelper.close();
                 return true;
             }
-            Log.d(TAG,"Loading new sets of symbols.");
+            Log.d(TAG, "Loading new sets of symbols.");
             result = getSymbols(context);
         }
 
@@ -97,11 +92,11 @@ public class NetworkUtilities {
 
 
         ContentValues values;
-        long rows = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME,null, null);
+        long rows = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME, null, null);
         Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.SymbolEntry.TABLE_NAME + rows);
 
         rows = db.delete(SmartStockContract.UpdateEntry.TABLE_NAME,
-                SmartStockContract.UpdateEntry.COLUMN_TABLE + " = '" + SmartStockContract.SymbolEntry.TABLE_NAME +"'", null);
+                SmartStockContract.UpdateEntry.COLUMN_TABLE + " = '" + SmartStockContract.SymbolEntry.TABLE_NAME + "'", null);
         Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.UpdateEntry.TABLE_NAME + rows);
 
         for (int i = 0; i < dataArray.size(); i++) {
@@ -129,8 +124,7 @@ public class NetworkUtilities {
         return result != null;
     }
 
-    public static void loadMarketSymbols(Context context, String[] marketSymbols, boolean force)
-    {
+    public static void loadMarketSymbols(Context context, String[] marketSymbols, boolean force) {
         try {
             Log.d(TAG, "loadMarketSymbols");
 
@@ -141,7 +135,7 @@ public class NetworkUtilities {
 
             Cursor c = db.query(SmartStockContract.UpdateEntry.TABLE_NAME, columns,
                     SmartStockContract.UpdateEntry.COLUMN_TABLE + " = '" +
-                    SmartStockContract.MarketEntry.TABLE_NAME + "'", null, null, null, null, null);
+                            SmartStockContract.MarketEntry.TABLE_NAME + "'", null, null, null, null, null);
             if (force == false && c != null && c.getCount() > 0) {
                 Log.d(TAG, "Market symbols have previously been populated.");
 
@@ -170,10 +164,8 @@ public class NetworkUtilities {
             c.close();
             db.close();
             mDbHelper.close();
-        }
-        catch(Exception ex)
-        {
-            Log.e(TAG , "loadMarketSymbols: " + ex.toString());
+        } catch (Exception ex) {
+            Log.e(TAG, "loadMarketSymbols: " + ex.toString());
         }
 
     }
@@ -326,9 +318,6 @@ public class NetworkUtilities {
         return data;
 
 
-
-
-
     }
 
     private static Stock makeMarket(String symbol, Double price, Double change, String marketInfo) {
@@ -342,9 +331,8 @@ public class NetworkUtilities {
         return m;
     }
 
-    public static boolean addPortfolio(Context context, String symbol)
-    {
-        Log.d(TAG, "Starting addPortfolio" );
+    public static boolean addPortfolio(Context context, String symbol) {
+        Log.d(TAG, "Starting addPortfolio");
         mDbHelper = new SmartStrockDbHelper(context);
         // Gets the data repository in write mode
         db = mDbHelper.getWritableDatabase();
@@ -352,20 +340,19 @@ public class NetworkUtilities {
         values.put(SmartStockContract.PortfolioEntry.COLUMN_SYMBOL, symbol);
         long newRowId = db.insert(SmartStockContract.PortfolioEntry.TABLE_NAME, null, values);
         db.close();
-        Log.d(TAG, "Completing addPortfolio" );
+        Log.d(TAG, "Completing addPortfolio");
         return true;
     }
 
-    public static boolean removePortfolio(Context context, String symbol)
-    {
-        Log.d(TAG, "Starting removePortfolio" );
+    public static boolean removePortfolio(Context context, String symbol) {
+        Log.d(TAG, "Starting removePortfolio");
         mDbHelper = new SmartStrockDbHelper(context);
         // Gets the data repository in write mode
         db = mDbHelper.getWritableDatabase();
-        boolean result =  db.delete(SmartStockContract.PortfolioEntry.TABLE_NAME,
+        boolean result = db.delete(SmartStockContract.PortfolioEntry.TABLE_NAME,
                 SmartStockContract.PortfolioEntry.COLUMN_SYMBOL + " = '" + symbol + "'", null) > 0;
         db.close();
-        Log.d(TAG, "Completing removePortfolio" );
+        Log.d(TAG, "Completing removePortfolio");
         return result;
     }
 
@@ -383,17 +370,17 @@ public class NetworkUtilities {
         db = mDbHelper.getReadableDatabase();
 
         Cursor c = db.rawQuery("SELECT " +
-                SmartStockContract.SymbolEntry.COLUMN_SYMBOL +
-                " FROM " + SmartStockContract.SymbolEntry.TABLE_NAME + " Where " +
-                SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " = '" + query +"' "
+                        SmartStockContract.SymbolEntry.COLUMN_SYMBOL +
+                        " FROM " + SmartStockContract.SymbolEntry.TABLE_NAME + " Where " +
+                        SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " = '" + query + "' "
                 , null);
 
         ArrayList<String> matchingSymbol = new ArrayList<>();
-        if (c.moveToFirst()){
+        if (c.moveToFirst()) {
             do {
                 String symbol = c.getString(0);
                 matchingSymbol.add(symbol);
-            } while(c.moveToNext());
+            } while (c.moveToNext());
         }
         c.close();
         db.close();
@@ -420,7 +407,7 @@ public class NetworkUtilities {
                                                ArrayList<String> portfolio) {
 
         ArrayList<Stock> searchResult = new ArrayList<>();
-        for(int i = 0; i < matchingSymbol.size(); i++){
+        for (int i = 0; i < matchingSymbol.size(); i++) {
             String symbol = matchingSymbol.get(i);
             Log.d(TAG, "Getting Detailed Data for " + symbol);
             try {
@@ -428,21 +415,20 @@ public class NetworkUtilities {
                 Log.d(TAG, "getDetails: " + symbol);
                 URL url = new URL(stockUrl);
                 String response = getResponseFromHttpUrl(url, context);
-                Log.d(TAG, "Details for quote for " + symbol + " : " + response );
+                Log.d(TAG, "Details for quote for " + symbol + " : " + response);
                 Stock parsedData = JsonUtilities.parseStockQuote(response);
                 //if this stock is in portfolio, then mark it true
-                if(portfolio != null && portfolio.contains(symbol)) {
+                if (portfolio != null && portfolio.contains(symbol)) {
                     parsedData.InPortoflio = true;
                 }
                 //TODO split to different thread for performance
                 url = new URL(STOCKURL + symbol + CHARTSUFFIX);
                 Log.d(TAG, "getDetails calling chart: " + url);
-                response = getResponseFromHttpUrl(url,context);
-                Log.d(TAG, "Detail for chart Data for " + symbol + " : " + response );
+                response = getResponseFromHttpUrl(url, context);
+                Log.d(TAG, "Detail for chart Data for " + symbol + " : " + response);
 
                 ArrayList<Chart> chartData = JsonUtilities.parseChartQuote(response);
                 parsedData.Charts = chartData;
-
 
 
                 //Get Logo URL
@@ -452,9 +438,7 @@ public class NetworkUtilities {
                 parsedData.LogoUrl = JsonUtilities.parseLogo(response);
 
                 searchResult.add(parsedData);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Log.e(TAG, ex.toString());
                 return null;
             }
@@ -501,10 +485,9 @@ public class NetworkUtilities {
             ArrayList<Stock> portfolio = getDetails(context, portfolioSymbol, portfolioSymbol);
 
             db.close();
-            Log.d(TAG, "Completing Portfolio " + portfolio.size() );
+            Log.d(TAG, "Completing Portfolio " + portfolio.size());
             return portfolio;
-        }
-        else if(query.equals(SmartStockConstant.QueryMarket)) {
+        } else if (query.equals(SmartStockConstant.QueryMarket)) {
             mDbHelper = new SmartStrockDbHelper(context);
             // Gets the data repository in write mode
             db = mDbHelper.getWritableDatabase();
@@ -515,7 +498,7 @@ public class NetworkUtilities {
             ArrayList<Stock> markets = getDetails(context, symbols, portfolioSymbol);
 
             db.close();
-            Log.d(TAG, "Completing Portfolio " + markets.size() );
+            Log.d(TAG, "Completing Portfolio " + markets.size());
             return markets;
         }
 

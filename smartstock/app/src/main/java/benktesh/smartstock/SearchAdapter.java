@@ -12,27 +12,23 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import benktesh.smartstock.Model.SearchRow;
 import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.Utils.ColorUtils;
 
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder>{
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
 
     private static String TAG = SearchAdapter.class.getSimpleName();
-
-    private Context mContext;
-    private ArrayList<Stock> mData;
-    private int mViewHolderCount;
-    private int mNumberItems;
-
     // I Create a final private ListItemClickListener called mOnClickListener
     /*
      * An on-click handler that we've defined to make it easy for an Activity to interface with
      * our RecyclerView
      */
     final private ListItemClickListener mOnClickListener;
-
+    private Context mContext;
+    private ArrayList<Stock> mData;
+    private int mViewHolderCount;
+    private int mNumberItems;
     private TextView mSymbolTextView;
 
 
@@ -44,15 +40,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         mViewHolderCount = 0;
     }
 
-    //  An interface called ListItemClickListener receives onClick message. Within that interface,
-    // we can define a void method called onListItemClick that takes any arguement as paramter.
-    public interface ListItemClickListener {
-        void onListItemClick(Stock stock);
-    }
-
-
     /**
-     *
      * This method is called for each ViewHolder created when the RecyclerView
      * is laid out. Enough ViewHolders will be created to fill the screen and allow for scrolling.
      *
@@ -76,7 +64,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         viewHolder.viewHolderIndex.setText("ViewHolder index: " + mViewHolderCount);
 
         //stock is up, one color, stock is down another color. Start with default color
-        int backgroundColorForViewHolder = ColorUtils.getViewBackGroundColorForStock(mContext,0);
+        int backgroundColorForViewHolder = ColorUtils.getViewBackGroundColorForStock(mContext, 0);
         viewHolder.itemView.setBackgroundColor(backgroundColorForViewHolder);
 
         mViewHolderCount++;
@@ -84,6 +72,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 + mViewHolderCount);
         return viewHolder;
     }
+
     /**
      * OnBindViewHolder is called by the RecyclerView to display the data at the specified
      * position. In this method, we update the contents of the ViewHolder to display the correct
@@ -105,16 +94,20 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         notifyDataSetChanged();
     }
 
-
     @Override
     public int getItemCount() {
         return mData == null ? 0 : mData.size();
     }
 
 
+    //  An interface called ListItemClickListener receives onClick message. Within that interface,
+    // we can define a void method called onListItemClick that takes any arguement as paramter.
+    public interface ListItemClickListener {
+        void onListItemClick(Stock stock);
+    }
 
     class SearchViewHolder extends ViewHolder implements View.OnClickListener {
-        
+
         // Will display the position in the list, ie 0 through getItemCount() - 1
         TextView symbolView;
         TextView changeView;
@@ -128,6 +121,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
          * Constructor for our ViewHolder. Within this constructor, we get a reference to our
          * TextViews and set an onClickListener to listen for clicks. Those will be handled in the
          * onClick method below.
+         *
          * @param itemView The View that you inflated in
          *                 {@link SearchAdapter#onCreateViewHolder(ViewGroup, int)}
          */
@@ -148,6 +142,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         /**
          * This method will take an integer as input and
          * use that integer to display the appropriate text within a list item.
+         *
          * @param listIndex Position of the item in the list
          */
         void bind(int listIndex) {
@@ -160,8 +155,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
 
         // COMPLETED (6) Override onClick, passing the clicked item's position (getAdapterPosition()) to mOnClickListener via its onListItemClick method
+
         /**
          * Called whenever a user clicks on an item in the list.
+         *
          * @param v The View that was clicked
          */
         @Override

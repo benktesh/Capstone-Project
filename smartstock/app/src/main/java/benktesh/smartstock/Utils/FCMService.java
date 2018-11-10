@@ -2,12 +2,10 @@ package benktesh.smartstock.Utils;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -19,15 +17,11 @@ import java.util.Map;
 import benktesh.smartstock.MainActivity;
 import benktesh.smartstock.R;
 
-import static benktesh.smartstock.R.string.notification_message;
-
 public class FCMService extends FirebaseMessagingService {
-    public FCMService() {
-    }
-
-
     private static final int NOTIFICATION_MAX_CHARACTERS = 30;
     private static String LOG_TAG = FCMService.class.getSimpleName();
+    public FCMService() {
+    }
 
     /**
      * Called when message is received.
@@ -114,8 +108,8 @@ public class FCMService extends FirebaseMessagingService {
                 PendingIntent.FLAG_ONE_SHOT);
 
         //TODO Move hardcoded to else where
-      // String author = data.get("ADMIN");
-       String message = data.get("MESSAGE");
+        // String author = data.get("ADMIN");
+        String message = data.get("MESSAGE");
 
         // If the message is longer than the max number of characters we want in our
         // notification, truncate it and add the unicode character for ellipsis

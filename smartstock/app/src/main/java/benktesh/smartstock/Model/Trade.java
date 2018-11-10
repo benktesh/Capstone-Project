@@ -3,47 +3,9 @@ package benktesh.smartstock.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
-public class Trade implements Parcelable, Comparable{
-
-    public double price;
-    public double size;
-    public long timestamp;
-
-    public Date getTime(){
-        try {
-
-            java.util.Date time=new java.util.Date(timestamp);
-
-            return time;
-        } catch(Exception e) { //this generic but you can control other types of exception
-            // look the origin of exception
-        }
-
-        return null;
-
-    }
-
-
-
-    public Trade() {}
-
-    public Trade (double p, double s, long t) {
-        price = p;
-        size  = s;
-        timestamp = t;
-    }
-
-    protected Trade(Parcel in) {
-        price = in.readDouble();
-        size = in.readDouble();
-        timestamp = in.readLong();
-    }
+public class Trade implements Parcelable, Comparable {
 
     public static final Creator<Trade> CREATOR = new Creator<Trade>() {
         @Override
@@ -56,6 +18,39 @@ public class Trade implements Parcelable, Comparable{
             return new Trade[size];
         }
     };
+    public double price;
+    public double size;
+    public long timestamp;
+
+
+    public Trade() {
+    }
+
+    public Trade(double p, double s, long t) {
+        price = p;
+        size = s;
+        timestamp = t;
+    }
+
+    protected Trade(Parcel in) {
+        price = in.readDouble();
+        size = in.readDouble();
+        timestamp = in.readLong();
+    }
+
+    public Date getTime() {
+        try {
+
+            java.util.Date time = new java.util.Date(timestamp);
+
+            return time;
+        } catch (Exception e) { //this generic but you can control other types of exception
+            // look the origin of exception
+        }
+
+        return null;
+
+    }
 
     @Override
     public int describeContents() {
@@ -72,8 +67,8 @@ public class Trade implements Parcelable, Comparable{
     @Override
     public int compareTo(Object o) {
         Trade e = (Trade) o;
-        return this.timestamp<((Trade) o).timestamp?-1:
-                this.timestamp>((Trade) o).timestamp?1:0;
+        return this.timestamp < ((Trade) o).timestamp ? -1 :
+                this.timestamp > ((Trade) o).timestamp ? 1 : 0;
     }
 
     @Override

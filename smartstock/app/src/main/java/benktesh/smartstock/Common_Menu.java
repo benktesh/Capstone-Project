@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.SearchView;
 
-public class Common_Menu extends AppCompatActivity{
+public class Common_Menu extends AppCompatActivity {
 
     public Common_Menu() {
 

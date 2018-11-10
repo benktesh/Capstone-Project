@@ -26,15 +26,15 @@
     <TextView
         android:id="@+id/label_stock_symbol"
         android:layout_width="match_parent"
-        android:layout_marginStart="@dimen/widget_text_margin"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/widget_text_margin"
         android:text="@string/label_symbol" />
 
     <TextView
         android:id="@+id/stock_symbol"
         android:layout_width="match_parent"
-        android:layout_marginStart="@dimen/widget_text_margin"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/widget_text_margin"
         tools:text="ARR" />
 
     <TextView

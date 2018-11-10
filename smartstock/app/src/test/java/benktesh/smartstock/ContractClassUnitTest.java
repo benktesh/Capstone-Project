@@ -1,10 +1,7 @@
 package benktesh.smartstock;
 
 
-
 import android.provider.BaseColumns;
-
-
 
 import org.junit.Test;
 
@@ -37,7 +34,6 @@ public class ContractClassUnitTest {
         assertTrue("Inner class should be final", Modifier.isFinal(entryClass.getModifiers()));
         assertTrue("Inner class should be static", Modifier.isStatic(entryClass.getModifiers()));
     }
-
 
 
 }

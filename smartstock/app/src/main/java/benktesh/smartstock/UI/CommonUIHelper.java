@@ -12,18 +12,14 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import benktesh.smartstock.R;
-import benktesh.smartstock.Model.SearchRow;
 import benktesh.smartstock.Utils.NetworkUtilities;
-import benktesh.smartstock.Utils.SmartStockConstant;
 
 public class CommonUIHelper {
 
+    private static String TAG = CommonUIHelper.class.getSimpleName();
     Context mContext;
 
-    private static String TAG = CommonUIHelper.class.getSimpleName();
     public CommonUIHelper(Context context) {
         mContext = context;
     }
@@ -52,13 +48,13 @@ public class CommonUIHelper {
             mContext.startActivity(intent);
             return true;
         }
-        if(id == R.id.action_search) {
+        if (id == R.id.action_search) {
             //TODO
             ShowMessage("Search is handled");
 
         }
 
-        if(id == R.id.action_update) {
+        if (id == R.id.action_update) {
 
             new NetworkTask().execute();
             ShowMessage("It may take a while. Symbols will be updated");
@@ -100,8 +96,7 @@ public class CommonUIHelper {
             boolean result = false;
             try {
                 result = NetworkUtilities.populateSymbol(mContext, true);
-            }
-            catch (Exception ex){
+            } catch (Exception ex) {
                 Log.d(TAG, ex.toString());
             }
 

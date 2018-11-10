@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.os.StrictMode;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -21,7 +20,7 @@ public class SmartStockWidget extends AppWidgetProvider {
     private static final String TAG = SmartStockWidget.class.getSimpleName();
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int[] appWidgetIds, Stock stock) {
+                                       int[] appWidgetIds, Stock stock) {
 
         Log.d(TAG, "updatingAppWidget");
 
@@ -30,14 +29,12 @@ public class SmartStockWidget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.smart_stock_widget);
 
 
-        if(stock != null)
-        {
+        if (stock != null) {
             views.setTextViewText(R.id.appwidget_text, widgetText);
             views.setTextViewText(R.id.stock_symbol, stock.Symbol);
             views.setTextViewText(R.id.stock_price, String.valueOf(stock.Price));
             views.setTextViewText(R.id.stock_change, String.valueOf(stock.Change));
-        }
-        else {
+        } else {
             Log.d(TAG, "Stock is null");
         }
 

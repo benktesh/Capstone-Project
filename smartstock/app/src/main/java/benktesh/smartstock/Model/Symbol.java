@@ -4,6 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Symbol implements Parcelable {
+    public static final Creator<Symbol> CREATOR = new Creator<Symbol>() {
+        @Override
+        public Symbol createFromParcel(Parcel in) {
+            return new Symbol(in);
+        }
+
+        @Override
+        public Symbol[] newArray(int size) {
+            return new Symbol[size];
+        }
+    };
     public String symbol;
     public String name;
     public String date;
@@ -38,16 +49,4 @@ public class Symbol implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<Symbol> CREATOR = new Creator<Symbol>() {
-        @Override
-        public Symbol createFromParcel(Parcel in) {
-            return new Symbol(in);
-        }
-
-        @Override
-        public Symbol[] newArray(int size) {
-            return new Symbol[size];
-        }
-    };
 }

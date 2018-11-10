@@ -32,9 +32,8 @@ import benktesh.smartstock.databinding.ActivityStockdetailBinding;
 public class StockDetailActivity extends AppCompatActivity {
 
     private static String TAG = StockDetailActivity.class.getSimpleName();
-    private Stock stock;
-
     SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+    private Stock stock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +85,6 @@ public class StockDetailActivity extends AppCompatActivity {
             Log.d(TAG, "Logo URL: " + stock.LogoUrl);
             ImageView imageView = findViewById(R.id.stock_logo);
             Picasso.get().load(stock.LogoUrl).into(imageView);
-
 
 
             if (stock.IsMarket) {

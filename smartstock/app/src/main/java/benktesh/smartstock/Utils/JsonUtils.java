@@ -3,13 +3,11 @@ package benktesh.smartstock.Utils;
 
 import android.util.Log;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import benktesh.smartstock.Model.Chart;
 import benktesh.smartstock.Model.Stock;

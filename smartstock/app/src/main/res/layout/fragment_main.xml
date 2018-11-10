@@ -9,7 +9,6 @@
         android:orientation="vertical">
 
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -25,6 +24,7 @@
                 android:text="@string/market_summary"
                 android:textColor="@android:color/white"
                 android:visibility="visible" />
+
             <include layout="@layout/stock_row_header" />
 
 
@@ -52,8 +52,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:gravity="center"
-                android:textColor="@android:color/white"
-                android:text="Portfolio Summary" />
+                android:text="Portfolio Summary"
+                android:textColor="@android:color/white" />
 
             <include layout="@layout/stock_row_header" />
 

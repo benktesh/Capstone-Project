@@ -5,10 +5,10 @@
 
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/colorPrimary"
-    android:textColor="@android:color/white"
     android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
     android:orientation="horizontal"
+    android:textColor="@android:color/white"
     android:weightSum="5"
     tools:showIn="@layout/fragment_main">
 
