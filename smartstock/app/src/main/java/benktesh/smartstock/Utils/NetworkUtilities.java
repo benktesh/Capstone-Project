@@ -53,6 +53,8 @@ public class NetworkUtilities {
     public static final String BOOK_SUFFIX = "/book";
     public static final String QUOTE_SUFFIX = "/quote";
 
+    public static final String LOGO_SUFFIX = "/logo";
+
 
     public static boolean populateSymbol(Context context, boolean force) {
         Log.d(TAG, "Populating Symbols");
@@ -439,8 +441,16 @@ public class NetworkUtilities {
                 Log.d(TAG, "Detail for chart Data for " + symbol + " : " + response );
 
                 ArrayList<Chart> chartData = JsonUtilities.parseChartQuote(response);
-
                 parsedData.Charts = chartData;
+
+
+
+                //Get Logo URL
+                url = new URL(STOCKURL + symbol + LOGO_SUFFIX);
+                Log.d(TAG, "getDetails calling logo: " + url);
+                response = getResponseFromHttpUrl(url, context);
+                parsedData.LogoUrl = JsonUtilities.parseLogo(response);
+
                 searchResult.add(parsedData);
             }
             catch (Exception ex)

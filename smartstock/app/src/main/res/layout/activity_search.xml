@@ -11,6 +11,6 @@
         android:textColor="@android:color/white"
         android:text="Search Summary" />
     <include layout="@layout/stock_row_header" />
-    <include layout="@layout/progress_spinner" />
     <include layout="@layout/recycle_stock" />
+    <include layout="@layout/progress_spinner" />
 </LinearLayout>

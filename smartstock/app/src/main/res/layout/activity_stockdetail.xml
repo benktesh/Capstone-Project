@@ -18,6 +18,9 @@
         tools:context=".UI.StockDetailActivity"
         tools:showIn="@layout/activity_stockdetail">
 
+
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,11 +36,11 @@
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp">
 
-                <TextView
-                    android:id="@+id/label_stock_symbol"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_symbol" />
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/stock_logo"
+                    />
 
                 <TextView
                     android:id="@+id/stock_symbol"

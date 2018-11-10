@@ -93,7 +93,7 @@ class JsonUtilities {
                 chart.Volume = chartObject.optDouble("volume", 0);
 
                 //if(chart.Average >= 0 ) {
-                    result.add(chart);
+                result.add(chart);
                 //}
 
             }
@@ -116,7 +116,7 @@ class JsonUtilities {
             JSONObject quoteObject = new JSONObject(json);
 
             element = new Stock();
-           // JSONObject elementObject = quoteObject.getJSONObject("quote");
+            // JSONObject elementObject = quoteObject.getJSONObject("quote");
             element.Symbol = quoteObject.optString("symbol", "");
             element.InPortoflio = false;
             element.Price = quoteObject.optDouble("latestPrice", 0.0);
@@ -134,7 +134,7 @@ class JsonUtilities {
 
     }
 
-    public static ArrayList<Trade>  parseTradeData(JSONObject bookObject) {
+    public static ArrayList<Trade> parseTradeData(JSONObject bookObject) {
         ArrayList<Trade> trades = new ArrayList<>();
 
 
@@ -230,6 +230,23 @@ class JsonUtilities {
             Log.e(TAG + " parseRecipeJson", "Could not parse json " + ex.toString());
             return null;
         }
+    }
+
+    public static String parseLogo(String json) {
+        String url = "";
+        Log.d(TAG, "parseLogo Started " + json);
+
+        try {
+            JSONObject logoObject = new JSONObject(json);
+
+            url = logoObject.optString("url", "");
+
+        } catch (Exception ex) {
+            Log.e(TAG, "parseStockQuote " + ex.getMessage() + "\n" + json);
+            return null;
+        }
+        Log.d(TAG, "paseStockQuote Ended");
+        return url;
     }
 
     /*

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -13,6 +14,7 @@ import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,6 +82,13 @@ public class StockDetailActivity extends AppCompatActivity {
                 //graph.getGridLabelRenderer().setNumHorizontalLabels(9);
             }
 
+            //load the logo using picasso
+            Log.d(TAG, "Logo URL: " + stock.LogoUrl);
+            ImageView imageView = findViewById(R.id.stock_logo);
+            Picasso.get().load(stock.LogoUrl).into(imageView);
+
+
+
             if (stock.IsMarket) {
                 //remove the view related to portforlio for market stocks
                 View portfolio = findViewById(R.id.stockdetail_portfolio);
@@ -88,6 +97,7 @@ public class StockDetailActivity extends AppCompatActivity {
             binding.setStock(stock);
         }
     }
+
 
     public void onTogglePortfolio(View view) {
         if (((ToggleButton) view).isChecked()) {

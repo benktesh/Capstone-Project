@@ -17,6 +17,7 @@ public class Stock implements Parcelable {
     public int Position;
     public ArrayList<Trade> Trades;
     public ArrayList<Chart> Charts;
+    public String LogoUrl;
 
 
     protected Stock(Parcel in) {
@@ -47,6 +48,7 @@ public class Stock implements Parcelable {
         Position = in.readInt();
         Trades = in.createTypedArrayList(Trade.CREATOR);
         Charts = in.createTypedArrayList(Chart.CREATOR);
+        LogoUrl = in.readString();
     }
 
     @Override
@@ -82,6 +84,7 @@ public class Stock implements Parcelable {
         dest.writeInt(Position);
         dest.writeTypedList(Trades);
         dest.writeTypedList(Charts);
+        dest.writeString(LogoUrl);
     }
 
     @Override
@@ -118,7 +121,7 @@ public class Stock implements Parcelable {
 
 
     public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
-                 Double DayLow, Double Price, boolean IsMarket, int Position) {
+                 Double DayLow, Double Price, boolean IsMarket, int Position, String logoUrl) {
         this.Symbol = Symbol;
         this.Change = Change;
         this.InPortoflio = InPortoflio;
@@ -128,12 +131,15 @@ public class Stock implements Parcelable {
         this.Price = Price;
         this.IsMarket = IsMarket;
         this.Position = Position;
+        this.LogoUrl = logoUrl;
     }
 
     public Stock(String Symbol, Double Change, boolean InPortoflio, String Market, Double DayHigh,
                  Double DayLow, Double Price, boolean IsMarket,
                  ArrayList<Trade> trades, ArrayList<Chart> charts,
-                 int Position) {
+                 int Position,
+                 String logourl
+    ) {
         this.Symbol = Symbol;
         this.Change = Change;
         this.InPortoflio = InPortoflio;
@@ -145,6 +151,7 @@ public class Stock implements Parcelable {
         this.Trades = trades;
         this.Charts = charts;
         this.Position = Position;
+        this.LogoUrl = logourl;
     }
 
 }
