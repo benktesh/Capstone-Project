@@ -54,7 +54,11 @@ public class SmartStockContentProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+    public Cursor query(@NonNull Uri uri,
+                        @Nullable String[] projection,
+                        @Nullable String selection,
+                        @Nullable String[] selectionArgs,
+                        @Nullable String sortOrder) {
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
         int match = sUriMatcher.match(uri);
         Cursor retCursor;
@@ -70,7 +74,7 @@ public class SmartStockContentProvider extends ContentProvider {
                 break;
             case MARKETS:
                 retCursor = db.query(SmartStockContract.MarketEntry.TABLE_NAME,
-                        null,
+                        projection,
                         null,
                         null,
                         null,

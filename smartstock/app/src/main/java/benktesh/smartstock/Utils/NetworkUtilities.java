@@ -30,6 +30,8 @@ import benktesh.smartstock.Model.Stock;
 import benktesh.smartstock.Model.Symbol;
 import benktesh.smartstock.R;
 
+import static benktesh.smartstock.Data.SmartStockContract.MarketEntry.COLUMN_SYMBOL;
+
 /**
  * Created by Benktesh on 5/1/18.
  * Some of the resource for this file were created from Udacity provided content for the students in Google Challenge Scholar's Exercise 2.
@@ -151,7 +153,7 @@ public class NetworkUtilities {
                 ContentValues values;
                 for (String symbol : marketSymbols) {
                     values = new ContentValues();
-                    values.put(SmartStockContract.MarketEntry.COLUMN_SYMBOL, symbol);
+                    values.put(COLUMN_SYMBOL, symbol);
                     db.insert(SmartStockContract.MarketEntry.TABLE_NAME, null, values);
                 }
 
@@ -298,26 +300,23 @@ public class NetworkUtilities {
         This method returns a list of stocks as market data
      */
     public static ArrayList<String> getMarketList(Context context) {
-        Log.d(TAG, " Starting getMarketList");
+        Log.d(TAG, " Starting getMarketList from Content Provider");
 
         ArrayList<String> data = new ArrayList<>();
-        SmartStrockDbHelper mDbHelper = new SmartStrockDbHelper(context);
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        Cursor c;
-        c = db.rawQuery("SELECT symbol FROM market", null);
+
+        String[] cols = {SmartStockContract.MarketEntry.COLUMN_SYMBOL};
+        Cursor c = context.getContentResolver().query(SmartStockContract.MarketEntry.MARKET_URI
+                ,cols,null,null,null);
+
         if (c.moveToFirst()) {
             do {
                 data.add(c.getString(0));
             } while (c.moveToNext());
         }
-        c.close();
-        db.close();
-        mDbHelper.close();
 
+        c.close();
         Log.d(TAG, " Ending getMarketList");
         return data;
-
-
     }
 
     private static Stock makeMarket(String symbol, Double price, Double change, String marketInfo) {
@@ -497,31 +496,6 @@ public class NetworkUtilities {
             Log.d(TAG, "Completing Portfolio " + markets.size());
             return markets;
         }
-
-        /*
-        else {
-            //search for query string on api
-            //return a list upto matching number
-            searchResult.add(new Stock("EGOV", 1.0,
-                    false, "NASDAQ", 100.0, 99.0, 100.0, false));
-            searchResult.add(new Stock("SPY", 1.0,
-                    true, "NYSE", 100.0, 99.0, 100.0, false));
-
-            searchResult.add(new Stock("ARR", 1.0,
-                    false, "NYSE", 100.0, 99.0, 100.0, false));
-
-            searchResult.add(new Stock("GE", 1.0,
-                    true, "NYSE", 100.0, 99.0, 100.0, false));
-
-            searchResult.add(new Stock("SPY", 1.0,
-                    true, "NYSE", 100.0, 99.0, 100.0, false));
-
-            Log.d(TAG, "Original searchresuult size: " + searchResult.size()
-                    + " max searchsize: " + SmartStockConstant.MaximumSearchResult);
-
-            LibraryHelper.Trim(searchResult, SmartStockConstant.MaximumSearchResult);
-        }
-*/
 
         return searchResult;
     }
