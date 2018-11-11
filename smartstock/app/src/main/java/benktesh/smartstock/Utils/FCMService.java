@@ -20,6 +20,7 @@ import benktesh.smartstock.R;
 public class FCMService extends FirebaseMessagingService {
     private static final int NOTIFICATION_MAX_CHARACTERS = 30;
     private static String LOG_TAG = FCMService.class.getSimpleName();
+
     public FCMService() {
     }
 

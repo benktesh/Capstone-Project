@@ -88,7 +88,7 @@ public class NetworkUtilities {
         ContentValues values;
 
         long rows;
-        rows = context.getContentResolver().delete(SmartStockContract.SymbolEntry.SYMBOL_URI,null, null);
+        rows = context.getContentResolver().delete(SmartStockContract.SymbolEntry.SYMBOL_URI, null, null);
         Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.SymbolEntry.TABLE_NAME + rows);
 
 
@@ -124,7 +124,7 @@ public class NetworkUtilities {
             Cursor c;
             String[] columns = new String[]{SmartStockContract.AuditEntry.COLUMN_TABLE};
             String selection = SmartStockContract.AuditEntry.COLUMN_TABLE + " =?";
-            String[] selectionArguments = {SmartStockContract.MarketEntry.TABLE_NAME };
+            String[] selectionArguments = {SmartStockContract.MarketEntry.TABLE_NAME};
 
             c = context.getContentResolver().query(
                     SmartStockContract.AuditEntry.AUDIT_URI,
@@ -146,14 +146,14 @@ public class NetworkUtilities {
                 for (String symbol : marketSymbols) {
                     values = new ContentValues();
                     values.put(COLUMN_SYMBOL, symbol);
-                   // db.insert(SmartStockContract.MarketEntry.TABLE_NAME, null, values);
-                    context.getContentResolver().insert(SmartStockContract.MarketEntry.MARKET_URI,values);
+                    // db.insert(SmartStockContract.MarketEntry.TABLE_NAME, null, values);
+                    context.getContentResolver().insert(SmartStockContract.MarketEntry.MARKET_URI, values);
                 }
 
                 values = new ContentValues();
                 values.put(SmartStockContract.AuditEntry.COLUMN_TABLE, SmartStockContract.MarketEntry.TABLE_NAME);
                 values.put(SmartStockContract.AuditEntry.COLUMN_DATE, new Date().toString());
-                context.getContentResolver().insert(SmartStockContract.AuditEntry.AUDIT_URI,values);
+                context.getContentResolver().insert(SmartStockContract.AuditEntry.AUDIT_URI, values);
             }
             c.close();
         } catch (Exception ex) {
@@ -318,7 +318,7 @@ public class NetworkUtilities {
         String[] cols = {SmartStockContract.SymbolEntry.COLUMN_SYMBOL};
         String[] selectionArguements = {query};
         Cursor c = context.getContentResolver().query(SmartStockContract.SymbolEntry.SYMBOL_URI, cols,
-                SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " =?", selectionArguements, null );
+                SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " =?", selectionArguements, null);
 
 
         ArrayList<String> matchingSymbol = new ArrayList<>();

@@ -89,10 +89,9 @@
         </receiver>
 
         <provider
-            android:authorities="benktesh.smartstock"
             android:name="benktesh.smartstock.Data.SmartStockContentProvider"
-            android:exported="false"
-            />
+            android:authorities="benktesh.smartstock"
+            android:exported="false" />
     </application>
 
 </manifest>

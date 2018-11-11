@@ -82,10 +82,9 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
         Intent intent = getIntent();
         //if the intent is coming from widget, search for stock and display
         Stock stock = intent.getParcelableExtra(SmartStockConstant.ParcelableStock);
-        if(stock != null) {
+        if (stock != null) {
             new NetworkQueryTask().execute(stock.Symbol.toUpperCase());
-        }
-        else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+        } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             new NetworkQueryTask().execute(query.toUpperCase());
         }

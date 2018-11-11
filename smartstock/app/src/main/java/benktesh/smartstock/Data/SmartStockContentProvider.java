@@ -13,15 +13,13 @@ import android.util.Log;
 
 public class SmartStockContentProvider extends ContentProvider {
 
-    private static final String TAG = SmartStockContentProvider.class.getSimpleName();
-
-    private static final UriMatcher sUriMatcher = buildUriMatcher();
-    SmartStrockDbHelper dbHelper;
-
     public static final int SYMBOLS = 100;
     public static final int MARKETS = 110;
     public static final int PORTFOLIOS = 120;
     public static final int AUDITS = 130;
+    private static final String TAG = SmartStockContentProvider.class.getSimpleName();
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
+    SmartStrockDbHelper dbHelper;
 
     public static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);

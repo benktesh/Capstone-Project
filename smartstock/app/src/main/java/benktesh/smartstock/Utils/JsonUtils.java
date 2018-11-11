@@ -137,7 +137,7 @@ class JsonUtilities {
         } catch (JSONException e) {
             Log.d(TAG, "parseTradeData: " + e.getMessage());
         }
-        if(tradeArray == null) {
+        if (tradeArray == null) {
             return trades;
         }
         for (int i = 0; i < tradeArray.length(); i++) {
