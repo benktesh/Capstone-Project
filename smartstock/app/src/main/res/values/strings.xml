@@ -52,4 +52,9 @@
     <string name="key_message">MESSAGE</string>
     <string name="title_admin_message">Admin Message</string>
     <string name="label_viewholder_index">ViewHolder index:</string>
+    <string name="label_emailtype">text/email</string>
+    <string name="label_developer_contat_email">benktesh1@gmail.com</string>
+    <string name="label_feedback_subject">SmartStock Feedback</string>
+    <string name="label_address_developer">Dear Developer Name,</string>
+    <string name="label_send_feedback">Send Feedback:</string>
 </resources>

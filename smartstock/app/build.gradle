@@ -17,7 +17,7 @@ android {
     signingConfigs {
         // More code
         myConfig {
-            storeFile file("/Users/utia/Downloads/KeyStore")
+            storeFile file("../app/KeyStore")
             storePassword "KeyStore"
             keyAlias "SmartStockKey"
             keyPassword "SmartStock"

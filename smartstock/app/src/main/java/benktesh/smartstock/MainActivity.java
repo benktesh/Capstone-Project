@@ -61,13 +61,13 @@ public class MainActivity extends AppCompatActivity implements
             public void onClick(View view) {
 
                 Intent Email = new Intent(Intent.ACTION_SEND);
-                Email.setType("text/email");
+                Email.setType(getString(R.string.label_emailtype));
                 Email.putExtra(Intent.EXTRA_EMAIL,
-                        new String[]{"benktesh1@gmail.com"});  //developer 's email
+                        new String[]{getString(R.string.label_developer_contat_email)});  //developer 's email
                 Email.putExtra(Intent.EXTRA_SUBJECT,
-                        "Add your Subject"); // Email 's Subject
-                Email.putExtra(Intent.EXTRA_TEXT, "Dear Developer Name," + "");  //Email 's Greeting text
-                startActivity(Intent.createChooser(Email, "Send Feedback:"));
+                        R.string.label_feedback_subject); // Email 's Subject
+                Email.putExtra(Intent.EXTRA_TEXT, getString(R.string.label_address_developer) + "");  //Email 's Greeting text
+                startActivity(Intent.createChooser(Email, getString(R.string.label_send_feedback)));
             }
         });
 
