@@ -13,8 +13,19 @@ android {
     dataBinding {
         enabled = true
     }
+
+    signingConfigs {
+        // More code
+        myConfig {
+            storeFile file("/Users/utia/Downloads/KeyStore")
+            storePassword "KeyStore"
+            keyAlias "SmartStockKey"
+            keyPassword "SmartStock"
+        }
+    }
     buildTypes {
         release {
+            signingConfig signingConfigs.myConfig
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -25,6 +36,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:exifinterface:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:design:28.0.0'
 
