@@ -94,6 +94,7 @@ public class NetworkUtilities {
 
 
         ContentValues values;
+
         long rows = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME, null, null);
         Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.SymbolEntry.TABLE_NAME + rows);
 
@@ -296,40 +297,6 @@ public class NetworkUtilities {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    /*
-        This method returns a list of stocks as market data
-     */
-    public static ArrayList<String> getMarketList(Context context) {
-        Log.d(TAG, " Starting getMarketList from Content Provider");
-
-        ArrayList<String> data = new ArrayList<>();
-
-        String[] cols = {SmartStockContract.MarketEntry.COLUMN_SYMBOL};
-        Cursor c = context.getContentResolver().query(SmartStockContract.MarketEntry.MARKET_URI
-                ,cols,null,null,null);
-
-        if (c.moveToFirst()) {
-            do {
-                data.add(c.getString(0));
-            } while (c.moveToNext());
-        }
-
-        c.close();
-        Log.d(TAG, " Ending getMarketList");
-        return data;
-    }
-
-    private static Stock makeMarket(String symbol, Double price, Double change, String marketInfo) {
-
-        Stock m = new Stock();
-        m.Symbol = symbol;
-        m.Price = price;
-        m.Change = change;
-        m.Market = marketInfo;
-        m.IsMarket = true;
-        return m;
-    }
-
     public static boolean addPortfolio(Context context, String symbol) {
         Log.d(TAG, "Starting addPortfolio");
         ContentValues values = new ContentValues();
@@ -341,14 +308,13 @@ public class NetworkUtilities {
 
     public static boolean removePortfolio(Context context, String symbol) {
         Log.d(TAG, "Starting removePortfolio");
-        mDbHelper = new SmartStrockDbHelper(context);
-        // Gets the data repository in write mode
-        db = mDbHelper.getWritableDatabase();
-        boolean result = db.delete(SmartStockContract.PortfolioEntry.TABLE_NAME,
-                SmartStockContract.PortfolioEntry.COLUMN_SYMBOL + " = '" + symbol + "'", null) > 0;
-        db.close();
-        Log.d(TAG, "Completing removePortfolio");
-        return result;
+        // Defines selection criteria for the rows you want to delete
+        String mSelectionClause = SmartStockContract.PortfolioEntry.COLUMN_SYMBOL + " = ?";
+        String[] mSelectionArgs = {symbol};
+        int x = context.getContentResolver().delete(SmartStockContract.PortfolioEntry.PORTFOLIO_URI,
+                mSelectionClause, mSelectionArgs);
+        Log.d(TAG, "Completing removePortfolio " + x);
+        return true;
     }
 
     public static ArrayList<Stock> searchStock(Context context, String query) {
@@ -359,16 +325,13 @@ public class NetworkUtilities {
             Log.d(TAG, "Empty query string: " + query);
             return null;
         }
-
         Log.d(TAG, "Start SearchStock: " + query);
-        mDbHelper = new SmartStrockDbHelper(context);
-        db = mDbHelper.getReadableDatabase();
 
-        Cursor c = db.rawQuery("SELECT " +
-                        SmartStockContract.SymbolEntry.COLUMN_SYMBOL +
-                        " FROM " + SmartStockContract.SymbolEntry.TABLE_NAME + " Where " +
-                        SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " = '" + query + "' "
-                , null);
+        String[] cols = {SmartStockContract.SymbolEntry.COLUMN_SYMBOL};
+        String[] selectionArguements = {query};
+        Cursor c = context.getContentResolver().query(SmartStockContract.SymbolEntry.SYMBOL_URI, cols,
+                SmartStockContract.SymbolEntry.COLUMN_SYMBOL + " =?", selectionArguements, null );
+
 
         ArrayList<String> matchingSymbol = new ArrayList<>();
         if (c.moveToFirst()) {
@@ -377,15 +340,12 @@ public class NetworkUtilities {
                 matchingSymbol.add(symbol);
             } while (c.moveToNext());
         }
-        c.close();
-        db.close();
 
         Log.d(TAG, "Matching Symbols Count: " + matchingSymbol.size());
-
-        ArrayList<String> portfolio = getPortfolio();
-
+        ArrayList<String> portfolio = getListPortfolio(context);
         Log.d(TAG, " Portfolio Size: " + portfolio.size());
         //Instead of loop, use batch
+
         searchResult = getDetails(context, matchingSymbol, portfolio);
         Log.d(TAG, "End SearchStock " + searchResult.size() + " " + searchResult.toString());
         //LibraryHelper.Trim(searchResult, SmartStockConstant.MaximumSearchResult);
@@ -416,7 +376,7 @@ public class NetworkUtilities {
                 if (portfolio != null && portfolio.contains(symbol)) {
                     parsedData.InPortoflio = true;
                 }
-                //TODO split to different thread for performance
+
                 url = new URL(STOCKURL + symbol + CHARTSUFFIX);
                 Log.d(TAG, "getDetails calling chart: " + url);
                 response = getResponseFromHttpUrl(url, context);
@@ -424,7 +384,6 @@ public class NetworkUtilities {
 
                 ArrayList<Chart> chartData = JsonUtilities.parseChartQuote(response);
                 parsedData.Charts = chartData;
-
 
                 //Get Logo URL
                 url = new URL(STOCKURL + symbol + LOGO_SUFFIX);
@@ -441,25 +400,48 @@ public class NetworkUtilities {
         return searchResult;
     }
 
-    @NonNull
-    private static ArrayList<String> getPortfolio() {
-        Log.d(TAG, " Getting Portfolio");
-        Cursor c;
+    /*
+        This method returns a list of stocks as market data using Content Provider
+     */
+    public static ArrayList<String> getListMarket(Context context) {
+        Log.d(TAG, " Starting getListMarket");
 
+        ArrayList<String> data = new ArrayList<>();
+
+        String[] cols = {SmartStockContract.MarketEntry.COLUMN_SYMBOL};
+        Cursor c = context.getContentResolver().query(SmartStockContract.MarketEntry.MARKET_URI,
+                cols, null, null, null);
+
+        if (c.moveToFirst()) {
+            do {
+                data.add(c.getString(0));
+            } while (c.moveToNext());
+        }
+        c.close();
+        Log.d(TAG, " Ending getListMarket");
+        return data;
+    }
+
+
+    @NonNull
+    private static ArrayList<String> getListPortfolio(Context context) {
+        Log.d(TAG, " Getting Portfolio");
         ArrayList<String> portfolio = new ArrayList<>();
-        db = mDbHelper.getReadableDatabase();
-        c = db.rawQuery("SELECT symbol FROM portfolio", null);
+
+        String[] cols = {SmartStockContract.MarketEntry.COLUMN_SYMBOL};
+        Cursor c = context.getContentResolver().query(SmartStockContract.PortfolioEntry.PORTFOLIO_URI
+                , cols, null, null, null);
+
         if (c.moveToFirst()) {
             do {
                 portfolio.add(c.getString(0));
             } while (c.moveToNext());
         }
         c.close();
-        db.close();
-
         Log.d(TAG, " Ending Portfolio");
         return portfolio;
     }
+
 
     /*
     This method returns a list of stock data based on query.
@@ -469,30 +451,16 @@ public class NetworkUtilities {
      */
     public static ArrayList<Stock> getStockData(Context context, String query) {
         Log.d(TAG, "Starting getStockData: " + query);
+
         if (query.equals(SmartStockConstant.QueryPortfolio)) {
-
-            mDbHelper = new SmartStrockDbHelper(context);
-            // Gets the data repository in write mode
-            db = mDbHelper.getWritableDatabase();
-
-            ArrayList<String> portfolioSymbol = getPortfolio();
-
+            ArrayList<String> portfolioSymbol = getListPortfolio(context);
             ArrayList<Stock> portfolio = getDetails(context, portfolioSymbol, portfolioSymbol);
-
-            db.close();
             Log.d(TAG, "Completing Portfolio " + portfolio.size());
             return portfolio;
         } else if (query.equals(SmartStockConstant.QueryMarket)) {
-            mDbHelper = new SmartStrockDbHelper(context);
-            // Gets the data repository in write mode
-            db = mDbHelper.getWritableDatabase();
-
-            ArrayList<String> symbols = getMarketList(context);
-            ArrayList<String> portfolioSymbol = getPortfolio();
-
+            ArrayList<String> symbols = getListMarket(context);
+            ArrayList<String> portfolioSymbol = getListPortfolio(context);
             ArrayList<Stock> markets = getDetails(context, symbols, portfolioSymbol);
-
-            db.close();
             Log.d(TAG, "Completing Portfolio " + markets.size());
             return markets;
         }

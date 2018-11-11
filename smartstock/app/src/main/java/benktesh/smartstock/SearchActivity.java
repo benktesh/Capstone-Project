@@ -154,8 +154,6 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.L
                     }
                     mAdapter.resetData(searchResults);
                     spinner.setVisibility(View.INVISIBLE);
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.text_searching) + R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();
                 }
             } else {
                 Log.e(TAG, "onPostExecute: Query is Null in Async. Nothing Done");

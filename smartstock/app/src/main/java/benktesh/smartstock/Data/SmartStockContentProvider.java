@@ -9,8 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 public class SmartStockContentProvider extends ContentProvider {
+
+    private static final String TAG = SmartStockContentProvider.class.getSimpleName();
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     SmartStrockDbHelper dbHelper;
@@ -61,13 +64,14 @@ public class SmartStockContentProvider extends ContentProvider {
                         @Nullable String sortOrder) {
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
         int match = sUriMatcher.match(uri);
+        Log.d(TAG, "uri : " + uri + " " + projection + " " + selection + " " + selectionArgs);
         Cursor retCursor;
         switch (match) {
             case PORTFOLIOS:
                 retCursor = db.query(SmartStockContract.PortfolioEntry.TABLE_NAME,
-                        null,
-                        null,
-                        null,
+                        projection,
+                        selection,
+                        selectionArgs,
                         null,
                         null,
                         SmartStockContract.PortfolioEntry.COLUMN_TIMESTAMP);
@@ -75,12 +79,32 @@ public class SmartStockContentProvider extends ContentProvider {
             case MARKETS:
                 retCursor = db.query(SmartStockContract.MarketEntry.TABLE_NAME,
                         projection,
-                        null,
-                        null,
+                        selection,
+                        selectionArgs,
                         null,
                         null,
                         SmartStockContract.MarketEntry.COLUMN_TIMESTAMP);
                 break;
+            case SYMBOLS:
+                retCursor = db.query(SmartStockContract.SymbolEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        SmartStockContract.MarketEntry.COLUMN_TIMESTAMP);
+                break;
+
+            case AUDITS:
+                retCursor = db.query(SmartStockContract.AuditEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        SmartStockContract.MarketEntry.COLUMN_TIMESTAMP);
+                break;
+
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -118,7 +142,7 @@ public class SmartStockContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, @Nullable String selectionClause, @Nullable String[] selectionArgs) {
 
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int match = sUriMatcher.match(uri);
@@ -127,7 +151,7 @@ public class SmartStockContentProvider extends ContentProvider {
         switch (match) {
             case SYMBOL_ID:
                 String id = uri.getPathSegments().get(1);
-                deletedCount = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME, "id=?", new String[]{id});
+                deletedCount = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME, "symbol=?", new String[]{id});
                 break;
             case SYMBOLS: //delete all
                 deletedCount = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME, null, null);
@@ -137,8 +161,13 @@ public class SmartStockContentProvider extends ContentProvider {
                 break;
 
             case PORTFOLIOS:
-                deletedCount = db.delete(SmartStockContract.PortfolioEntry.TABLE_NAME, null, null);
+                String symbol = uri.getPathSegments().get(1);
+                deletedCount = db.delete(SmartStockContract.PortfolioEntry.TABLE_NAME, selectionClause, selectionArgs);
                 break;
+
+           // case PORTFOLIOS:
+           //     deletedCount = db.delete(SmartStockContract.PortfolioEntry.TABLE_NAME, null, null);
+           //     break;
 
             case AUDITS:
                 deletedCount = db.delete(SmartStockContract.AuditEntry.TABLE_NAME, null, null);
