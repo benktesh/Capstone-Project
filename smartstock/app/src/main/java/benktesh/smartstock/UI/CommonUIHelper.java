@@ -28,10 +28,6 @@ public class CommonUIHelper {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            ShowMessage(mContext.getString(R.string.msg_setting_shown));
-            return true;
-        }
         if (id == R.id.action_exit) {
             ShowMessage(mContext.getString(R.string.msg_existing));
             Intent intent = new Intent(Intent.ACTION_MAIN);

@@ -19,33 +19,16 @@ public class SmartStockContentProvider extends ContentProvider {
     SmartStrockDbHelper dbHelper;
 
     public static final int SYMBOLS = 100;
-    public static final int SYMBOL_ID = 101;
-
     public static final int MARKETS = 110;
-    public static final int MARKET_ID = 111;
-
     public static final int PORTFOLIOS = 120;
-    public static final int PORTFOLIO_ID = 121;
-
     public static final int AUDITS = 130;
-    public static final int AUDIT_ID = 131;
 
     public static UriMatcher buildUriMatcher() {
-
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(SmartStockContract.AUTHORITY, SmartStockContract.PATH_SYMBOL, SYMBOLS);
-        uriMatcher.addURI(SmartStockContract.AUTHORITY, SmartStockContract.PATH_SYMBOL + "/*", SYMBOL_ID);
-
         uriMatcher.addURI(SmartStockContract.AUTHORITY, SmartStockContract.PATH_MARKET, MARKETS);
-        uriMatcher.addURI(SmartStockContract.AUTHORITY, SmartStockContract.PATH_MARKET + "/*", MARKET_ID);
-
         uriMatcher.addURI(SmartStockContract.AUTHORITY, SmartStockContract.PATH_PORTFOLIO, PORTFOLIOS);
-        uriMatcher.addURI(SmartStockContract.AUTHORITY, SmartStockContract.PATH_PORTFOLIO + "/*", PORTFOLIO_ID);
-
         uriMatcher.addURI(SmartStockContract.AUTHORITY, SmartStockContract.PATH_AUDIT, AUDITS);
-        uriMatcher.addURI(SmartStockContract.AUTHORITY, SmartStockContract.PATH_AUDIT + "/*", AUDIT_ID);
-
-
         return uriMatcher;
     }
 
@@ -126,17 +109,43 @@ public class SmartStockContentProvider extends ContentProvider {
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
         int match = sUriMatcher.match(uri);
         Uri returnUri;
+        long id;
         switch (match) {
             case PORTFOLIOS:
-                long id = db.insert(SmartStockContract.PortfolioEntry.TABLE_NAME, null, values);
+                id = db.insert(SmartStockContract.PortfolioEntry.TABLE_NAME, null, values);
                 if (id > 0) {
                     returnUri = ContentUris.withAppendedId(SmartStockContract.PortfolioEntry.PORTFOLIO_URI, id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
+
+            case MARKETS:
+                id = db.insert(SmartStockContract.MarketEntry.TABLE_NAME, null, values);
+                if (id > 0) {
+                    returnUri = ContentUris.withAppendedId(SmartStockContract.MarketEntry.MARKET_URI, id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            case AUDITS:
+                id = db.insert(SmartStockContract.AuditEntry.TABLE_NAME, null, values);
+                if (id > 0) {
+                    returnUri = ContentUris.withAppendedId(SmartStockContract.AuditEntry.AUDIT_URI, id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            case SYMBOLS:
+                id = db.insert(SmartStockContract.SymbolEntry.TABLE_NAME, null, values);
+                if (id > 0) {
+                    returnUri = ContentUris.withAppendedId(SmartStockContract.SymbolEntry.SYMBOL_URI, id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException("Insert Unknown uri: " + uri);
         }
         return returnUri;
     }
@@ -144,33 +153,25 @@ public class SmartStockContentProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selectionClause, @Nullable String[] selectionArgs) {
 
+        Log.d(TAG, "Deleting: " + uri + " " + selectionClause + " " + selectionArgs);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int match = sUriMatcher.match(uri);
         int deletedCount; // starts as 0
 
         switch (match) {
-            case SYMBOL_ID:
-                String id = uri.getPathSegments().get(1);
-                deletedCount = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME, "symbol=?", new String[]{id});
-                break;
             case SYMBOLS: //delete all
-                deletedCount = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME, null, null);
+                deletedCount = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME, selectionClause, selectionArgs);
                 break;
             case MARKETS:
-                deletedCount = db.delete(SmartStockContract.MarketEntry.TABLE_NAME, null, null);
+                deletedCount = db.delete(SmartStockContract.MarketEntry.TABLE_NAME, selectionClause, selectionArgs);
                 break;
 
             case PORTFOLIOS:
-                String symbol = uri.getPathSegments().get(1);
                 deletedCount = db.delete(SmartStockContract.PortfolioEntry.TABLE_NAME, selectionClause, selectionArgs);
                 break;
 
-           // case PORTFOLIOS:
-           //     deletedCount = db.delete(SmartStockContract.PortfolioEntry.TABLE_NAME, null, null);
-           //     break;
-
             case AUDITS:
-                deletedCount = db.delete(SmartStockContract.AuditEntry.TABLE_NAME, null, null);
+                deletedCount = db.delete(SmartStockContract.AuditEntry.TABLE_NAME, selectionClause, selectionArgs);
                 break;
 
             default:

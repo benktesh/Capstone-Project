@@ -60,24 +60,16 @@ public class NetworkUtilities {
         loadMarketSymbols(context, SmartStockConstant.MarketSymbols, force);
 
         String result = "";
-        mDbHelper = new SmartStrockDbHelper(context);
-        // Gets the data repository in write mode
-        db = mDbHelper.getWritableDatabase();
-
         if (force == true) {
             Log.d(TAG, "Loading new sets of symbols.");
             result = getSymbols(context);
         } else {
-            //check database for updateflag for symbolentry table
-            //if no record found populate symbol
-
             String[] columns = new String[]{SmartStockContract.AuditEntry.COLUMN_TABLE};
-            Cursor c = db.query(SmartStockContract.AuditEntry.TABLE_NAME, columns, null, null, null, null, null);
+            Cursor c = context.getContentResolver().query(SmartStockContract.AuditEntry.AUDIT_URI, columns,
+                    null, null, null, null);
             if (c != null && c.getCount() > 0) {
                 //Log.d(TAG,"Database has previously been populated. Returning true");
                 c.close();
-                db.close();
-                mDbHelper.close();
                 return true;
             }
             Log.d(TAG, "Loading new sets of symbols.");
