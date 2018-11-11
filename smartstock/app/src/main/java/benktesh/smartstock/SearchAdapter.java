@@ -61,7 +61,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
         SearchViewHolder viewHolder = new SearchViewHolder(view);
 
-        viewHolder.viewHolderIndex.setText("ViewHolder index: " + mViewHolderCount);
+        viewHolder.viewHolderIndex.setText(mContext.getString(R.string.label_viewholder_index) + mViewHolderCount);
 
         //stock is up, one color, stock is down another color. Start with default color
         int backgroundColorForViewHolder = ColorUtils.getViewBackGroundColorForStock(mContext, 0);

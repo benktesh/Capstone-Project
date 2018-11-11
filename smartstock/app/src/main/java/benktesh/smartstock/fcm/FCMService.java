@@ -36,23 +36,23 @@ public class FCMService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, getString(R.string.label_from) + remoteMessage.getFrom());
 
         Map<String, String> data = remoteMessage.getData();
 
 
         if (data.size() > 0) {
-            Log.d(TAG, "Message data payload: " + data);
+            Log.d(TAG, getString(R.string.label_message_data_payload) + data);
 
             // Send a notification that we have got admin upate message
-            sendNotification("App updating..." + data.get(JSON_KEY_MESSAGE));
+            sendNotification(getString(R.string.msg_app_updating) + data.get(JSON_KEY_MESSAGE));
             new NetworkTask().execute();
 
         }
         // Send a notification that we some message that are not update specific
         else if (remoteMessage.getNotification() != null) {
             String messageBody = remoteMessage.getNotification().getBody();
-            Log.d(TAG, "Message Notification Body: " + messageBody);
+            Log.d(TAG, getString(R.string.msg_notificaiton_body) + messageBody);
             sendNotification(messageBody);
         }
 
@@ -76,7 +76,6 @@ public class FCMService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        Log.d(TAG, "sendNotification. message=" + message);
         //trim the message to 100 characters
         if (message != null && message.length() > NOTIFICATION_MAX_CHARACTERS) {
 
@@ -105,7 +104,7 @@ public class FCMService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(JSON_KEY_MESSAGE + " Message")
+                .setContentTitle(JSON_KEY_MESSAGE + getString(R.string.msg_Message))
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
@@ -122,7 +121,6 @@ public class FCMService extends FirebaseMessagingService {
 
 
         protected Boolean doInBackground(String... params) {
-            Log.d(TAG, "network task starting");
             boolean result = false;
             try {
                 result = NetworkUtilities.populateSymbol(getApplicationContext(), true);
@@ -134,11 +132,6 @@ public class FCMService extends FirebaseMessagingService {
 
         }
 
-
-        protected void onPostExecute(boolean result) {
-            Log.d(TAG, "network task completed");
-
-        }
     }
 
 }

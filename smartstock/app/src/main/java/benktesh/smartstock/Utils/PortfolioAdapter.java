@@ -62,7 +62,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.Port
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
         PortfolioViewHolder viewHolder = new PortfolioViewHolder(view);
 
-        viewHolder.viewHolderIndex.setText("ViewHolder index: " + mViewHolderCount);
+        viewHolder.viewHolderIndex.setText(R.string.label_viewholder_index + mViewHolderCount);
 
         //stock is up, one color, stock is down another color. Start with default color
         int backgroundColorForViewHolder = ColorUtils.getViewBackGroundColorForStock(mContext, 0);

@@ -33,7 +33,7 @@ public class FCMService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         super.onMessageReceived(remoteMessage);
-        Log.d("msg", "onMessageReceived: " + remoteMessage.getData().get("message"));
+        //Log.d("msg", "onMessageReceived: " + remoteMessage.getData().get("message"));
         // There are two types of messages data messages and notification messages. Data messages
         // are handled
         // here in onMessageReceived whether the app is in the foreground or background. Data
@@ -51,48 +51,16 @@ public class FCMService extends FirebaseMessagingService {
         // The Squawk server always sends just *data* messages, meaning that onMessageReceived when
         // the app is both in the foreground AND the background
 
-        Log.d(LOG_TAG, "From: " + remoteMessage.getFrom());
-
         // Check if message contains a data payload.
 
         Map<String, String> data = remoteMessage.getData();
 
         if (data.size() > 0) {
-            Log.d(LOG_TAG, "Message data payload: " + data);
-
             // Send a notification that you got a new message
             sendNotification(data);
-            //insertSquawk(data);
 
         }
     }
-
-    /**
-     * Inserts a single squawk into the database;
-     *
-     * @param data Map which has the message data in it
-     */
-    private void insertSquawk(final Map<String, String> data) {
-    /*
-        // Database operations should not be done on the main thread
-        AsyncTask<Void, Void, Void> insertSquawkTask = new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                ContentValues newMessage = new ContentValues();
-                newMessage.put(SquawkContract.COLUMN_AUTHOR, data.get(JSON_KEY_AUTHOR));
-                newMessage.put(SquawkContract.COLUMN_MESSAGE, data.get(JSON_KEY_MESSAGE).trim());
-                newMessage.put(SquawkContract.COLUMN_DATE, data.get(JSON_KEY_DATE));
-                newMessage.put(SquawkContract.COLUMN_AUTHOR_KEY, data.get(JSON_KEY_AUTHOR_KEY));
-                getContentResolver().insert(SquawkProvider.SquawkMessages.CONTENT_URI, newMessage);
-                return null;
-            }
-        };
-
-        insertSquawkTask.execute();
-        */
-    }
-
 
     /**
      * Create and show a simple notification containing the received FCM message
@@ -110,7 +78,7 @@ public class FCMService extends FirebaseMessagingService {
 
         //TODO Move hardcoded to else where
         // String author = data.get("ADMIN");
-        String message = data.get("MESSAGE");
+        String message = data.get(getString(R.string.key_message));
 
         // If the message is longer than the max number of characters we want in our
         // notification, truncate it and add the unicode character for ellipsis
@@ -121,7 +89,7 @@ public class FCMService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.summary_background)
-                .setContentTitle("Admin Message")
+                .setContentTitle(getString(R.string.title_admin_message))
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

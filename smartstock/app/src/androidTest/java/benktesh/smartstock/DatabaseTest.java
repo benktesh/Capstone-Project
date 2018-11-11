@@ -66,7 +66,7 @@ public class DatabaseTest {
 
 
         /* We think the database is open, let's verify that here */
-        String databaseIsNotOpen = "The database should be open and isn't";
+        String databaseIsNotOpen = mContext.getString(R.string.database_is_not_open);
         assertEquals(databaseIsNotOpen,
                 true,
                 database.isOpen());
