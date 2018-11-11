@@ -3,7 +3,6 @@ package benktesh.smartstock;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
