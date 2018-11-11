@@ -70,7 +70,7 @@
         </activity>
 
         <service
-            android:name=".fcm.FCMService"
+            android:name=".FCM.FCMService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

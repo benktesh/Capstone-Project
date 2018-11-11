@@ -1,4 +1,4 @@
-package benktesh.smartstock.fcm;
+package benktesh.smartstock.FCM;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

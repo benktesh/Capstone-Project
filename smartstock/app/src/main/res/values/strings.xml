@@ -57,4 +57,6 @@
     <string name="label_feedback_subject">SmartStock Feedback</string>
     <string name="label_address_developer">Dear Developer Name,</string>
     <string name="label_send_feedback">Send Feedback:</string>
+    <string name="pattern_hhmm">hh:mm</string>
+    <string name="msg_logo_url">Logo URL:</string>
 </resources>

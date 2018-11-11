@@ -35,7 +35,7 @@ import benktesh.smartstock.databinding.ActivityStockdetailBinding;
 public class StockDetailActivity extends AppCompatActivity {
 
     private static String TAG = StockDetailActivity.class.getSimpleName();
-    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+    SimpleDateFormat sdf = new SimpleDateFormat(getString(R.string.pattern_hhmm));
     private Stock stock;
 
     @Override
@@ -47,13 +47,13 @@ public class StockDetailActivity extends AppCompatActivity {
         if (stock == null) {
             Toast.makeText(this, getString(R.string.Error_Loading_Detail), Toast.LENGTH_SHORT).show();
         } else {
-            Log.d(TAG, "Stock " + stock.Symbol);
+            //Log.d(TAG, "Stock " + stock.Symbol);
 
             //Upate widget for selected Stock
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, SmartStockWidget.class));
             SmartStockWidget.updateAppWidget(this, appWidgetManager, appWidgetIds, stock);
-            Log.d(TAG, "OnCreate: Updated Widget");
+            //Log.d(TAG, "OnCreate: Updated Widget");
 
 
             //load chart only when there is data
@@ -85,7 +85,7 @@ public class StockDetailActivity extends AppCompatActivity {
             }
 
             //load the logo using picasso
-            Log.d(TAG, "Logo URL: " + stock.LogoUrl);
+            Log.d(TAG, getString(R.string.msg_logo_url) + stock.LogoUrl);
             ImageView imageView = findViewById(R.id.stock_logo);
             Picasso.get().load(stock.LogoUrl).into(imageView);
 
