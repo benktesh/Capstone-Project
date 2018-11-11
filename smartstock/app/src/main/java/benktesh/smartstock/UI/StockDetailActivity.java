@@ -76,7 +76,7 @@ public class StockDetailActivity extends AppCompatActivity {
                                 if (isValuex) {
                                     return sdf.format(new Date((long) value));
                                 } else {
-                                    return super.formatLabel(value, isValuex);
+                                    return super.formatLabel(value, false);
                                 }
                             }
                         }
