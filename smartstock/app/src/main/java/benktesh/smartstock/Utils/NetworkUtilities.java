@@ -95,11 +95,14 @@ public class NetworkUtilities {
 
         ContentValues values;
 
-        long rows = db.delete(SmartStockContract.SymbolEntry.TABLE_NAME, null, null);
+        long rows;
+        rows = context.getContentResolver().delete(SmartStockContract.SymbolEntry.SYMBOL_URI,null, null);
         Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.SymbolEntry.TABLE_NAME + rows);
 
-        rows = db.delete(SmartStockContract.AuditEntry.TABLE_NAME,
-                SmartStockContract.AuditEntry.COLUMN_TABLE + " = '" + SmartStockContract.SymbolEntry.TABLE_NAME + "'", null);
+
+        String[] selectionArgs = {SmartStockContract.SymbolEntry.TABLE_NAME};
+        rows = context.getContentResolver().delete(SmartStockContract.AuditEntry.AUDIT_URI,
+                SmartStockContract.AuditEntry.COLUMN_TABLE + " =?", selectionArgs);
         Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.AuditEntry.TABLE_NAME + rows);
 
         for (int i = 0; i < dataArray.size(); i++) {
@@ -112,17 +115,13 @@ public class NetworkUtilities {
             values.put(SmartStockContract.SymbolEntry.COLUMN_IEXID, symbol.iexid);
             values.put(SmartStockContract.SymbolEntry.COLUMN_ISENABLED, symbol.isenabled);
             values.put(SmartStockContract.SymbolEntry.COLUMN_TYPE, symbol.type);
-            // Insert the new row, returning the primary key value of the new row
-            long newRowId = db.insert(SmartStockContract.SymbolEntry.TABLE_NAME, null, values);
-            //Log.d(TAG, "Loading Symbol: " + symbol.symbol + " (" + i + ")");
+            context.getContentResolver().insert(SmartStockContract.SymbolEntry.SYMBOL_URI, values);
         }
 
         values = new ContentValues();
         values.put(SmartStockContract.AuditEntry.COLUMN_TABLE, SmartStockContract.SymbolEntry.TABLE_NAME);
         values.put(SmartStockContract.AuditEntry.COLUMN_DATE, new Date().toString());
-        long newRowId = db.insert(SmartStockContract.AuditEntry.TABLE_NAME, null, values);
-        db.close();
-        mDbHelper.close();
+        context.getContentResolver().insert(SmartStockContract.AuditEntry.AUDIT_URI, values);
         Log.d(TAG, "Done updating Symbol: " + result);
         return result != null;
     }
@@ -130,47 +129,44 @@ public class NetworkUtilities {
     public static void loadMarketSymbols(Context context, String[] marketSymbols, boolean force) {
         try {
             Log.d(TAG, "loadMarketSymbols");
-
-            SmartStrockDbHelper mDbHelper = new SmartStrockDbHelper(context);
-            SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
+            Cursor c;
             String[] columns = new String[]{SmartStockContract.AuditEntry.COLUMN_TABLE};
+            String selection = SmartStockContract.AuditEntry.COLUMN_TABLE + " =?";
+            String[] selectionArguments = {SmartStockContract.MarketEntry.TABLE_NAME };
 
-            Cursor c = db.query(SmartStockContract.AuditEntry.TABLE_NAME, columns,
-                    SmartStockContract.AuditEntry.COLUMN_TABLE + " = '" +
-                            SmartStockContract.MarketEntry.TABLE_NAME + "'", null, null, null, null, null);
+            c = context.getContentResolver().query(
+                    SmartStockContract.AuditEntry.AUDIT_URI,
+                    columns, selection, selectionArguments, null);
+
             if (force == false && c != null && c.getCount() > 0) {
                 Log.d(TAG, "Market symbols have previously been populated.");
 
             } else {
-
-                long rows = db.delete(SmartStockContract.MarketEntry.TABLE_NAME, null, null);
+                long rows;
+                //long rows = db.delete(SmartStockContract.MarketEntry.TABLE_NAME, null, null);
+                rows = context.getContentResolver().delete(SmartStockContract.MarketEntry.MARKET_URI, null, null);
                 Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.MarketEntry.TABLE_NAME + rows);
 
-                rows = db.delete(SmartStockContract.AuditEntry.TABLE_NAME,
-                        SmartStockContract.AuditEntry.COLUMN_TABLE + " = '" + SmartStockContract.MarketEntry.TABLE_NAME + "'", null);
+                rows = context.getContentResolver().delete(SmartStockContract.AuditEntry.AUDIT_URI, null, null);
                 Log.d(TAG, "Deleted # of rows in Table " + SmartStockContract.AuditEntry.TABLE_NAME + rows);
 
                 ContentValues values;
                 for (String symbol : marketSymbols) {
                     values = new ContentValues();
                     values.put(COLUMN_SYMBOL, symbol);
-                    db.insert(SmartStockContract.MarketEntry.TABLE_NAME, null, values);
+                   // db.insert(SmartStockContract.MarketEntry.TABLE_NAME, null, values);
+                    context.getContentResolver().insert(SmartStockContract.MarketEntry.MARKET_URI,values);
                 }
 
                 values = new ContentValues();
                 values.put(SmartStockContract.AuditEntry.COLUMN_TABLE, SmartStockContract.MarketEntry.TABLE_NAME);
                 values.put(SmartStockContract.AuditEntry.COLUMN_DATE, new Date().toString());
-                long newRowId = db.insert(SmartStockContract.AuditEntry.TABLE_NAME, null, values);
+                context.getContentResolver().insert(SmartStockContract.AuditEntry.AUDIT_URI,values);
             }
-
             c.close();
-            db.close();
-            mDbHelper.close();
         } catch (Exception ex) {
             Log.e(TAG, "loadMarketSymbols: " + ex.toString());
         }
-
     }
 
     /*
